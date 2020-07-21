@@ -1,0 +1,689 @@
+"Entry","B4R.designation","Line.type","Stress","blups.gy","std.er.gy"
+"1","IRRI 214","entry","Drought",1275.01,351.41
+"10","IRRI 218","entry","Drought",1770.63,351.44
+"100","IR16F1251","entry","Drought",1898.43,351.42
+"101","IR16F1254","entry","Drought",2080.04,351.4
+"102","IR16F1269","entry","Drought",1529.16,351.42
+"103","IR16F1014","entry","Drought",1817.17,351.21
+"104","IR16F1033","entry","Drought",1972.88,351.44
+"105","IR16F1045","entry","Drought",1935.99,350.98
+"106","IR16F1061","entry","Drought",1818.53,351.44
+"107","IR16F1079","entry","Drought",1904.14,347.2
+"108","IR16F1097","entry","Drought",1396.74,347.16
+"109","IR16F1159","entry","Drought",1885.4,351.41
+"11","IRRI 162","entry","Drought",2326.94,351.44
+"110","IR16F1172","entry","Drought",1673.3,351.44
+"111","IR16F1181","entry","Drought",2057.21,351.21
+"112","IR16A1070","entry","Drought",2194.41,359.19
+"113","IR15A2373","entry","Drought",2078.52,351.2
+"114","IR16A2332","entry","Drought",1781.59,351.44
+"115","IR16A1800","entry","Drought",1797.05,347.2
+"116","IR 105469:72-18-2","entry","Drought",1657.81,351.42
+"117","IR 105479:64-2","entry","Drought",1542.13,351.21
+"118","IR15A4029","entry","Drought",1915.39,351.21
+"119","IR16A2225","entry","Drought",2413.27,351.2
+"12","IRRI 175","entry","Drought",2301.71,351.43
+"120","IR 110615-C1-B-B-B-1-1","entry","Drought",2359.4,347.19
+"121","IR 115838:5-5-5","entry","Drought",2235.64,351.2
+"122","IR 122310:7-2-2","entry","Drought",2071.64,351.71
+"123","IR 54447-3B-10-2","entry","Drought",1428.22,351.44
+"124","IR 93339:29-B-7-7-B-B-B-16","entry","Drought",1913.88,351.44
+"125","IR14V1020","entry","Drought",2139.97,350.98
+"126","IR 93346:1-B-13-7-6-1RGA-2RGA-1-B","entry","Drought",2291.93,347.2
+"127","IR15A2442","entry","Drought",1916.62,351.44
+"128","IR 99054-B-B-1","entry","Drought",1381.9,351.44
+"129","IR15A2401","entry","Drought",1710.37,351.41
+"13","IRRI 161","entry","Drought",2243.66,351.44
+"130","IR16A2261","entry","Drought",1672.24,351.44
+"131","IR03A568","entry","Drought",2017.61,351.42
+"132","IRRI 193","entry","Drought",1947.57,351.44
+"133","IR04A428","entry","Drought",1578.52,351.21
+"134","IRRI 180","entry","Drought",2328.53,351.21
+"135","IR05N341","entry","Drought",2223.68,351.21
+"136","IR05N359","entry","Drought",1956.53,351.44
+"137","IRRI 186","entry","Drought",2320.81,351.78
+"138","IR08A176","entry","Drought",2027.38,351.44
+"139","IR09A130","entry","Drought",2074.14,351.44
+"14","IRRI 217","entry","Drought",1789.48,351.44
+"140","IR09A220","entry","Drought",1838.42,351.44
+"141","IR09A228","entry","Drought",2007.05,351.44
+"142","IR09A235","entry","Drought",1621.36,351.22
+"143","IR09M120","entry","Drought",1986.37,351.43
+"144","IR09N516","entry","Drought",1928.84,351.21
+"145","IR10A231","entry","Drought",1747.09,351.44
+"146","IR10F559","entry","Drought",1810.35,347.15
+"147","IR10M210","entry","Drought",1878.1,351.44
+"148","IR10N134","entry","Drought",2354.01,351.44
+"149","IR10N230","entry","Drought",2352.72,351.21
+"15","IR08L181","entry","Drought",2792.69,347.19
+"150","IR10N237","entry","Drought",1916.99,347.15
+"151","IR10N271","entry","Drought",1475.31,347.16
+"152","IR11A282","entry","Drought",1854.06,351.44
+"153","IR11A293","entry","Drought",2093.03,351.44
+"154","IR11A297","entry","Drought",2082.96,351.44
+"155","IR11A306","entry","Drought",2538.52,347.15
+"156","IR11A341","entry","Drought",2208.28,351.42
+"157","IR11N121","entry","Drought",2624.69,351
+"158","IR11N202","entry","Drought",2034.52,351.22
+"159","IR11N313","entry","Drought",2106.85,351.4
+"16","IR 82635-B-B-75-2","entry","Drought",2285.91,351.44
+"160","IR12A136","entry","Drought",1718.57,351.43
+"161","IR12A173","entry","Drought",1519,351.42
+"162","IR12A229","entry","Drought",2010.38,351.41
+"163","IR12A282","entry","Drought",1856.63,346.99
+"164","IR12A329","entry","Drought",1555.14,346.94
+"165","IR12M112","entry","Drought",1767.85,351.44
+"166","IR12N135","entry","Drought",1832.64,351.41
+"167","IR12N165","entry","Drought",2012.48,351.21
+"168","IR12N231","entry","Drought",1898.95,351.44
+"169","IR12N240","entry","Drought",2291.8,351.41
+"17","IR09L302","entry","Drought",2070.6,351.44
+"170","IR12N249","entry","Drought",1990.93,351.22
+"171","IR13A107","entry","Drought",1944.11,347.19
+"172","IR13A153","entry","Drought",1719.92,351.42
+"173","IR13A515","entry","Drought",1888.4,347.14
+"174","IR13N102","entry","Drought",2261.97,347.15
+"175","IR13N115","entry","Drought",1556.24,347.16
+"176","IR13N131","entry","Drought",2079.86,351.2
+"177","IR13N134","entry","Drought",1705.77,351.2
+"178","IR13N143","entry","Drought",1847.59,351.44
+"179","IR13N152","entry","Drought",1804.02,351.44
+"18","IRRI 188","entry","Drought",2048.1,351.21
+"180","IR13N157","entry","Drought",1957.99,347.15
+"181","IR14A150","entry","Drought",1822.97,347.2
+"182","IR14A185","entry","Drought",2001.08,347.19
+"183","IR14A216","entry","Drought",1814.21,351.44
+"184","IR14F690","entry","Drought",1959.87,347.16
+"185","IR14F697","entry","Drought",2158.06,351.44
+"186","IR14F703","entry","Drought",1966.82,351.42
+"187","IR14F707","entry","Drought",2274.36,347.15
+"188","IR14F711","entry","Drought",1820.56,351.42
+"189","IR14F713","entry","Drought",2154.1,351.44
+"19","IR09L204","entry","Drought",1741.54,351.43
+"190","IR14F717","entry","Drought",2138.55,351.22
+"191","IR14N153","entry","Drought",2010.19,347.16
+"192","IR15A1103","entry","Drought",1896.33,351.41
+"193","IR15A1410","entry","Drought",1546.98,351.44
+"194","IR15M1289","entry","Drought",1610.06,351.44
+"195","IR16A1957","entry","Drought",2258.09,346.95
+"196","IR 68","entry","Drought",2349.01,351.44
+"197","PIR-26>C0-2071-1-4-2-1","entry","Drought",2278.84,351.42
+"198","PR 42071-14-2-2-2","entry","Drought",2454.69,351.21
+"199","PR 37464-31-3-2-2-2-3-1-B-5-1-1","entry","Drought",2477.57,343.09
+"2","IRRI 163","entry","Drought",1930.04,351.44
+"20","IRRI 200","entry","Drought",2237.39,351.43
+"200","PR 44420-36-4-3","entry","Drought",1959.68,346.95
+"201","PR44517-10-2-1-B","entry","Drought",1883.45,351.44
+"202","PR44522-15-5-2-B","entry","Drought",1971.24,351.44
+"203","A69-1","entry","Drought",1868.25,361.12
+"204","IR 100632-37-AJY 3-CMU 1","entry","Drought",2018.41,351.43
+"205","IR14T156","entry","Drought",1801.19,347.14
+"206","IR14T155","entry","Drought",1875.08,351.41
+"207","IR14T154","entry","Drought",2054.98,351.71
+"208","IR 100701-AJY 24-AJY 1-CMU 1","entry","Drought",1847.1,351.44
+"209","IR16T1661","entry","Drought",2511.38,359.19
+"21","IRRI 189","entry","Drought",1844.59,351.44
+"210","IR 108175-B-22-AJY 3-B-1","entry","Drought",1960.57,347.19
+"211","IR16T1662","entry","Drought",2147.09,351.44
+"212","IR12T147","entry","Drought",1954.71,351.44
+"213","IR11T197","entry","Drought",1286.55,351.21
+"214","IR11T198","entry","Drought",2145.11,347.16
+"215","IR11T205","entry","Drought",1650.17,343.14
+"216","IR11T220","entry","Drought",1916.2,347.16
+"217","IR12T162","entry","Drought",1461.1,347.18
+"218","IR11T230","entry","Drought",1841.95,343.15
+"219","IR 87959-6-2-3-1-2-BAY B-CMU 1","entry","Drought",1793.39,351.44
+"22","IR10L414","entry","Drought",2373.28,351.44
+"220","IR 92831-22-BAY 2-1-CMU 1","entry","Drought",2067.25,351.43
+"221","IR14T136","entry","Drought",1618.03,347.19
+"222","IR15T1133","entry","Drought",1898.09,351.21
+"223","IR15T1303","entry","Drought",1706.27,351.22
+"224","IR15T1319","entry","Drought",1643.02,347.19
+"225","IR15T1330","entry","Drought",1735.57,347.16
+"226","IR15T1462","entry","Drought",1458.01,360.86
+"227","IR15T1469","entry","Drought",2133.85,351.42
+"228","IR15T1473","entry","Drought",1679.23,351.44
+"229","IR15T1476","entry","Drought",1794.42,351.78
+"23","IR 87707-446-B-B-B","entry","Drought",1668.76,351.44
+"230","IR 66946-3R-149-1-1","entry","Drought",2519.25,347.19
+"231","IRRI 147","entry","Drought",1810.41,356.46
+"232","BRRI DHAN 53","entry","Drought",1516.95,351.42
+"233","BRRI DHAN 55","entry","Drought",1789.24,351.42
+"234","IR11T129","entry","Drought",2034.35,351.44
+"235","IR06M139","entry","Drought",2310.91,346.97
+"236","PR 30244-AC-V2","entry","Drought",2080.85,351.42
+"237","PR 25997-B-B-B","entry","Drought",2115,351.44
+"238","IR 84675-58-4-1-B-B","entry","Drought",1887.19,351.44
+"239","OM 4900","entry","Drought",2319.57,351.44
+"24","IR11L122","entry","Drought",2388.22,351.2
+"240","IR14T157","entry","Drought",1645.59,351.42
+"241","SALT TOL SIN THWE LATT","entry","Drought",1974.42,351.21
+"242","IR 101840-1-1-11-2-1","entry","Drought",1674.47,351.41
+"243","IR 101793-1-1-1-3-5-4","entry","Drought",1870.05,361.11
+"244","IR 91648-B-289-B","entry","Drought",1529.09,351.44
+"245","IR15D120","entry","Drought",1968.02,351.44
+"246","IR 127152-2-10","entry","Drought",1884.78,351.42
+"247","IR 127155-1-22","entry","Drought",2056.93,346.96
+"248","IR13F474","entry","Drought",1682.54,351.44
+"249","IR 108963:6-1-1-3","entry","Drought",2021.6,346.95
+"25","IRRI 199","entry","Drought",2034.54,351.41
+"250","IR 91648-B-117-B-1-1","entry","Drought",2172.77,347.16
+"251","IR 96465-B-BGY 372-103-B","entry","Drought",1427.48,351.21
+"252","IR17L1040","entry","Drought",2387.75,351.43
+"253","IR17L1099","entry","Drought",2096.14,351.42
+"254","IR17L1041","entry","Drought",1709.47,351.42
+"255","IR17L1056","entry","Drought",1360.21,347.18
+"256","IR17L1082","entry","Drought",1733.49,351.43
+"257","IR17L1089","entry","Drought",1806,351.44
+"258","IR17L1148","entry","Drought",1705.98,351.42
+"259","IR17L1165","entry","Drought",1653.19,351.42
+"26","IR 92522-45-3-1-4","entry","Drought",2421.26,351.43
+"260","IR17L1612","entry","Drought",1538.89,347.2
+"261","IR17L1066","entry","Drought",1952.13,351.44
+"262","IR17L1059","entry","Drought",2181.23,351.71
+"263","IR17L1208","entry","Drought",1693.34,351.42
+"264","IR17L1074","entry","Drought",2484.3,351.22
+"265","IR17L1116","entry","Drought",1941.5,347.52
+"266","IR17L1060","entry","Drought",2688.41,351.44
+"267","IR17L1207","entry","Drought",1751.89,351.42
+"268","IR17L1101","entry","Drought",2191.55,347.18
+"269","IR17L1030","entry","Drought",1469.82,347.2
+"27","IR14L247","entry","Drought",2165.87,351.43
+"270","IR17L1035","entry","Drought",1697.56,346.95
+"271","IR14L521","entry","Drought",2067.35,351.43
+"272","IR14L156","entry","Drought",1835.44,351.44
+"273","IR13L337","entry","Drought",2070.48,351.21
+"274","IRRI 154","entry","Drought",2447.4,347.15
+"275","IRRI 123","entry","Drought",1679.52,347.15
+"276","IR15L1505","entry","Drought",1943.2,351.42
+"277","IR15L1442","entry","Drought",2443.7,347.2
+"278","IR15L1153","entry","Drought",2235.17,351.21
+"279","IR15L1203","entry","Drought",1854.74,351.42
+"28","IR13L495","entry","Drought",1735.72,351.21
+"280","IRRI 215","entry","Drought",2230.13,351.44
+"281","IR15A1479","entry","Drought",2132.19,351.42
+"282","IRRI 179","entry","Drought",2172.19,347.14
+"283","CRR759-11-B-1","entry","Drought",2219.98,347.14
+"284","CRR759-12-B-1","entry","Drought",2168.99,351.42
+"285","CRR759-B-12-B-1","entry","Drought",2302.48,351.71
+"286","CRR759-B-36-B-1","entry","Drought",2468.97,351.21
+"287","CRR759-B-7-B-1","entry","Drought",2145.31,351.22
+"288","CR-2859-1-S-B-2-1-B-B-5-1","entry","Drought",962.27,347.12
+"289","CR 2860-S-B-189-1-1-1 (IET 27060)","entry","Drought",1867.71,351.21
+"29","IR09L226","entry","Drought",1662.85,351.22
+"290","CR 2851-S-1-B-4-1-4-1-1 (IET27051)","entry","Drought",1921.67,351.43
+"291","CR 3898-113-4-2-1(IET-25909)","entry","Drought",1613.87,347.16
+"292","CR 3881-4-1-3-7-2-3(IET-26820)","entry","Drought",2366.82,351.42
+"293","CR 2582-3-35-2-1-1-3","entry","Drought",1671.42,351.44
+"294","CR 3145-4-1-3-2-1-1","entry","Drought",1746.16,347.19
+"295","CR 3143-1-1-1-1-2-1","entry","Drought",1948.91,351.21
+"296","CR 3933-8-1-3-3-2","entry","Drought",1850.89,347.16
+"297","CR 2859-S-B-2-1-B-7-1","entry","Drought",1220.01,351.43
+"298","R-RF-105","entry","Drought",1944.3,475.83
+"299","R-RF-127","entry","Drought",3070.45,351.42
+"3","IRRI 148","entry","Drought",2953.17,351.21
+"30","IR12L321","entry","Drought",1428.15,351.41
+"300","R-RF-156","entry","Drought",1807.54,351.44
+"301","R-RF-126","entry","Drought",2011.34,351.21
+"302","DH-16-H","entry","Drought",1575.07,347.16
+"303","MCM100 -","entry","Drought",2089.32,351.44
+"304","MCM103 -","entry","Drought",1413.93,351.44
+"305","MCM109 -","entry","Drought",1499.09,347.01
+"306","MTU1290 ( DST38-15-3-1)","entry","Drought",1790.32,347.2
+"307","MTU1291 ( DST36-108-1)","entry","Drought",1842.82,347.16
+"308","Gomati Dhan","entry","Drought",2620.63,347.12
+"309","Tripura Chikan Dhan","entry","Drought",2488.48,351.44
+"31","IR13L188","entry","Drought",1640.75,351.42
+"310","Tripura Jala","entry","Drought",2000.5,347.19
+"311","Tripura Nirog","entry","Drought",2079.12,347.11
+"312","Tripura Khara 1","entry","Drought",2647.16,347.12
+"313","HURS 19-3","entry","Drought",1655.69,351.44
+"314","HURS 19-4","entry","Drought",1965.18,347.15
+"315","HURS 19-5","entry","Drought",2390.03,361.09
+"316","HURS 19-6","entry","Drought",1159.74,347.18
+"317","HURS 19-7","entry","Drought",2213.6,351.44
+"318","BRR 0072","entry","Drought",1732.23,351.43
+"319","BRR  0119","entry","Drought",1990.89,351.22
+"32","IR14L101","entry","Drought",2279.13,351.2
+"320","BRR 0120","entry","Drought",1788.78,351.21
+"321","BRR 0122","entry","Drought",2118.36,351.42
+"322","BRR 0124","entry","Drought",1601.56,351.21
+"323","TTB 944-31-10-1-2","entry","Drought",1636.69,351.42
+"324","TTB 1349-3-2-1","entry","Drought",1230.7,351.19
+"325","TTB 1348-1-1","entry","Drought",1292.62,351.22
+"326","TTB 1401-3-I-2","entry","Drought",1697.31,351.42
+"327","TTB 1402-4-s-4","entry","Drought",1560.01,351.44
+"328","IR 98976-20-1-2-2","entry","Drought",1962.23,347.16
+"329","IR 93329-61-B-21-12-21-1RGA-2RGA-","entry","Drought",1725.27,351.2
+"33","IR14L144","entry","Drought",1860.31,351.2
+"330","IR14L572","entry","Drought",2140.41,351.44
+"331","IR 90527-B-577-2-B?B","entry","Drought",1173.95,351.44
+"332","IR14L158","entry","Drought",2023.28,347.14
+"333","IRRI 149","check","Drought",1715.62,229.07
+"334","Swarna-Sub1","check","Drought",1689.26,227.96
+"335","SAMBHA MAHSURI + SUB1","check","Drought",1421.34,227.95
+"336","Ciherang-Sub1","check","Drought",2197.17,227.96
+"337","Thadokkham -1","check","Drought",1938.23,229.01
+"338","CIHERANG","check","Drought",2330.01,229.07
+"339","IRRI 105","check","Drought",1916.12,230.18
+"34","IR14L159","entry","Drought",2278.48,351.43
+"340","SAMBHA MAHSURI","check","Drought",1434.35,227.9
+"341","SWARNA","check","Drought",1582.16,226.82
+"342","MTU 1010","check","Drought",1521.89,229.11
+"343","SAHBHAGI DHAN","check","Drought",2612.1,229.09
+"344","IRRI 123","check","Drought",1861.6,227.95
+"35","IR14L245","entry","Drought",1964.09,351.4
+"36","IR 95780-43-1-1-1","entry","Drought",1731.26,351.43
+"37","IR14L256","entry","Drought",2374.47,346.9
+"38","IR 95793-5-2-2-3","entry","Drought",2487.16,351.42
+"39","IR14L297","entry","Drought",1750.28,346.98
+"4","SAHBHAGI DHAN","entry","Drought",2465.49,346.97
+"40","IR14L331","entry","Drought",2079.96,351.42
+"41","IR14L345","entry","Drought",2143.46,361.12
+"42","IR14L362","entry","Drought",2186.9,351.42
+"43","IR14L395","entry","Drought",1745.34,351.42
+"44","IR14L440","entry","Drought",1859.23,351.44
+"45","IR14L545","entry","Drought",1810.21,351.43
+"46","IR14L586","entry","Drought",1870.75,351.42
+"47","IR14L594","entry","Drought",2129.87,351.43
+"48","IR15L1008","entry","Drought",1918.71,351.44
+"49","IR15L1222","entry","Drought",2033.45,351.44
+"5","IRRI 213","entry","Drought",2018.18,351.44
+"50","IR15L1361","entry","Drought",2514.87,351.21
+"51","IR15L1419","entry","Drought",1590.17,359.19
+"52","IR15L1504","entry","Drought",2141.22,351.44
+"53","IR15L1564","entry","Drought",1762.13,351.44
+"54","IR15L1656","entry","Drought",2242.19,350.98
+"55","IR16L1411","entry","Drought",2522.57,351.21
+"56","IR16L1419","entry","Drought",1935.39,347.2
+"57","IR16L1421","entry","Drought",1917.47,347.16
+"58","IR16L1478","entry","Drought",2183.97,351.42
+"59","IR16L1499","entry","Drought",1998.74,351.44
+"6","IRRI 155","entry","Drought",1944.3,475.83
+"60","IRRI 132","entry","Drought",2522.7,351.42
+"61","IR11L101","entry","Drought",2449.67,351.42
+"62","IR15F1677","entry","Drought",1827.92,351.2
+"63","IR15F1697","entry","Drought",1783.53,346.99
+"64","IR15F1706","entry","Drought",2576.95,351.2
+"65","IR15F1709","entry","Drought",1950.39,351.42
+"66","IR15F1710","entry","Drought",1451.32,351.44
+"67","IR15F1716","entry","Drought",1910.66,347.2
+"68","IR15F1729","entry","Drought",1191.8,351.2
+"69","IR15F1742","entry","Drought",1303.97,347.2
+"7","IR 79971-B-191-B-B","entry","Drought",2189.58,351.43
+"70","IR15F1745","entry","Drought",1548.64,351.44
+"71","IR15F1754","entry","Drought",1814.37,351.21
+"72","IR15F1764","entry","Drought",1684.13,351.44
+"73","IR15F1766","entry","Drought",1612.75,347.16
+"74","IR15F1768","entry","Drought",1755.72,351.44
+"75","IR15F1779","entry","Drought",1480.16,351.44
+"76","IR15F1804","entry","Drought",1649.57,347.19
+"77","IR15F1832","entry","Drought",2277.79,347.1
+"78","IR15F1864","entry","Drought",1846.82,347.16
+"79","IR15F1868","entry","Drought",2031.59,347.14
+"8","IR 79971-B-227-B-B","entry","Drought",2410.52,351.44
+"80","IR15F1872","entry","Drought",1611.78,351.22
+"81","IR15F1886","entry","Drought",2090.8,351.77
+"82","IR15F1889","entry","Drought",2442.69,347.19
+"83","IR15F1897","entry","Drought",1616.54,351.44
+"84","IR15F1900","entry","Drought",1895.64,351.56
+"85","IR15F1907","entry","Drought",2457.05,351.76
+"86","IR15F1931","entry","Drought",1957.19,359.19
+"87","IR15F1936","entry","Drought",2214.8,347.14
+"88","IR15F1943","entry","Drought",1891.15,351.2
+"89","IR15F1982","entry","Drought",1928.29,361.1
+"9","IR07W120","entry","Drought",2495.94,351.21
+"90","IR15F1989","entry","Drought",2020.1,347
+"91","IR15F1996","entry","Drought",1616.94,351.42
+"92","IR15F2007","entry","Drought",1885.05,351.41
+"93","IR16F1198","entry","Drought",1720.42,351.42
+"94","IR16F1201","entry","Drought",1911.3,351.21
+"95","IR16F1205","entry","Drought",1531.03,351.41
+"96","IR16F1226","entry","Drought",1867.67,351.41
+"97","IR16F1229","entry","Drought",2447.06,351.44
+"98","IR16F1237","entry","Drought",1785.58,351.44
+"99","IR16F1243","entry","Drought",1933.35,351.44
+"1","IRRI 214","entry","Non-stress",5054.99,568.18
+"10","IRRI 218","entry","Non-stress",5349.65,567.8
+"100","IR16F1251","entry","Non-stress",5116.43,568.1
+"101","IR16F1254","entry","Non-stress",4743.7,574.86
+"102","IR16F1269","entry","Non-stress",5013.19,567.99
+"103","IR16F1014","entry","Non-stress",4098.94,574.87
+"104","IR16F1033","entry","Non-stress",4953.96,574.9
+"105","IR16F1045","entry","Non-stress",4721.22,574.83
+"106","IR16F1061","entry","Non-stress",5218.83,568.14
+"107","IR16F1079","entry","Non-stress",4671.91,574.87
+"108","IR16F1097","entry","Non-stress",4818.09,574.49
+"109","IR16F1159","entry","Non-stress",5527.31,567.82
+"11","IRRI 162","entry","Non-stress",5300.94,568.72
+"110","IR16F1172","entry","Non-stress",4452.48,574.86
+"111","IR16F1181","entry","Non-stress",5412.51,574.86
+"112","IR16A1070","entry","Non-stress",4939.3,740.05
+"113","IR15A2373","entry","Non-stress",5367.5,597.07
+"114","IR16A2332","entry","Non-stress",4171.29,568.07
+"115","IR16A1800","entry","Non-stress",4491.1,574.89
+"116","IR 105469:72-18-2","entry","Non-stress",3911.96,574.52
+"117","IR 105479:64-2","entry","Non-stress",4125.89,590.61
+"118","IR15A4029","entry","Non-stress",5454.04,568.14
+"119","IR16A2225","entry","Non-stress",4675.83,568.18
+"12","IRRI 175","entry","Non-stress",4957.27,574.9
+"120","IR 110615-C1-B-B-B-1-1","entry","Non-stress",4757.64,597.05
+"121","IR 115838:5-5-5","entry","Non-stress",4883.52,574.53
+"122","IR 122310:7-2-2","entry","Non-stress",5117.27,574.9
+"123","IR 54447-3B-10-2","entry","Non-stress",5383.79,574.9
+"124","IR 93339:29-B-7-7-B-B-B-16","entry","Non-stress",5252.61,568.18
+"125","IR14V1020","entry","Non-stress",4881.69,574.89
+"126","IR 93346:1-B-13-7-6-1RGA-2RGA-1-B","entry","Non-stress",5022.31,574.9
+"127","IR15A2442","entry","Non-stress",5420.35,568.1
+"128","IR 99054-B-B-1","entry","Non-stress",4532.25,574.5
+"129","IR15A2401","entry","Non-stress",5860.57,574.86
+"13","IRRI 161","entry","Non-stress",5605.42,574.9
+"130","IR16A2261","entry","Non-stress",4593.63,574.9
+"131","IR03A568","entry","Non-stress",5237.74,574.82
+"132","IRRI 193","entry","Non-stress",5126.03,575.08
+"133","IR04A428","entry","Non-stress",5067.83,590.97
+"134","IRRI 180","entry","Non-stress",5893.77,567.76
+"135","IR05N341","entry","Non-stress",4809.72,575.62
+"136","IR05N359","entry","Non-stress",6165.29,574.89
+"137","IRRI 186","entry","Non-stress",5270.36,574.5
+"138","IR08A176","entry","Non-stress",5795.22,574.51
+"139","IR09A130","entry","Non-stress",5276.58,597.07
+"14","IRRI 217","entry","Non-stress",4491,574.5
+"140","IR09A220","entry","Non-stress",4587.65,575.58
+"141","IR09A228","entry","Non-stress",4680.9,568.14
+"142","IR09A235","entry","Non-stress",4765.19,574.53
+"143","IR09M120","entry","Non-stress",5121.37,574.9
+"144","IR09N516","entry","Non-stress",4454.91,574.54
+"145","IR10A231","entry","Non-stress",5042.91,568.16
+"146","IR10F559","entry","Non-stress",4700.7,574.87
+"147","IR10M210","entry","Non-stress",5191.85,591.02
+"148","IR10N134","entry","Non-stress",5132.86,575.55
+"149","IR10N230","entry","Non-stress",4985.41,574.85
+"15","IR08L181","entry","Non-stress",4771.56,574.83
+"150","IR10N237","entry","Non-stress",4939.63,567.98
+"151","IR10N271","entry","Non-stress",5207.22,574.89
+"152","IR11A282","entry","Non-stress",5277.99,574.86
+"153","IR11A293","entry","Non-stress",4323.61,574.52
+"154","IR11A297","entry","Non-stress",4755.67,574.52
+"155","IR11A306","entry","Non-stress",5004.12,574.54
+"156","IR11A341","entry","Non-stress",4697.97,574.88
+"157","IR11N121","entry","Non-stress",5635.38,574.85
+"158","IR11N202","entry","Non-stress",5516.4,568.14
+"159","IR11N313","entry","Non-stress",4926.29,574.89
+"16","IR 82635-B-B-75-2","entry","Non-stress",4740.94,568.1
+"160","IR12A136","entry","Non-stress",4590.06,574.9
+"161","IR12A173","entry","Non-stress",5750.39,568.15
+"162","IR12A229","entry","Non-stress",5412.54,574.9
+"163","IR12A282","entry","Non-stress",4751.24,574.51
+"164","IR12A329","entry","Non-stress",4424.64,575.45
+"165","IR12M112","entry","Non-stress",5267.77,574.89
+"166","IR12N135","entry","Non-stress",4915.73,574.86
+"167","IR12N165","entry","Non-stress",5505.13,590.98
+"168","IR12N231","entry","Non-stress",5177.54,574.9
+"169","IR12N240","entry","Non-stress",5167.07,574.9
+"17","IR09L302","entry","Non-stress",4613.87,568.12
+"170","IR12N249","entry","Non-stress",5335.19,568.8
+"171","IR13A107","entry","Non-stress",4845.4,574.9
+"172","IR13A153","entry","Non-stress",5005.45,574.54
+"173","IR13A515","entry","Non-stress",4707.14,574.5
+"174","IR13N102","entry","Non-stress",4437.24,574.54
+"175","IR13N115","entry","Non-stress",4628.92,574.89
+"176","IR13N131","entry","Non-stress",4559.36,561.66
+"177","IR13N134","entry","Non-stress",4556.42,568.15
+"178","IR13N143","entry","Non-stress",4294.11,568.09
+"179","IR13N152","entry","Non-stress",4311.81,574.89
+"18","IRRI 188","entry","Non-stress",5491.63,574.89
+"180","IR13N157","entry","Non-stress",5289.1,567.85
+"181","IR14A150","entry","Non-stress",4885.69,574.9
+"182","IR14A185","entry","Non-stress",4939.3,740.05
+"183","IR14A216","entry","Non-stress",4705.62,574.89
+"184","IR14F690","entry","Non-stress",4835.72,574.85
+"185","IR14F697","entry","Non-stress",5026.2,568.15
+"186","IR14F703","entry","Non-stress",5024.69,574.9
+"187","IR14F707","entry","Non-stress",4115.01,568.09
+"188","IR14F711","entry","Non-stress",4744.34,574.88
+"189","IR14F713","entry","Non-stress",5103.12,574.86
+"19","IR09L204","entry","Non-stress",4494.77,574.52
+"190","IR14F717","entry","Non-stress",4521.58,574.9
+"191","IR14N153","entry","Non-stress",3994.57,574.9
+"192","IR15A1103","entry","Non-stress",6091.15,567.68
+"193","IR15A1410","entry","Non-stress",3906.21,574.89
+"194","IR15M1289","entry","Non-stress",4631.1,575.49
+"195","IR16A1957","entry","Non-stress",4929.88,574.89
+"196","IR 68","entry","Non-stress",4937.85,574.9
+"197","PIR-26>C0-2071-1-4-2-1","entry","Non-stress",5946.97,568.17
+"198","PR 42071-14-2-2-2","entry","Non-stress",4622.98,574.9
+"199","PR 37464-31-3-2-2-2-3-1-B-5-1-1","entry","Non-stress",4647.24,567.81
+"2","IRRI 163","entry","Non-stress",4333.17,574.9
+"20","IRRI 200","entry","Non-stress",4422.28,590.98
+"200","PR 44420-36-4-3","entry","Non-stress",4768.49,575.46
+"201","PR44517-10-2-1-B","entry","Non-stress",5398.5,574.89
+"202","PR44522-15-5-2-B","entry","Non-stress",4626.25,574.52
+"203","A69-1","entry","Non-stress",4605.5,574.89
+"204","IR 100632-37-AJY 3-CMU 1","entry","Non-stress",4597.37,574.89
+"205","IR14T156","entry","Non-stress",4807.14,574.89
+"206","IR14T155","entry","Non-stress",5162.16,568.13
+"207","IR14T154","entry","Non-stress",5055.89,568.1
+"208","IR 100701-AJY 24-AJY 1-CMU 1","entry","Non-stress",5920.04,567.86
+"209","IR16T1661","entry","Non-stress",4999.81,568.1
+"21","IRRI 189","entry","Non-stress",4875.61,574.87
+"210","IR 108175-B-22-AJY 3-B-1","entry","Non-stress",5340.27,574.54
+"211","IR16T1662","entry","Non-stress",4693.6,574.9
+"212","IR12T147","entry","Non-stress",4534.69,574.85
+"213","IR11T197","entry","Non-stress",4515.46,574.9
+"214","IR11T198","entry","Non-stress",4606.65,574.89
+"215","IR11T205","entry","Non-stress",5961.05,567.74
+"216","IR11T220","entry","Non-stress",5048.8,574.89
+"217","IR12T162","entry","Non-stress",5247.03,574.49
+"218","IR11T230","entry","Non-stress",5112.58,574.54
+"219","IR 87959-6-2-3-1-2-BAY B-CMU 1","entry","Non-stress",4939.3,740.05
+"22","IR10L414","entry","Non-stress",4714.87,574.86
+"220","IR 92831-22-BAY 2-1-CMU 1","entry","Non-stress",4828.6,568.18
+"221","IR14T136","entry","Non-stress",4617.85,574.89
+"222","IR15T1133","entry","Non-stress",4825.1,568.08
+"223","IR15T1303","entry","Non-stress",5042.43,574.5
+"224","IR15T1319","entry","Non-stress",4848.26,574.89
+"225","IR15T1330","entry","Non-stress",5746.97,568.11
+"226","IR15T1462","entry","Non-stress",4518.5,574.5
+"227","IR15T1469","entry","Non-stress",5230.68,574.53
+"228","IR15T1473","entry","Non-stress",4803.45,574.54
+"229","IR15T1476","entry","Non-stress",4734.02,574.83
+"23","IR 87707-446-B-B-B","entry","Non-stress",5079.4,574.9
+"230","IR 66946-3R-149-1-1","entry","Non-stress",5021.64,574.9
+"231","IRRI 147","entry","Non-stress",4588.83,575.62
+"232","BRRI DHAN 53","entry","Non-stress",5864.45,574.89
+"233","BRRI DHAN 55","entry","Non-stress",4954.95,590.97
+"234","IR11T129","entry","Non-stress",6129.9,590.63
+"235","IR06M139","entry","Non-stress",4789.29,574.53
+"236","PR 30244-AC-V2","entry","Non-stress",5259.71,574.9
+"237","PR 25997-B-B-B","entry","Non-stress",4925.22,574.89
+"238","IR 84675-58-4-1-B-B","entry","Non-stress",4939.3,740.05
+"239","OM 4900","entry","Non-stress",5028.89,574.82
+"24","IR11L122","entry","Non-stress",4635.39,574.87
+"240","IR14T157","entry","Non-stress",5324.68,574.54
+"241","SALT TOL SIN THWE LATT","entry","Non-stress",5300.58,568.17
+"242","IR 101840-1-1-11-2-1","entry","Non-stress",5595.44,575.13
+"243","IR 101793-1-1-1-3-5-4","entry","Non-stress",4469.81,574.52
+"244","IR 91648-B-289-B","entry","Non-stress",5470.41,574.54
+"245","IR15D120","entry","Non-stress",5372.82,574.86
+"246","IR 127152-2-10","entry","Non-stress",4475.78,574.87
+"247","IR 127155-1-22","entry","Non-stress",5808.02,590.6
+"248","IR13F474","entry","Non-stress",4900.45,574.54
+"249","IR 108963:6-1-1-3","entry","Non-stress",5146.9,568.19
+"25","IRRI 199","entry","Non-stress",4583.3,574.84
+"250","IR 91648-B-117-B-1-1","entry","Non-stress",4948.36,574.87
+"251","IR 96465-B-BGY 372-103-B","entry","Non-stress",5343.39,574.87
+"252","IR17L1040","entry","Non-stress",5997.07,575.58
+"253","IR17L1099","entry","Non-stress",4961.45,574.5
+"254","IR17L1041","entry","Non-stress",4982.11,567.84
+"255","IR17L1056","entry","Non-stress",4884.99,574.87
+"256","IR17L1082","entry","Non-stress",4043.86,568.77
+"257","IR17L1089","entry","Non-stress",4553.02,574.9
+"258","IR17L1148","entry","Non-stress",5122.25,596.65
+"259","IR17L1165","entry","Non-stress",4764.77,574.9
+"26","IR 92522-45-3-1-4","entry","Non-stress",6197.9,574.9
+"260","IR17L1612","entry","Non-stress",5419.36,574.5
+"261","IR17L1066","entry","Non-stress",4693.96,574.55
+"262","IR17L1059","entry","Non-stress",5362.51,574.86
+"263","IR17L1208","entry","Non-stress",4848.34,597.02
+"264","IR17L1074","entry","Non-stress",5532.13,574.89
+"265","IR17L1116","entry","Non-stress",5272.97,574.52
+"266","IR17L1060","entry","Non-stress",4337.92,574.49
+"267","IR17L1207","entry","Non-stress",5435.04,574.87
+"268","IR17L1101","entry","Non-stress",4192.14,568.73
+"269","IR17L1030","entry","Non-stress",4995.42,568.07
+"27","IR14L247","entry","Non-stress",4464.15,590.97
+"270","IR17L1035","entry","Non-stress",5142.43,574.87
+"271","IR14L521","entry","Non-stress",5976.9,567.76
+"272","IR14L156","entry","Non-stress",4083.38,568.11
+"273","IR13L337","entry","Non-stress",5218.31,568.14
+"274","IRRI 154","entry","Non-stress",4739.66,575.45
+"275","IRRI 123","entry","Non-stress",5619.36,568.57
+"276","IR15L1505","entry","Non-stress",4777.08,574.89
+"277","IR15L1442","entry","Non-stress",5831.59,574.49
+"278","IR15L1153","entry","Non-stress",4829.77,574.9
+"279","IR15L1203","entry","Non-stress",4143.08,568.19
+"28","IR13L495","entry","Non-stress",4913.71,595.24
+"280","IRRI 215","entry","Non-stress",4796.05,574.86
+"281","IR15A1479","entry","Non-stress",4388.14,574.52
+"282","IRRI 179","entry","Non-stress",4747.43,574.89
+"283","CRR759-11-B-1","entry","Non-stress",5347.66,574.9
+"284","CRR759-12-B-1","entry","Non-stress",4563.35,574.83
+"285","CRR759-B-12-B-1","entry","Non-stress",5012.63,575.57
+"286","CRR759-B-36-B-1","entry","Non-stress",5422.81,574.89
+"287","CRR759-B-7-B-1","entry","Non-stress",4876.71,574.9
+"288","CR-2859-1-S-B-2-1-B-B-5-1","entry","Non-stress",4952.9,568.1
+"289","CR 2860-S-B-189-1-1-1 (IET 27060)","entry","Non-stress",4401.88,568.09
+"29","IR09L226","entry","Non-stress",4939.3,740.05
+"290","CR 2851-S-1-B-4-1-4-1-1 (IET27051)","entry","Non-stress",5396.66,574.51
+"291","CR 3898-113-4-2-1(IET-25909)","entry","Non-stress",5011.57,574.19
+"292","CR 3881-4-1-3-7-2-3(IET-26820)","entry","Non-stress",4066.25,574.9
+"293","CR 2582-3-35-2-1-1-3","entry","Non-stress",5090.12,574.9
+"294","CR 3145-4-1-3-2-1-1","entry","Non-stress",4793.03,568.17
+"295","CR 3143-1-1-1-1-2-1","entry","Non-stress",4432.87,574.53
+"296","CR 3933-8-1-3-3-2","entry","Non-stress",4842.87,574.89
+"297","CR 2859-S-B-2-1-B-7-1","entry","Non-stress",4510.72,574.5
+"298","R-RF-105","entry","Non-stress",4559.03,574.9
+"299","R-RF-127","entry","Non-stress",6056.04,574.89
+"3","IRRI 148","entry","Non-stress",5588.17,574.85
+"30","IR12L321","entry","Non-stress",5174.74,575.24
+"300","R-RF-156","entry","Non-stress",6215.7,574.9
+"301","R-RF-126","entry","Non-stress",4638.95,574.89
+"302","DH-16-H","entry","Non-stress",4824.75,574.52
+"303","MCM100 -","entry","Non-stress",6065.26,574.9
+"304","MCM103 -","entry","Non-stress",5419.02,574.9
+"305","MCM109 -","entry","Non-stress",4887.04,574.52
+"306","MTU1290 ( DST38-15-3-1)","entry","Non-stress",4705.48,574.83
+"307","MTU1291 ( DST36-108-1)","entry","Non-stress",4750.83,567.99
+"308","Gomati Dhan","entry","Non-stress",5015.48,574.9
+"309","Tripura Chikan Dhan","entry","Non-stress",4661.61,574.89
+"31","IR13L188","entry","Non-stress",4477.41,568.01
+"310","Tripura Jala","entry","Non-stress",4333.12,567.74
+"311","Tripura Nirog","entry","Non-stress",5670.07,591.83
+"312","Tripura Khara 1","entry","Non-stress",4939.3,740.05
+"313","HURS 19-3","entry","Non-stress",4396.8,568.1
+"314","HURS 19-4","entry","Non-stress",3525.1,574.9
+"315","HURS 19-5","entry","Non-stress",4392.07,568.14
+"316","HURS 19-6","entry","Non-stress",4665.73,574.87
+"317","HURS 19-7","entry","Non-stress",4930.66,574.51
+"318","BRR 0072","entry","Non-stress",4777.92,595.23
+"319","BRR  0119","entry","Non-stress",4124.65,574.83
+"32","IR14L101","entry","Non-stress",4939.3,740.05
+"320","BRR 0120","entry","Non-stress",5809.61,574.89
+"321","BRR 0122","entry","Non-stress",4591.89,568.07
+"322","BRR 0124","entry","Non-stress",4420.27,574.83
+"323","TTB 944-31-10-1-2","entry","Non-stress",4758.26,568.06
+"324","TTB 1349-3-2-1","entry","Non-stress",4453.02,574.86
+"325","TTB 1348-1-1","entry","Non-stress",4661.92,574.51
+"326","TTB 1401-3-I-2","entry","Non-stress",5414.83,574.53
+"327","TTB 1402-4-s-4","entry","Non-stress",5698.03,590.95
+"328","IR 98976-20-1-2-2","entry","Non-stress",4804.38,574.9
+"329","IR 93329-61-B-21-12-21-1RGA-2RGA-","entry","Non-stress",5137.08,568.15
+"33","IR14L144","entry","Non-stress",5015.55,567.93
+"330","IR14L572","entry","Non-stress",5318.98,574.53
+"331","IR 90527-B-577-2-B?B","entry","Non-stress",5063.95,597.06
+"332","IR14L158","entry","Non-stress",4930.59,574.89
+"333","IRRI 149","check","Non-stress",5268.33,392.07
+"334","Swarna-Sub1","check","Non-stress",4852.89,389.99
+"335","SAMBHA MAHSURI + SUB1","check","Non-stress",5137.54,391.9
+"336","Ciherang-Sub1","check","Non-stress",4994.99,390.05
+"337","Thadokkham -1","check","Non-stress",4922.76,395.02
+"338","CIHERANG","check","Non-stress",5469.12,395.1
+"339","IRRI 105","check","Non-stress",5389.4,389.97
+"34","IR14L159","entry","Non-stress",3949.62,574.87
+"340","SAMBHA MAHSURI","check","Non-stress",5524.15,391.93
+"341","SWARNA","check","Non-stress",5364.53,388.03
+"342","MTU 1010","check","Non-stress",5580.21,390.79
+"343","SAHBHAGI DHAN","check","Non-stress",5804.47,388.91
+"344","IRRI 123","check","Non-stress",4953.19,392.05
+"35","IR14L245","entry","Non-stress",3742.25,567.83
+"36","IR 95780-43-1-1-1","entry","Non-stress",5025.18,574.86
+"37","IR14L256","entry","Non-stress",4722.48,574.89
+"38","IR 95793-5-2-2-3","entry","Non-stress",5255.23,574.9
+"39","IR14L297","entry","Non-stress",4691.22,574.52
+"4","SAHBHAGI DHAN","entry","Non-stress",4612.39,574.89
+"40","IR14L331","entry","Non-stress",4271.08,574.54
+"41","IR14L345","entry","Non-stress",4751.28,568.14
+"42","IR14L362","entry","Non-stress",4973.59,568.17
+"43","IR14L395","entry","Non-stress",5577.13,568.18
+"44","IR14L440","entry","Non-stress",4088.87,568.14
+"45","IR14L545","entry","Non-stress",4317.9,568.02
+"46","IR14L586","entry","Non-stress",4547.48,574.9
+"47","IR14L594","entry","Non-stress",4902.02,574.49
+"48","IR15L1008","entry","Non-stress",5138.64,568.17
+"49","IR15L1222","entry","Non-stress",4890.01,574.86
+"5","IRRI 213","entry","Non-stress",4894.19,574.9
+"50","IR15L1361","entry","Non-stress",4811.39,574.9
+"51","IR15L1419","entry","Non-stress",4445.73,574.86
+"52","IR15L1504","entry","Non-stress",4496.97,574.9
+"53","IR15L1564","entry","Non-stress",5040.03,574.83
+"54","IR15L1656","entry","Non-stress",5299.04,574.9
+"55","IR16L1411","entry","Non-stress",4800.42,574.9
+"56","IR16L1419","entry","Non-stress",4200.49,568.17
+"57","IR16L1421","entry","Non-stress",3663.7,574.86
+"58","IR16L1478","entry","Non-stress",5351.01,574.87
+"59","IR16L1499","entry","Non-stress",4541.47,574.52
+"6","IRRI 155","entry","Non-stress",5097.87,574.9
+"60","IRRI 132","entry","Non-stress",4849.67,591.03
+"61","IR11L101","entry","Non-stress",4798.88,568.09
+"62","IR15F1677","entry","Non-stress",4892.29,574.9
+"63","IR15F1697","entry","Non-stress",4086.38,568.01
+"64","IR15F1706","entry","Non-stress",4952.24,574.9
+"65","IR15F1709","entry","Non-stress",4728.71,574.86
+"66","IR15F1710","entry","Non-stress",5243.66,575.45
+"67","IR15F1716","entry","Non-stress",4691.39,568.16
+"68","IR15F1729","entry","Non-stress",5029.72,574.82
+"69","IR15F1742","entry","Non-stress",5588.58,574.86
+"7","IR 79971-B-191-B-B","entry","Non-stress",5201.81,596.6
+"70","IR15F1745","entry","Non-stress",4960.84,574.86
+"71","IR15F1754","entry","Non-stress",5012.32,568.15
+"72","IR15F1764","entry","Non-stress",4458.32,574.9
+"73","IR15F1766","entry","Non-stress",5203.75,574.55
+"74","IR15F1768","entry","Non-stress",4542.34,574.83
+"75","IR15F1779","entry","Non-stress",4939.3,740.05
+"76","IR15F1804","entry","Non-stress",4811.89,574.51
+"77","IR15F1832","entry","Non-stress",4822.17,568.1
+"78","IR15F1864","entry","Non-stress",4673.64,574.48
+"79","IR15F1868","entry","Non-stress",4939.3,740.05
+"8","IR 79971-B-227-B-B","entry","Non-stress",5428.93,574.89
+"80","IR15F1872","entry","Non-stress",4939.3,740.05
+"81","IR15F1886","entry","Non-stress",5371.94,568.01
+"82","IR15F1889","entry","Non-stress",5013.14,561.68
+"83","IR15F1897","entry","Non-stress",5208.92,597.74
+"84","IR15F1900","entry","Non-stress",4126.21,574.86
+"85","IR15F1907","entry","Non-stress",4568.97,568.06
+"86","IR15F1931","entry","Non-stress",5205.65,574.9
+"87","IR15F1936","entry","Non-stress",4882.91,568
+"88","IR15F1943","entry","Non-stress",4585.19,574.9
+"89","IR15F1982","entry","Non-stress",4701.93,568.14
+"9","IR07W120","entry","Non-stress",4904.54,574.89
+"90","IR15F1989","entry","Non-stress",4680.97,574.9
+"91","IR15F1996","entry","Non-stress",5345.74,574.83
+"92","IR15F2007","entry","Non-stress",5642.99,574.86
+"93","IR16F1198","entry","Non-stress",4714.55,574.86
+"94","IR16F1201","entry","Non-stress",4581.9,574.9
+"95","IR16F1205","entry","Non-stress",5248.28,575.12
+"96","IR16F1226","entry","Non-stress",5004.16,574.9
+"97","IR16F1229","entry","Non-stress",4832.46,574.89
+"98","IR16F1237","entry","Non-stress",5015.4,567.83
+"99","IR16F1243","entry","Non-stress",4551.15,574.82
