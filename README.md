@@ -1,4 +1,8 @@
 # Phenotypic Data Analysis Workflow and Documentation
+- This repository has the phenotypic data analysis pipeline and complete documentation of analysis workflow and R Markdown generated HTML file.
+
+- The schematic representation of analysis pipeline is given in figure: 
+
 ![](www/workflow.png)
-- This repository contains the  source codes and demo data sets associated with the manuscript "Seamless Data Analysis, Visualizations and Sharing: Perspective from IRRI’s Rainfed Rice Breeding Program".
-- 
+
+
