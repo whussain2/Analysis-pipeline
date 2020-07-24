@@ -22,7 +22,7 @@ to develop a unique data analysis workflow and redesigned it to a reproducible d
 - The source codes and ****.Rmd**** file used to generate the report is available here [Sample. Rmd file](https://github.com/whussain2/Analysis-pipeline/blob/gh-pages/Codes/sample.report.Rmd)
 
 - The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/sample.html). 
-- All features are not visible in 
+- All features are not visible in sample document if opened in GitHub preview. To see all features, download html file and open it in any web browser.
 
 # How to Use the Source Codes and Run the Pipeline
 
