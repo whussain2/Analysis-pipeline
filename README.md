@@ -11,7 +11,6 @@
 
 - The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/gh-pages/sample.html)
 
-
 # How to Use the Source Codes
 
 Update will be given soon
