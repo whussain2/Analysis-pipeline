@@ -9,7 +9,7 @@
 #  Source code and Document
 - The source codes and **.Rmd** file used to generate the report is available here [Sample. Rmd file](https://github.com/whussain2/Analysis-pipeline/blob/gh-pages/Codes/sample.report.Rmd)
 
-- The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/gh-pages/Codes/sample.report.html)
+- The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/Codes/blob/gh-pages/sample.html)
 
 
 # How to Use the Source Codes
