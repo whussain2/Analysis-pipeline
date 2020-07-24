@@ -11,12 +11,28 @@
 
 - The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/sample.html)
 
-# How to Use the Source Codes
+# How to Use the Source Codes and Run the Pipeline
 
-Update will be given soon
+The steps to use the source codes and run it on local computer is given below:
+
+- Open the GitHub page containing the source codes and files by using clicking the link[https://github.com/whussain2/Analysis-pipeline.git](https://github.com/whussain2/Analysis-pipeline.git).
+- This will pop-up the Github repository, click on the **Code** button on right side of page highlighted as green box and scroll and click on **Download Zip**.
+- Save and unzip the downloaded repository in local drive.  
+- Open the ***.Rmd*** file in R Studio and make sure to change the working directory based on users defined path to the repository. On the following lines (Line no. 85, 135, 634, 815, 998, 1083, 1140, 1269) in **.Rmd** file directory needs to be changed.
+
+- Also users must install and upload the following R packages before running the pipeline:
+
+```
+library(easypackages)
+libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", "tidyverse",
+          "lme4", "data.table", "readr","plotly", "DT", "pheatmap","asreml", "VennDiagram", 
+          "patchwork", "heatmaply", "ggcorrplot", "RColorBrewer", "hrbrthemes", "tm", "proustr")
+```
 
 
+# Manuscript
 
+More details and manuscript is coming!
 
 # Contributors
 Rainfed Breeding Team IRRI
