@@ -1,16 +1,12 @@
 # Phenotypic Data Analysis Workflow and Documentation
 <<<<<<< HEAD
-- This repository has the phenotypic data analysis pipeline and complete documentation of analysis workflow and R Markdown generated HTML file.
+- This repository contains the phenotypic data analysis pipeline and complete documentation of analysis workflow as R Markdown generated HTML file.
 
-- The schematic representation of analysis pipeline is given in figure: 
+- The schematic representation of analysis pipeline adopted is given in figure: 
 
 ![](www/workflow.png)
-
-
 =======
-The repository contains source codes and demo data set
-![](www/workflow.png)
- 
+
 Description of data analysis workflow is available here (link will be provided soon)
 R Markdown file is available here( linke will be provided soon)
 
