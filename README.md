@@ -1,14 +1,17 @@
 # Phenotypic Data Analysis Workflow and Documentation
-<<<<<<< HEAD
+
 - This repository contains the phenotypic data analysis pipeline and complete documentation of analysis workflow as R Markdown generated HTML file.
 
 - The schematic representation of analysis pipeline adopted is given in figure: 
 
 ![](www/workflow.png)
-=======
 
-Description of data analysis workflow is available here (link will be provided soon)
-R Markdown file is available here( linke will be provided soon)
+=======
+#  Source code and Document
+- The source codes and **.Rmd** file used to generate the report is available here [Sample. Rmd file](https://github.com/whussain2/Analysis-pipeline/blob/gh-pages/Codes/sample.report.Rmd)
+
+- The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://github.com/whussain2/Analysis-pipeline/blob/gh-pages/Codes/sample.report.html)
+
 
 # How to Use the Source Codes
 
