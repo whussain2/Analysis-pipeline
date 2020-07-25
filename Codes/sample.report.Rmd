@@ -459,7 +459,7 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 * As the data is in **Augmenetd RCBD un-replicated** uni-variate approach will be used to find the potential outliers.
 * Briefly, we will flag out the lines that lie outside 1.5*IQR, where IQR, the ‘Inter Quartile Range’ is the difference between 75th and 25th quartiles, these are observation that are outside the whiskers in box plot. For more details on this please check this [R blog](https://www.r-bloggers.com/outlier-detection-and-treatment-with-r/).
 * So, in this section, a function named *outlier.box* which will first subset the data based on environment and replication, then we will get Quantiles, IQR and maximum and minimum values. Then we will flag out and extract the ones that fall outside the maximum and minimum value in the data.
-* More robust approach by integrating all the data across all the trials or locations to find potential outliers by the method called **Bonferroni–Holm test** is briefly described in this [article](https://link.springer.com/article/10.1007/s00122-016-2666-6).  The R codes on this is available at [Click the link]().
+* More robust approach by integrating all the data across all the trials or locations to find potential outliers by the method called **Bonferroni–Holm test** is briefly described in this [article](https://link.springer.com/article/10.1007/s00122-016-2666-6).  The R codes on this is available at [Click the link](https://static-content.springer.com/esm/art%3A10.1007%2Fs00122-016-2666-6/MediaObjects/122_2016_2666_MOESM2_ESM.pdf).
 * Here we will be using Uni-variate approach as we are dealing with un-replicated data sets.
 
 </div>
