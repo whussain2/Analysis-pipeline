@@ -8,9 +8,9 @@
 In this pipeline we provide an overview of how rainfed breeding program at IRRI has leveraged R 
 computational power with open-source resource tools like R Markdown, plotly, LaTeX and HTML
 to develop a unique data analysis workflow and redesigned it to a reproducible document for
- better interpretation, visualization and seamlessly sharing with partners. The generated report 
- is the state-of-the-art implementation of analysis workflow and outputs either in text, 
- tables or graphics in a unified way as one document. 
+better interpretation, visualization and seamlessly sharing with partners. The generated report 
+is the state-of-the-art implementation of analysis workflow and outputs either in text, 
+tables or graphics in a unified way as one document. 
 ```
 
 
