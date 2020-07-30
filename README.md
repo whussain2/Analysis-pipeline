@@ -21,9 +21,7 @@ tables or graphics in a unified way as one document.
 #  Source code and Document
 - The source codes and ****.Rmd**** file used to generate the report is available here [Sample. Rmd file](https://github.com/whussain2/Analysis-pipeline/blob/gh-pages/Codes/sample.report.Rmd)
 
-[check](https://www.dropbox.com/s/zoz9ruo2fhxv5xm/sample.html?dl=0)
-
-- The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://github.com/whussain2/Analysis-pipeline/sample.html). All features are not visible in sample document if opened in GitHub preview. To see all features, download html file and open it in any web browser. To download the sample.html file, click the [link](https://github.com/whussain2/Analysis-pipeline/blob/master/sample.html), then click the ***Download button*** and save the file on local drive. After saving open it in browser.
+- The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://whussain2.github.io/Analysis-pipeline/Codes/sample.html). All features are not visible in sample document if opened in GitHub preview. To see all features, download html file and open it in any web browser. To download the sample.html file, click the [link](https://github.com/whussain2/Analysis-pipeline/blob/master/sample.html), then click the ***Download button*** and save the file on local drive. After saving open it in browser.
 
 # How to Use the Source Codes and Run the Pipeline
 
