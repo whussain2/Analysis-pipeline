@@ -45,7 +45,7 @@ Note: The pipeline requires asreml R package to do the analysis.
 
 # Manuscript
 
-More details and manuscript is coming soon!
+More details can be found in the manuscript available as preprint [Link](https://www.researchsquare.com/article/rs-49247/v1)
 
 
 # Contributors
