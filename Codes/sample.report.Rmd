@@ -87,46 +87,47 @@ opts_chunk$set(echo=TRUE,
 
 ```{r, message=FALSE, echo=FALSE}
 library(easypackages)
-libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", "tidyverse",
-          "lme4", "data.table", "readr","plotly", "DT", "pheatmap","asreml", "VennDiagram", 
-          "patchwork", "heatmaply", "ggcorrplot", "RColorBrewer", "hrbrthemes", "tm", "proustr")
+libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", 
+          "tidyverse","lme4", "data.table", "readr","plotly", "DT",
+          "pheatmap","asreml", "VennDiagram", "patchwork", "heatmaply", 
+          "ggcorrplot", "RColorBrewer", "hrbrthemes", "tm", "proustr")
 ```
 
 
 ***
-#  General Information
+#  General Information on Demo Data
 ***
-
-**Location**:  NARES Location India.
 
 **Study**: Drought (Stress and non-stress)
 
-**Contact Person**: ***Rainfed Breeding Team***
-
-**Experimental Design**: Augmented RCBD; 
+**Experimental Design**: Augmented Randomized Block Design; 
 
 - 4 blocks 
 
-- 1 Replication, 322 entries and 12 checks.
-
-- **Global Check**: ..................................
-
-- **Local Check**: ........................
+- 1 Replication, 322 entries (un-replicated) and 12 checks (replicated).
 
 **Season**: Wet-season (WS).
 
+**Location**:  NARES Location in India.
+
 **Year**: 2019.
 
-***
-
-<span style="color: darkblue; font-size: 16pt">**NOTE: Due to IRRI's data policies, the actual names of lines and complete metadata information is not given in this demo report. Also, the response variables has been modified in this demo.** </span>
+**Contact Person**: ***Rainfed Breeding Team***
 
 ***
-# Demo Data Set
+
+<span style="color: darkblue; font-size: 16pt">**NOTE: Due to IRRI's data policies, the actual names of lines and complete metadata information is not given in this demo report. Also, the data varaiables used in the study has been modified in the demo data set.** </span>
+
 ***
-* Here demo data set will be uploaded and viewed as table.
-* The file contains stress (drought) and non-stress trials data for traits grain yield, plant height and days to flowering.
+# Description of Demo Data Set
+***
+* Demo data set used is in augmented RCBD design. 
+
+* The demo data includes data from two trials: a) under normal conditions (non-stress) and b) under drought conditions (stress), which are phenotyped for three traits grain yield, plant height and days to flowering.
+
 * Besides blocks, information on columns and rows is also given in the data set.
+
+* Stress and non-stress will be treated as two environments for the analysis.
 
 ```{r, echo=TRUE}
 # Remove previous work
@@ -147,16 +148,24 @@ libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", "tidyver
                          dom = '<<t>Bp>',
                          buttons = c('copy', 'excel', 'pdf', 'print')), ...)
    }
-  print_table(demo.data[, c(1, 5,6,8,9,13)], editable = 'cell', rownames = FALSE, caption = htmltools::tags$caption("Table: Showing Yield Raw Data for stress and non-stress trials",style="color:black; font-size:130%"), filter = 'top')
+  print_table(demo.data[, c(1, 5,6,8,9,13)], editable = 'cell', rownames = FALSE, caption = htmltools::tags$caption("Table: Raw Data in normal and stress trial",style="color:black; font-size:130%"), filter = 'top')
 ```
 
 ***
-# Pre-processing of Data: Checking Quality of Data
+# Pre-processing of Data: Checking Quality of Phenotypic Data
 ***
 
+* Here in this step data will be pre-processed and quality of data will be checked, and only quality phenotypes will be advanced for downstream analysis and get more reliable and accurate estimates or predictors. 
 
+* The steps in pre-processing involves:
+  - Looking for missing data
+  - Descriptive statistics for each variable
+  - Heatmaps of field experimental design
+  - Data visualizatiosn as boxplots, histograms and QQ plots
+  - Look and filter for outliers.
+  
 ***
-## Visualize the missing data.
+## Visualize the Missing Data.
 ***
 * Here we will check whether the data has any missing values
 
@@ -172,8 +181,8 @@ libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", "tidyver
 # Visualize it as bar plot
   ggbarplot(na_count, x = "Variables", y = "missing.count",
           fill="lightblue",
-          color = "lightblue",            # Set bar border colors to white
-          x.text.angle = 45           # Rotate vertically x axis texts
+          color = "lightblue", # Set bar border colors to white
+          x.text.angle = 45 # Rotate vertically x axis texts
           )+
     labs(title="Missing Data Points for all Variables",x="Variables", y = "Count")+
     theme (plot.title = element_text(color="black", size=12,hjust=0.5, face="bold"), # add and modify the title to plot
@@ -192,10 +201,10 @@ libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", "tidyver
 ##  Descriptive Statistics
 ***
 
-* Here data is summarized as mean, median, standard deviation (SD), minimum, maximum, Coefficient of variation (CV) and standard error (SE) for grain yield, days to flowering, and plant height.
+* Here data is summarized as mean, median, standard deviation (SD), minimum, maximum, coefficient of variation (CV) and standard error (SE) for grain yield, days to flowering, and plant height traits.
 
 ```{r, results='asis'}
-# Summary for GRAIN YIELD
+# Summary for grain yield
 summary.gykgpha<-data.frame(demo.data %>% 
   group_by(Environment)%>% 
   summarize(Mean = mean(GYKGPHA, na.rm=TRUE),
@@ -209,7 +218,7 @@ summary.gykgpha<-data.frame(demo.data %>%
   summary.gykgpha<-data.frame(lapply(summary.gykgpha, function(y) if(is.numeric(y)) round(y, 2) else y)) 
 
   summary.gykgpha<-cbind(data.frame(Trait=c(rep("Yield", nrow(summary.gykgpha)))),summary.gykgpha )
-# Summary for FLOWERING DATA
+# Summary for flowering date
 summary.flowering<-data.frame(demo.data %>% 
   group_by(Environment)%>% 
   summarize(Mean = mean(Days.to.flowering, na.rm=TRUE),
@@ -222,7 +231,7 @@ summary.flowering<-data.frame(demo.data %>%
                ))
 summary.flowering<-data.frame(lapply(summary.flowering, function(y) if(is.numeric(y)) round(y, 2) else y)) 
 summary.flowering<-cbind(data.frame(Trait=c(rep("Flowering", nrow(summary.flowering)))),summary.flowering )
-# Summary for PLANT HEIGHT
+# Summary for plant height
   summary.height<-data.frame(demo.data %>% 
   group_by(Environment)%>% 
   summarize(Mean = mean(Height, na.rm=TRUE),
@@ -241,7 +250,7 @@ summary.flowering<-cbind(data.frame(Trait=c(rep("Flowering", nrow(summary.flower
   print_table(summary.data, rownames = FALSE,caption = htmltools::tags$caption("Data summary including mean, median, standard deviation (SD), coefficient of variation (CV), and standard error (St.err) for yield, days to flowering and plant Height.", style="color:black; font-size:130%"))
 
 ```
-<span style="color: darkblue;">**Note: Extremely high CV for grain yield under drought and lower values may be due to extreme drought.**</span>
+<span style="color: darkblue;">**Note: Extremely high CV for grain yield under drought and lower values may be due to the effect of drought.**</span>
 
 ***
 
@@ -249,16 +258,16 @@ summary.flowering<-cbind(data.frame(Trait=c(rep("Flowering", nrow(summary.flower
 ## Heat Maps of the Field Experimental Design
 ***
 
-* In this section we will visualize the field design for **grain yield** through heat map to get better idea about the design and spatial variations in the field.
+* Experimental design in the field for **grain yield** is visualized through heat map to get better idea about the field design and spatial variations in the field.
 
 <button class="btn btn-primary" data-toggle="collapse" data-target="#HeatMap"> Click to show Heatmaps/Hide </button>  
 <div id="HeatMap" class="collapse">  
 
-**Showing heat maps of field design under non-stress and drought environments. X axis shows the list of columns and y-axis the blocks or rows.**
+**Showing heat maps of field design under non-stress and drought environments. X axis shows the list of columns and y-axis the blocks (blocks here are also treated as rows).**
 
 ```{r,fig.height = 6, fig.width =10}
 
-# For Drought data  
+# For drought data  
   demo.data.dr<- subset(demo.data, Environment=="Stress.trial",select =c("Block", "Column", "GYKGPHA") )
   demo.data.dr<-data.frame(demo.data.dr%>% group_by(Block)%>% arrange(Block) %>%arrange(Column))
   demo.data.dr<-droplevels.data.frame(demo.data.dr)
@@ -274,7 +283,7 @@ plot.gy.sa<-heatmaply(demo.data.dr, main = "Grain yield under stress (drought) t
                 Colv = FALSE, cexRow = 0.8, cexCol = 0.6, na.value="white")
 plot.gy.sa
 
-# For Non-stress Data
+# For non-stress data
   demo.data.ns<- subset(demo.data, Environment=="Non.stress.trial",select =c("Block", "Column", "GYKGPHA") )
   demo.data.ns<-data.frame(demo.data.ns%>% group_by(Block)%>% arrange(Block) %>%arrange(Column))
   demo.data.ns<-droplevels.data.frame(demo.data.ns)
@@ -305,7 +314,7 @@ plot.gy.ns
 
 ```{r, fig.heightp=8, fig.width=10}
 # First let us visualize the data using boxplots
-myboxplot<- function(dataframe,x,y){
+  myboxplot<- function(dataframe,x,y){
    aaa <- enquo(x)
    bbb <- enquo(y)
    dfname <- enquo(dataframe)
@@ -328,8 +337,8 @@ myboxplot<- function(dataframe,x,y){
                   legend.text = element_text(colour="black", size=14))+ # add and modify the legends
                   guides(fill=guide_legend(title="Environments"))+
   stat_summary(fun.y=mean, geom="line", aes(group=1))  + 
-stat_summary(fun=mean, geom="point")
-}
+  stat_summary(fun=mean, geom="point")
+  }
 
 # Now draw the box plot for yield
 p1<-boxplot.yield<-myboxplot(demo.data,x=Environment,y=GYKGPHA)+
@@ -349,17 +358,17 @@ p3<-boxplot.height<-myboxplot(demo.data,x=Environment,y=Height)+
   stat_compare_means(method = "anova", label.x = 1.6, label.y = 167)
 #p3<-ggplotly(boxplot.height)
 #p1+p2+p3
-par(mfrow=c(1,3))
-p1<-ggplotly(p1)
-p2<-ggplotly(p2)
-p3<-ggplotly(p3)
-subplot(p1, p2, p3, nrows=1, margin = 0.05, titleY = TRUE)
+  par(mfrow=c(1,3))
+  p1<-ggplotly(p1)
+  p2<-ggplotly(p2)
+  p3<-ggplotly(p3)
+  subplot(p1, p2, p3, nrows=1, margin = 0.05, titleY = TRUE)
 ```
 
-<span style="color: darkblue;">**Note: Significant difference between drought and non-stress observed for all traits, p-value is provided in on top of each plot. Outliers present for all traits**</span>
+<span style="color: darkblue;">**Note: Significant difference between drought and non-stress observed for all traits, p-value is provided on top of each plot. Outliers are present for all traits**</span>
 
 
-**Histograms** and **QQ plots** are also available for more diagnostics , click the buttons below
+**Histograms** and **QQ plots** are also available , click the buttons below
 
 
 ### Histogram plots 
@@ -371,28 +380,26 @@ subplot(p1, p2, p3, nrows=1, margin = 0.05, titleY = TRUE)
 
 
 ```{r,fig.height = 4, fig.width = 8, fig.cap="Showing histograms for Grain yield, flowering and plant height. Check the problem with flowering data."}
-par(mfrow=c(1,2))
+  par(mfrow=c(1,2))
 # For grain yield
-envi<-unique(demo.data$Environment)
-for(i in 1:length(envi)){
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
   level_envi <- demo.data[which(demo.data$Environment==envi[i]),]
   hist(level_envi$GYKGPHA, col = "pink", xlab="Grain yield",
        main=paste(envi[i]))
   
 }
-
 # For Flowering date
-envi<-unique(demo.data$Environment)
-for(i in 1:length(envi)){
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
   level_envi <- demo.data[which(demo.data$Environment==envi[i]),]
   hist(level_envi$Days.to.flowering, col = "pink", xlab="Days to flowering",
        main=paste(envi[i]))
   
 }
-
 # For Plant height
-envi<-unique(demo.data$Environment)
-for(i in 1:length(envi)){
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
   level_envi <- demo.data[which(demo.data$Environment==envi[i]),]
   hist(level_envi$Height, col = "pink", xlab="Plant Height (cm)",
        main=paste(envi[i]))
@@ -410,39 +417,37 @@ for(i in 1:length(envi)){
 <div id="qq" class="collapse"> 
 
 
-* We will draw the QQ plots to check the normality of the data. It is just to to see if our data assumptions are plausible. 
+* QQ plots are drawn to check the normality of the data. It is just to to see if our data assumptions are plausible. 
 * We expect line to be straight, if it deviates then it indicates some issues with data. More information on QQ plots can be found here on this [link](https://data.library.virginia.edu/understanding-q-q-plots/)
 
 ```{r , fig.height = 4, fig.width = 8}
 ## QQ plots to check normality assumption
 # For the grain Yield
-par(mfrow=c(1,2))
-envi<-unique(demo.data$Environment)
-for(i in 1:length(envi)){
+  par(mfrow=c(1,2))
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
   level_envi <- demo.data[which(demo.data$Envi==envi[i]),]
   qqnorm(level_envi$GYKGPHA, pch = 1, frame = TRUE,  main=paste(envi[i],".Yield"))
   qqline(level_envi$GYKGPHA, col = "steelblue", lwd = 2)
-}
-
+  }
 # For the days to flowering
-par(mfrow=c(1,2))
-envi<-unique(demo.data$Environment)
-for(i in 1:length(envi)){
+  par(mfrow=c(1,2))
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
   level_envi <- demo.data[which(demo.data$Envi==envi[i]),]
   qqnorm(level_envi$Days.to.flowering, pch = 1, frame = TRUE,  main=paste(envi[i],".Flowering"))
   qqline(level_envi$Days.to.flowering, col = "steelblue", lwd = 2)
-}
-
-# For the days to plant height
-par(mfrow=c(1,2))
-envi<-unique(demo.data$Environment)
-for(i in 1:length(envi)){
+  }
+# For plant height
+  par(mfrow=c(1,2))
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
   level_envi <- demo.data[which(demo.data$Envi==envi[i]),]
   qqnorm(level_envi$Height, pch = 1, frame = TRUE,  main=paste(envi[i],".Height"))
   qqline(level_envi$Height, col = "steelblue", lwd = 2)
-}
+  }
 ```
-<span style="color: darkblue;">**Grain yield under  non-stress does not look good, so do the plant height and flowering date.**</span>
+<span style="color: darkblue;">**Grain yield under non-stress does not look good, so do the plant height and flowering date.**</span>
 </div>
 
 ***
@@ -456,7 +461,7 @@ for(i in 1:length(envi)){
 div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 </style>
 <div class = "blue">
-* As the data is in **Augmenetd RCBD un-replicated** uni-variate approach will be used to find the potential outliers.
+* As the data is in **Augmenetd RCBD** with one replication, uni-variate approach will be used to find the potential outliers.
 * Briefly, we will flag out the lines that lie outside 1.5*IQR, where IQR, the ‘Inter Quartile Range’ is the difference between 75th and 25th quartiles, these are observation that are outside the whiskers in box plot. For more details on this please check this [R blog](https://www.r-bloggers.com/outlier-detection-and-treatment-with-r/).
 * So, in this section, a function named *outlier.box* which will first subset the data based on environment and replication, then we will get Quantiles, IQR and maximum and minimum values. Then we will flag out and extract the ones that fall outside the maximum and minimum value in the data.
 * More robust approach by integrating all the data across all the trials or locations to find potential outliers by the method called **Bonferroni–Holm test** is briefly described in this [article](https://link.springer.com/article/10.1007/s00122-016-2666-6).  The R codes on this is available at [Click the link](https://static-content.springer.com/esm/art%3A10.1007%2Fs00122-016-2666-6/MediaObjects/122_2016_2666_MOESM2_ESM.pdf).
@@ -466,7 +471,7 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 
 ```{r}
 # Univariate approach to falg out outliers in augmented unreplicated design
-outlier.box<- function(data, trait, name){ 
+  outlier.box<- function(data, trait, name){ 
   #test<-subset(data, Envi==envir )# subsset based on environment and replications
   #test<-droplevels.data.frame(test) # drop factor levels
   #var_name <- eval(substitute(var),eval(data))
@@ -484,42 +489,39 @@ outlier.box<- function(data, trait, name){
   #outliers<- data[which(out_data$out_flag_max!="." |out_data$out_flag_min!="." ), c(1, 2,4,7,15)] # Extract the ones with extreame values and return only selected columns
   #outliers<- data[which(out_data$out_flag!="."),] # Extract the ones with extreame values and return only selected columns
   return( out_data)
-}
-
-table(demo.data$Environment)
+  }
+  table(demo.data$Environment)
 
 # Now subset the data and use above function to identify the outliers
 
 # subset
-Stress.trial<-subset(demo.data, Environment=="Stress.trial") # drought data
-Stress.trial<-droplevels.data.frame(Stress.trial) # drop factor levels
+  Stress.trial<-subset(demo.data, Environment=="Stress.trial") # drought data
+  Stress.trial<-droplevels.data.frame(Stress.trial) # drop factor levels
 # Now subset the non-stress data
-str(demo.data)
-Non.stress.trial<-subset(demo.data, Environment=="Non.stress.trial")
-Non.stress.trial<-droplevels.data.frame(Non.stress.trial) # drop factor levels
-
+  str(demo.data)
+  Non.stress.trial<-subset(demo.data, Environment=="Non.stress.trial")
+  Non.stress.trial<-droplevels.data.frame(Non.stress.trial) # drop factor levels
 # Now identify the outliers for grain yield
-Stress.trial<-outlier.box(Stress.trial,name="Outlier.GY", trait = GYKGPHA) # returns the list that has outliers for drought environment
-Non.stress.trial<-outlier.box(Non.stress.trial,name="Outlier.GY", trait = GYKGPHA) # returns the list that has outliers for non-stress environment
+  Stress.trial<-outlier.box(Stress.trial,name="Outlier.GY", trait = GYKGPHA) # returns the list that has outliers for drought environment
+  Non.stress.trial<-outlier.box(Non.stress.trial,name="Outlier.GY", trait = GYKGPHA) # returns the list that has outliers for non-stress environment
 
 # Now identify the outliers for plant height
-Stress.trial<-outlier.box(Stress.trial,name="Outlier.PH", trait = Height) # returns the list that has outliers for drought environment
-Non.stress.trial<-outlier.box(Non.stress.trial,name="Outlier.PH", trait = Height) # returns the list that has outliers for non-stress environment
-
+  Stress.trial<-outlier.box(Stress.trial,name="Outlier.PH", trait = Height) # returns the list that has outliers for drought environment
+  Non.stress.trial<-outlier.box(Non.stress.trial,name="Outlier.PH", trait = Height) # returns the list that has outliers for non-stress environment
 # Now identify the outliers for days to flowering
-Stress.trial<-outlier.box(Stress.trial,name="Outlier.FL", trait = Days.to.flowering) # returns the list that has outliers for drought environment
-Non.stress.trial<-outlier.box(Non.stress.trial,name="Outlier.FL", trait = Days.to.flowering) # returns the list that has outliers for non-stress environment
-
+  Stress.trial<-outlier.box(Stress.trial,name="Outlier.FL", trait = Days.to.flowering) # returns the list that has outliers for drought environment
+  Non.stress.trial<-outlier.box(Non.stress.trial,name="Outlier.FL", trait = Days.to.flowering) # returns the list that has outliers for non-stress environment
 # Now merge all the files and save them
-demo.data.out<-rbind(Stress.trial, Non.stress.trial)
+  demo.data.out<-rbind(Stress.trial, Non.stress.trial)
 #Here we will inspect all the outliers and filter the extreame ones.
 #First let us change the names of last two columns
-colnames(demo.data.out)[c(14,15,16)] <- c("out.flag.GY", "out.flag.PH", "out.flag.FL")
+  colnames(demo.data.out)[c(14,15,16)] <- c("out.flag.GY", "out.flag.PH", "out.flag.FL")
 # Visualize as table
-print_table(demo.data.out[, c(1, 6,11,12,13,14,15, 16)], editable = 'cell', rownames = FALSE, caption = htmltools::tags$caption("Table: Showing the list of outliers for grain yield, plant height and flowering date.",style="color:black; font-size:130%"), filter='top')
+  print_table(demo.data.out[, c(1, 6,11,12,13,14,15, 16)], editable = 'cell', rownames = FALSE, caption = htmltools::tags$caption("Table: Showing the list of outliers for grain yield, plant height and flowering date.",style="color:black; font-size:130%"), filter='top')
 ```
 
 ## Filter outliers
+
 <style>
 div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 </style>
@@ -531,11 +533,11 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 
 ```{r}
 # For grain yield
-demo.data.out$GYKGPHA<- ifelse(demo.data.out$out.flag.GY==".", demo.data.out$GYKGPHA, NA)
+  demo.data.out$GYKGPHA<- ifelse(demo.data.out$out.flag.GY==".", demo.data.out$GYKGPHA, NA)
 # For plant height
-demo.data.out$Height<- ifelse(demo.data.out$out.flag.PH==".", demo.data.out$Height, NA)
+  demo.data.out$Height<- ifelse(demo.data.out$out.flag.PH==".", demo.data.out$Height, NA)
 # For plant height
-demo.data.out$Days.to.flowering<- ifelse(demo.data.out$out.flag.FL==".", demo.data.out$Days.to.flowering, NA)
+  demo.data.out$Days.to.flowering<- ifelse(demo.data.out$out.flag.FL==".", demo.data.out$Days.to.flowering, NA)
 # We can also conver the outliers into mean values 
 #data<-data.frame(matrix())
 #env<- unique(TEST$Envi)
@@ -550,40 +552,36 @@ demo.data.out$Days.to.flowering<- ifelse(demo.data.out$out.flag.FL==".", demo.da
 <button class="btn btn-primary" data-toggle="collapse" data-target="#alldata"> Show plots and table after filtering for outliers/Hide </button>  
 <div id="alldata" class="collapse">  
 
-**Box Plot after Removing Outliers**
+**Box Plots after Removing Outliers**
 
 ```{r, fig.heightp=8, fig.width=10, fig.cap="Box plot showing distribution for all traits."}
 # Now draw the box plot
-p1<-boxplot.yield<-myboxplot(demo.data.out,x=Environment,y=GYKGPHA)+
+  p1<-boxplot.yield<-myboxplot(demo.data.out,x=Environment,y=GYKGPHA)+
   labs(title="",x="Environments", y = "Grain Yield")+
    stat_compare_means(method = "anova", label.x = 1.6, label.y = 10000)
 #p1<-ggplotly(boxplot.yield)
-
 # Now draw the box plot for flowering
-p2<-boxplot.flowering<-myboxplot(demo.data.out,x=Environment,y=Days.to.flowering)+
+  p2<-boxplot.flowering<-myboxplot(demo.data.out,x=Environment,y=Days.to.flowering)+
   labs(title="",x="Environments", y = "Days to flowering")+
    stat_compare_means(method = "anova", label.x = 1.6, label.y = 130)
 #p2<-ggplotly(boxplot.flowering)
-
 # Now draw the box plot height
-p3<-boxplot.height<-myboxplot(demo.data.out,x=Environment,y=Height)+
+  p3<-boxplot.height<-myboxplot(demo.data.out,x=Environment,y=Height)+
   labs(title="",x="Environments", y = "Plant Height (cm)")+
    stat_compare_means(method = "anova", label.x = 1.6, label.y = 167)
 #p3<-ggplotly(boxplot.height)
-
-par(mfrow=c(1,3))
-p1<-ggplotly(p1)
-p2<-ggplotly(p2)
-p3<-ggplotly(p3)
-subplot(p1, p2, p3, nrows=1, margin = 0.05, titleY = TRUE)
-
+  par(mfrow=c(1,3))
+  p1<-ggplotly(p1)
+  p2<-ggplotly(p2)
+  p3<-ggplotly(p3)
+  subplot(p1, p2, p3, nrows=1, margin = 0.05, titleY = TRUE)
 ```
 <span style="color: darkblue;font-size: 10pt">**Note: Seems much better now. Also check the significant differences between drought and non-stress trials.**</span>
 
 **Descriptive Statistics after Removing Outliers**
 
 ```{r, results='asis'}
-summary.gykgpha<-data.frame(demo.data.out %>% 
+  summary.gykgpha<-data.frame(demo.data.out %>% 
   group_by(Environment)%>% 
   summarize(Mean = mean(GYKGPHA, na.rm=TRUE),
             Median= median(GYKGPHA, na.rm=TRUE),
@@ -636,27 +634,33 @@ datatable(summary.data,options = list(pageLength = 7, dom = 'tip'), rownames = F
 </div>
 
 ***
-# Data Analysis for Grain Yield
+# Data Analysis for Grain Yield in ASReml R Package
 ***
 
 <style>
 div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 </style>
 <div class = "blue">
-* In this section, we will analyze only grain yield data using a **Mixed-Model Approach** in Asreml-R package.
-* Analysis is divided in two parts: 
-* First **Separate analysis**: In this stress and non-stress trials will be analyzed separately. We will be testing **five mixed models** correcting for experimental design factors (Blocks here) and spatial variations. Then best model will be selected (model having lowest *AIC* value ) and used  to extract the ***BLUPs or Breeding Values*** and ***Heritability***.
-* Second **Combined analysis or MET analysis**: In this analysis drought and non-stress trials will combined and analyzed together and ***single value BLUPs for each genotype*** will be extracted. Heritability will be also noted. The model used for combined analysis is again ***Mixed-Model accounting for spatial variations***. We already know best spatial model (found in separate analysis above) in drought and non-stress trial, so this information will be used and incorporated in combined mixed-model analysis model.  
+* In this section, data analysis will be shown only for grain yield trait using a **Linear Mixed-Model Approach** in [ASReml-R package](https://asreml.kb.vsni.co.uk/wp-content/uploads/sites/3/2018/02/ASReml-R-Reference-Manual-4.pdf).
+
+* Demo data analysis for grain yield will also be shown using freely available [lme4 R Package](https://cran.r-project.org/web/packages/lme4/lme4.pdf) package, and will be useful to the users which do not have access to the commercial **ASReml-R package**.
+
+* in general analysis is divided in two parts: 
+
+* First **Separate analysis or step-wise analysis**: In this stress and non-stress trials will be analyzed separately, and will be treated as seperate two environments. We will be testing **five mixed models** correcting for experimental design factors (Blocks here) and spatial variations. Then best model will be selected (model having lowest *AIC* value ) and used  to extract the ***BLUPs or Breeding Values*** and ***Heritability***.
+
+* Second **Combined analysis (MET) or single stage analysis**: In this analysis stress and non-stress trials will combined and analyzed together and ***single value BLUPs for each genotype*** will be extracted. The model used for combined analysis is again ***Mixed-Model accounting for spatial variations***. We already know best spatial model (found in separate analysis above) in drought and non-stress trial, so this information will be used and incorporated in combined mixed-model analysis model.  
+
 * Then we will rank the genotypes based on the BLUP values and compare it with checks. 
+
 * We will also look at correlations between the trials.
 </div>
-
 
 ***
 ## Separate Analysis 
 ***
 
-* As mentioned above **Five models** will be used to account for *experimental design factors* and accounting for *spatial variations*. For more information on these models we highly recommend these resources: [Asreml-R-Tutorial: Go to section 4.1](https://asreml.kb.vsni.co.uk/wp-content/uploads/sites/3/2018/02/ASReml-R-Reference-Manual-4.pdf); [Book: Genetic Data Analysis for Plant and Animal Breeding; Chapter 7](https://link.springer.com/book/10.1007%2F978-3-319-55177-7).
+* As mentioned above **only Five models** will be used to account for *experimental design factors* and accounting for *spatial variations*. For more information on these models and other advanced additional mixed models is available here: [Asreml-R-Tutorial: Go to section 4.1](https://asreml.kb.vsni.co.uk/wp-content/uploads/sites/3/2018/02/ASReml-R-Reference-Manual-4.pdf); [Book: Genetic Data Analysis for Plant and Animal Breeding; Chapter 7](https://link.springer.com/book/10.1007%2F978-3-319-55177-7).
 
 * Click button below for more description on the models:
 
@@ -681,10 +685,10 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 Y_{ij}= \mu+G_{i} + B_{j} + \varepsilon_{ij}\\
 Y_{ij}= \text{ is the effect of $i$th genotype in $j$th block} \\
 \mu= \text {overall mean}\\
-G_{i}=\text{effect of the $i$th genotype}\\
-B_{k}= \text {effect of $k$th block}\\
-e_{ij}=\text{error}\\
-\text{here we assume residuals are independent and identically distributed }\varepsilon\sim \text{$iid$N}(0,\sigma_e^2)\\
+G_{i}=\text{random effect of the $i$th genotype}\\
+B_{k}= \text {fixed effect of $k$th block}\\
+\varepsilon_{ij}=\text{error}\\
+\text{here we assume errors are independent and identically distributed }\varepsilon\sim \text{$iid$N}(0,\sigma_e^2)\\
 \]
 
 
@@ -692,7 +696,7 @@ e_{ij}=\text{error}\\
 
 <span style="color: darkblue;font-size: 10pt">**model1<-asreml(fixed=trait~Block, random=~Genotype, na.method="include", data=data)**</span>
 
-* Block as fixed effect and genotype as random effect
+* In the above model block is treated as fixed effect and genotype as random effect
 
 ***
 
@@ -705,10 +709,10 @@ e_{ij}=\text{error}\\
 Y_{ijk}= \mu+G_{i} + B_{j}+ C_{k} + \varepsilon_{ijk}\\
 Y_{ijk}= \text{ is the effect of $i$th genotype in $j$th block and $k$th column} \\
 \mu= \text {overall mean}\\
-G_{i}=\text{effect of the $i$th genotype}\\
-B_{j}= \text {efect of $j$th block}\\
-C_{k}= \text {efect of $k$th column}\\
-e_{ijk}=\text{error}\\
+G_{i}=\text{random effect of the $i$th genotype}\\
+B_{j}= \text {random efect of $j$th block}\\
+C_{k}= \text {random efect of $k$th column}\\
+\varepsilon_{ijk}=\text{error}\\
 \text{here we assume residuals are independent and identically distributed }\varepsilon\sim \text{$iid$N}(0,\sigma_e^2)\\
 \]
 
@@ -722,16 +726,16 @@ e_{ijk}=\text{error}\\
 
 <span style="color: darkred;font-size: 20pt">**Model 3**</span>
 
-* In this model we account **block**, and **column** effects, and for **spatial variations (i.e, correlated residuals both across blocks or rows and columns)** in row and column direction both.
+* In this model we account **block**, and **column** effects, and for **spatial variations (i.e, correlated residuals both across rows and columns)** in row and column direction both.
 
 \[
-Y_{ijk}= G_{i} + B_{j}+ C_{k} + \varepsilon_{ijk}:ar1(B):ar1(C)\\
-Y_{ijk}= \text{ is the effect of $i$th genotype and $j$th block in $k$th column} \\
+Y_{ijk}= G_{i} + B_{j}+ C_{k} + \varepsilon_{ijk}:ar1v(B):ar1(C)\\
+Y_{ijk}= \text{ is the effect of $i$th genotype in $j$th block and $k$th column} \\
 \mu= \text {overall mean}\\
-G_{i}=\text{effect of the $i$th genotype}\\
-B_{k}= \text {efect of $k$th block}\\
-C_{k}= \text {efect of $k$th column}\\
-ar1(B):ar1(C)=\text{AR1_AR1 first order autoregressive variance model for both Block/Row and Column}\\
+G_{i}=\text{random effect of the $i$th genotype}\\
+B_{j}= \text {random efect of $j$th block}\\
+C_{k}= \text {random efect of $k$th column}\\
+ar1v(B):ar1(C)=\text{AR1_AR1 first order autoregressive variance model for both Row and Column}\\
 \]
 here, we assume residuals are correlated based on the distance between plots along both the rows and columns; that is
 $$\sim \sum{_B}(p{_B})\bigotimes\sum{_C}(p{_C})$$
@@ -748,15 +752,15 @@ where,$$\sum{_B}(p{_B})$$ is the correlation matrix for the row model $$(p{_rB})
 
 <span style="color: darkred;font-size: 20pt">**Model 4**</span>
 
-* In this model we account for only **spatial variations (i.e, correlated residuals both across blocks or rows and columns)** in row and column direction both.
+* In this model we account only for fixed block effect and  **spatial variations (i.e, correlated residuals both across blocks or rows and columns)** in row and column directions both.
 
 \[
-Y_{ijk}= G_{i} + B_{j} + \varepsilon_{ij}:ar1(B):ar1(C)\\
-Y_{ijk}= \text{ is the effect of $i$th genotype and $j$th block} \\
+Y_{ijk}= G_{i} + B_{j} + \varepsilon_{ij}:ar1v(B):ar1(C)\\
+Y_{ijk}= \text{ is the effect of $i$th genotype in $j$th block} \\
 \mu= \text {overall mean}\\
-G_{i}=\text{effect of the $i$th genotype}\\
-B_{k}= \text {efect of $j$th block}\\
-ar1(B):ar1(C)=\text{AR1_AR1 first order autoregressive variance model for both Block/Row and Column}\\
+G_{i}=\text{random effect of the $i$th genotype}\\
+B_{k}= \text {fixed efect of $j$th block}\\
+ar1v(B):ar1(C)=\text{AR1_AR1 first order autoregressive variance model for both Row and Column}\\
 \]
 here, we assume residuals are correlated based on the distance between plots along both the rows and columns; that is
 $$\sim \sum{_B}(p{_B})\bigotimes\sum{_C}(p{_C})$$
@@ -775,13 +779,13 @@ where,$$\sum{_B}(p{_B})$$ is the correlation matrix for the row model $$(p{_rB})
 * In this model we account for **spatial variations (i.e, correlated residuals across columns)** in column direction only.
 
 \[
-Y_{ijk}= G_{i} + B_{j}+ C_{k} + \varepsilon_{ijk}:ar1(B):ar1(C)\\
+Y_{ijk}= G_{i} + B_{j}+ C_{k} + \varepsilon_{ijk}:idv(B):ar1(C)\\
 Y_{ijk}= \text{ is the effect of $i$th genotype and $j$th block in $k$th column} \\
 \mu= \text {overall mean}\\
-G_{i}=\text{effect of the $i$th genotype}\\
-B_{k}= \text {efect of $k$th block}\\
+G_{i}=\text{random effect of the $i$th genotype}\\
+B_{k}= \text {fixed efect of $k$th block}\\
 C_{k}= \text {efect of $k$th column}\\
-ar1(B):ar1(C)=\text{AR1_AR1 first order autoregressive variance model for both Block/Row and Column}\\
+idv(B):ar1(C)=\text{AR1_AR1 first order autoregressive variance model for Column only }\\
 \]
 here, we assume residuals are correlated based on the distance between plots along both the rows and columns; that is
 $$\sim\bigotimes\sum{_C}(p{_C})$$
@@ -1326,6 +1330,224 @@ div.final { background-color:pink; font-family:verdana; font-size:110%;border-ra
 * Combined analysis performed would be more appropriate to rank lines, as done above. 
 
 </div>
+
+***
+# Phenotypic Data Analysis in lme4
+***
+
+* Here in this section phenotypic data analysis is performed in an open source R package called **lme4**. More on this R package can be found here [lme4 Tutorial 1](https://cran.r-project.org/web/packages/lme4/lme4.pdf), and [lme4 Tutorial 2](https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf).
+
+* The purpose of this section is repeat the phenotypic data anlysis in lme4 as ASReml R package is commercial package and may not available to all the users. 
+
+* We will use filtered data set to show and perform the analysis in lme4.
+
+## Upload the Phenotypic Data
+
+```{r}
+# Uplaod the filtered daat set
+if(exists('demo.data.out') && is.data.frame(get('demo.data.out'))){
+  demo.data.out=demo.data.out
+}else{
+  demo.data.out<-read.csv(file="~/Documents/GitHub/Analysis-pipeline/Outputs/Tables/demo.data.filtered.csv",
+                            header = TRUE)
+# factor conversion if below are not in factors 
+  columns<-c("Plot", "Genotype", "Replication", "Block", "Row", "Column", "Year")
+  demo.data.out[, columns]<-lapply(columns, function(x) as.factor(demo.data.out[[x]]))
+  demo.data.out$GYKGPHA<-as.numeric(demo.data.out$GYKGPHA)
+  demo.data.out$Height<-as.numeric(demo.data.out$Height)
+}
+  
+demo.data.out<-data.frame(demo.data.out%>% group_by(Environment)%>%arrange(Row, Column)) # arrange by row and column
+demo.data.out<-data.frame(demo.data.out%>% arrange(Environment)) # Arrange by environment
+demo.dr<-subset(demo.data.out, Environment=="Stress.trial") # Drought environment
+demo.dr<-droplevels.data.frame(demo.dr)
+demo.ns<-subset(demo.data.out, Environment=="Non.stress.trial") # Non-stress environment
+demo.ns<-droplevels.data.frame(demo.ns)
+```
+
+## Seperate Analayis
+
+
+* We will use the following model in lme4 to run the analysis
+\[
+Y_{ij}= \mu+G_{i} + B_{j} + \varepsilon_{ij}\\
+Y_{ij}= \text{ is the effect of $i$th genotype in $j$th block} \\
+\mu= \text {overall mean}\\
+G_{i}=\text{effect of the $i$th genotype}\\
+B_{k}= \text {effect of $k$th block}\\
+e_{ij}=\text{error}\\
+\text{here we assume residuals are independent and identically distributed }\varepsilon\sim \text{$iid$N}(0,\sigma_e^2)\\
+\]
+
+* The model described above is equivalent to model1 described and used in ASReml R package.
+
+* Note: Blocks here are fixed and Genotypes as Random
+
+```{r}
+# Now apply model
+model1.lme4<-lmer(GYKGPHA~Block+(1|Genotype), data =demo.ns)
+```
+
+### Results
+
+* Here we will summarize the results using ***summary()*** function. The first few lines of output indicate that the model was fitted by REML as well as the value of the REML criterion. The second piece of the summary output provides information regarding the random-effects and residual variation.
+The third piece of the summary output provides information regarding the fixed-effects and the fourth piece of summary output provides information regarding the correlation of fixed effects.
+
+```{r}
+# Summarise the results
+summary(model1.lme4)
+```
+
+### Extract varaince componenets
+
+```{r}
+Ve<- VarCorr(model1.lme4)
+Ve
+```
+
+#### Plot the residual vs fitted plot (check for homoscedasticicty)
+
+```{r}
+plot(fitted(model1.lme4), resid(model1.lme4), type="pearson")
+abline(0,0, col="blue")
+# Plot QQ plot
+qqnorm(resid(model1.lme4))
+# Residual plot
+plot(residuals(model1.lme4,type="pearson"), main='Model residuals', 
+ylab='Pearson residual value')
+```
+
+#### ANOVA
+
+```{r}
+# ANOVA
+anova(model1.lme4)
+```
+
+
+#### Extarct the Fixed effects
+
+```{r}
+BLUEs<-fixef(model1.lme4)
+BLUEs
+```
+
+#### Extarct the Random effects
+
+```{r}
+# Extarct the Random effects
+BLUPs<-data.frame(Blups.yield=ranef(model1.lme4)$Genotype)
+GV<-data.frame(BLUps.GY=coef(model1.lme4)$Genotype[,1]) #Genotype values (Blups +Intercept)
+```
+
+### Heritability
+
+<style>
+div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+* Here in this section we will select and run the best model and extract BLUPs ([know more on BLUPs or BLUEs here](http://nitro.biosci.arizona.edu/workshops/TWIPB2013/Mod3/Mod3-5.pdf)).
+
+* We will also calculate the heritabilities. Note we are dealing with trials that is un-replicated and has missing data, so we cannot use basic formula as: $h{^2}=\frac{\sigma^{2}g}{\sigma^{2}g+\sigma^{2}e}$ to calculate heritability. Plus when we are dealing with spatial models or complex models, calculating heritability with this method is not appropriate.
+
+* Alternative method as described by [Piepho and M€ohring (2007)](https://link.springer.com/article/10.1007/s10681-007-9449-8) is more appropriate for complex residual structures and unbalanced experimental designs. The equation is: $H_{C}=1-\frac{\overline{V}_{BLUP}}{2\sigma^{2}g}$. Where $\overline{V}_{BLUP}$ is mean variance difference of difference of two BLUP and $\sigma^{2}g$ is variance of genotypes. Note this definition of heritability is related to reliability of breeding value predictions. For more details please check the [Book: Genetic Data Analysis for Plant and Animal Breeding; Chapter 7](https://link.springer.com/book/10.1007%2F978-3-319-55177-7) and this beautiful resource [Summary of heritability equations](https://shantel-martinez.github.io/resources.html)
+</div>
+
+
+```{r}
+# Extract the varaince components
+Ve<- data.frame (VarCorr(model1))
+Ve
+# Now calculate heritability using variance components
+genotype.var=Ve[1,4]
+error.var=Ve[2,4]
+# Now heritability
+h2=genotype.var/(genotype.var+error.var)*100
+h2
+# Relaibility
+library(arm)
+std.err<-se.ranef(model1)$Genotype
+v_BLUP<- mean(std.err)
+# Heritability/Reliability 
+h2<- (1-((v_BLUP)^2/(Ve[1,4]*2)))*100
+h2
+
+```
+
+
+***
+## Stage Wise/combined  Analysis 
+***
+     
+* Here we will analysis stress and non-stress together and extract the single BLUPs for the genotypes. We will use mixed model analysis in lme4 r package model. We will treat genotypes as random.
+
+* We will assume stress and non-stress as two environments.
+
+### First Get Basic ANOVA
+
+```{r}
+demo.data.out$Environment<-as.factor(demo.data.out$Environment)
+str(demo.data.out)
+model.anova<-lm(formula = GYKGPHA~Genotype+Block+Environment,data=demo.data.out)
+
+# Get ANOVA
+anova(model.anova)
+```
+
+### Check for Homogeneity of Varaince
+
+* More on this can be found on this: [Source 1 ](https://www.datanovia.com/en/lessons/homogeneity-of-variance-test-in-r/), [Source 2](https://www.geeksforgeeks.org/homogeneity-of-variance-test-in-r-programming/)
+
+```{r}
+var.test(GYKGPHA~Environment,data=demo.data.out)
+```
+
+### Now Perform Combined Analysis
+* The model we will use is give below:
+\[
+Y_{ij}= \mu+G_{i} + B_{j} + e{_k}+ \varepsilon_{ij}\\
+Y_{ij}= \text{ is the effect of $i$th genotype in $j$th block and $k$th environment} \\
+\mu= \text {overall mean}\\
+G_{i}=\text{effect of the $i$th genotype}\\
+B_{j}= \text {effect of $j$th block}\\
+E{_k}= \text{ is the effect of $k$th environment}\\
+e_{ij}=\text{error}\\
+\text{here we assume residuals are independent and identically distributed }\varepsilon\sim \text{$iid$N}(0,\sigma_e^2)\\
+\]
+
+* Mixed models are powerful tools to handle assumptions of linear model [Read this one](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13434)
+
+* We will extract varaince components and also calculate heritability.
+
+```{r}
+str(demo.data.out)
+demo.data.out$Environment<-as.factor(demo.data.out$Environment)
+model3<-lmer(GYKGPHA ~Block+(1|Genotype)+(1|Environment), data=demo.data.out1)
+summary(model3)
+plot(model3)
+# Extract the varaince components
+Ve<- data.frame (VarCorr(model3))
+Ve
+# Now calculate heritability using variance components
+genotype.var=Ve[1,4]
+environment.var=Ve[2,4]
+error.var=Ve[3,4]
+# Now heritability
+h2=genotype.var/(genotype.var+environment.var+error.var)*100
+h2
+# Relaibility
+library(arm)
+std.err<-se.ranef(model3)$Genotype
+v_BLUP<- mean(std.err)
+# Heritability/Reliability 
+h2<- (1-((v_BLUP)^2/(Ve[1,4]*2)))*100
+h2
+```
+
+
+
+
 
 ***
 *Note: For questions specific to analysis please contact waseem.hussain@irri.org*
