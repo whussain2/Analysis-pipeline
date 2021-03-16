@@ -1,4 +1,4 @@
-# Phenotypic Data Analysis Workflow and Documentation
+# [Phenotypic Data Analysis Workflow and Documentation](https://whussain2.github.io/Analysis-pipeline/Codes/sample.html)
 
 - This repository contains the phenotypic data analysis pipeline and complete documentation of analysis workflow as R Markdown generated HTML file.
 
@@ -19,11 +19,9 @@ tables or graphics in a unified way as one document.
 ![](www/workflow.png)
 
 #  Source code and Document
-- The source codes and ****.Rmd**** file used to generate the report is available here [Sample. Rmd file](https://github.com/whussain2/Analysis-pipeline/blob/gh-pages/Codes/sample.report.Rmd)
+- The source codes and ****.Rmd**** file used to generate the report is available here [Sample. Rmd file](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/sample.report.Rmd)
 
-[check](https://drive.google.com/file/d/1C83thxE8JO52XmktYXPU7g_gcOw5Ulnw/view?usp=sharing)
-
-- The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/sample.html). All features are not visible in sample document if opened in GitHub preview. To see all features, download html file and open it in any web browser. To download the sample.html file, click the [link](https://github.com/whussain2/Analysis-pipeline/blob/master/sample.html), then click the ***Download button*** and save the file on local drive. After saving open it in browser.
+- The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://whussain2.github.io/Analysis-pipeline/Codes/sample.html).
 
 # How to Use the Source Codes and Run the Pipeline
 
@@ -47,7 +45,7 @@ Note: The pipeline requires asreml R package to do the analysis.
 
 # Manuscript
 
-More details and manuscript is coming soon!
+More details can be found in the manuscript available as preprint [Link](https://www.researchsquare.com/article/rs-49247/v1)
 
 
 # Contributors
