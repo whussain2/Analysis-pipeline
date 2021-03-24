@@ -36,9 +36,10 @@ The steps to use the source codes and run it on local computer is given below:
 
 ```
 library(easypackages)
-libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", "tidyverse",
-          "lme4", "data.table", "readr","plotly", "DT", "pheatmap","asreml", "VennDiagram", 
-          "patchwork", "heatmaply", "ggcorrplot", "RColorBrewer", "hrbrthemes", "tm", "proustr")
+libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", 
+          "tidyverse","lme4", "data.table", "readr","plotly", "DT",
+          "pheatmap","asreml", "VennDiagram", "patchwork", "heatmaply", 
+          "ggcorrplot", "RColorBrewer", "hrbrthemes", "tm", "proustr", "arm")
 ```
 
 Note: The pipeline requires asreml R package to do the analysis. 
