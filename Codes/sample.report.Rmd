@@ -389,7 +389,7 @@ plot.gy.env2
 * Histograms for all traits to check distribution of data.
 
 
-```{r,fig.height = 4, fig.width = 8, fig.cap="Showing histograms for Grain yield, flowering and plant height. Check the problem with flowering data."}
+```{r,fig.height = 4, fig.width = 8, fig.cap="Showing histograms for Grain yield, flowering and plant height."}
   par(mfrow=c(1,2))
 # For grain yield
   envi<-unique(demo.data$Environment)
@@ -758,7 +758,7 @@ G_{i}=\text{random effect of the $i$th genotype}\\
 B_{k}= \text {fixed efect of $j$th block}\\
 \xi=\text  {residual error}\\
 \]
-here, we assume $\xi$ is a random effect that represents correlated residuals based on the distance between plots along both the rows and columns, where, $\xi\sim N(0,\mathbf{R})$ and *R* is the covariance matrix of $\xi$. Here,$R ={\sigma_\xi^2\ \Sigma}_c\left(\rho_c\right)\otimes\Sigma_r\left(\rho_r\right)$. $\sigma_\xi^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ and $\  \Sigma_r\left(\rho_r\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ and $\rho_{r\ }$ are the autocorrelation parameters for the columns and rows; $\otimes$ represents the Kronecker product between separable auto-regressive processes of the first order in the row-column dimensions.
+here, we assume $\xi$ is a random effect that represents correlated residuals based on the distance between plots along both the rows and columns, where, $\xi\sim N(0,\mathbf{R})$ and **R** is the covariance matrix of $\xi$. Here, $R ={\sigma_\xi^2\ \Sigma}_c\left(\rho_c\right)\otimes\Sigma_r\left(\rho_r\right)$. $\sigma_\xi^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ and $\  \Sigma_r\left(\rho_r\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ and $\rho_{r\ }$ are the autocorrelation parameters for the columns and rows; $\otimes$ represents the Kronecker product between separable auto-regressive processes of the first order in the row-column dimensions.
 
 **R script in Asreml**
 
@@ -782,7 +782,7 @@ C_{k}= \text {efect of $k$th column}\\
 \xi=\text  {residual error}\\
 \]
 
-here, we assume $\xi$ is a random effect that represents correlated residual across columns only, where, $\xi\sim N(0,\mathbf{R})$ and R is the covariance matrix of $\xi$, and $\mathbf{R}={\sigma_\xi^2\ \Sigma}_c\left(\rho_c\right)\otimes I_r$. $\sigma_\xi^2$ is the variance of spatially dependent residual; $ {\Sigma}_c\left(\rho_c\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ the autocorrelation parameters for the columns only; $I_r$ represents independently and identically distributed variance structure for rows.
+here, we assume $\xi$ is a random effect that represents correlated residual across columns only, where, $\xi\sim N(0,\mathbf{R})$ and **R** is the covariance matrix of $\xi$, and $\mathbf{R}={\sigma_\xi^2\ \Sigma}_c\left(\rho_c\right)\otimes I_r$. $\sigma_\xi^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ the autocorrelation parameters for the columns only; $I_r$ represents independently and identically distributed variance structure for rows.
 
 **R script in Asreml**
 
@@ -1046,6 +1046,7 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 **Combined or MET model**
 
 ***
+
 \[
 Y_{ijk}= \mu+G_{i} + E_{j}+G_{i}*E_{j}+ B_{k}(E_{j}) + \xi\\
 Y_{ijk}= \text{ is the effect of $i$th genotype in $j$th environment and $k$th block} \\
@@ -1054,8 +1055,9 @@ G_{i}=\text{random effect of the $i$th genotype}\\
 E_{j}=\text{fixed effect of the $j$th environment}\\
 B_{k}= \text {random efect of $k$th block nested in $j$th environment}\\
 \xi=\text{residual error}\\
-
 \]
+
+***
 
 here, we assume $\xi$ is a random effect that represents correlated residual across columns and or rows depending upon the correlation structure that was fitted.  Further it should be noted we applied a separate spatial trend for each environment in the combined model, and spatial model was decided from the seperate analysis done above. See the Asreml code below:
 
@@ -1467,12 +1469,12 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
   fill = myCol,
   
   # Numbers
-  cex = .6,
+  cex = .8,
   fontface = "bold",
   fontfamily = "sans",
   
   # Set names
-  cat.cex = 0.2,
+  cat.cex = 0.4,
   cat.fontface = "bold",
   cat.default.pos = "outer",
   cat.pos = c(-27, 27, 135),
