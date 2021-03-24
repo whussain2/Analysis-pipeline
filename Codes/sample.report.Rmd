@@ -681,13 +681,13 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 
 ***
 \[
-Y_{ij}= \mu+G_{i} + B_{j} + \varepsilon_{ij}\\
+Y_{ij}= \mu+G_{i} + B_{j} + \epsilon_{ij}\\
 Y_{ij}= \text{ is the effect of $i$th genotype in $j$th block} \\
 \mu= \text {overall mean}\\
 G_{i}=\text{random effect of the $i$th genotype}\\
 B_{k}= \text {fixed effect of $k$th block}\\
-\varepsilon_{ij}=\text{error}\\
-\text{here we assume errors are independent and identically distributed }\varepsilon\sim \text{$iid$N}(0,\sigma_e^2)\\
+\varepsilon_{ij}=\text{residual error}\\
+\text{here we assume errors are independent and identically distributed }\epsilon\sim \text{$iid$N}(0,\sigma_\epsilon^2)\\
 \]
 
 **R script in Asreml**
@@ -703,14 +703,14 @@ B_{k}= \text {fixed effect of $k$th block}\\
 
 ***
 \[
-Y_{ijk}= \mu+G_{i} + B_{j}+ C_{k} + \varepsilon_{ijk}\\
+Y_{ijk}= \mu+G_{i} + B_{j}+ C_{k} + \epsilon_{ijk}\\
 Y_{ijk}= \text{ is the effect of $i$th genotype in $j$th block and $k$th column} \\
 \mu= \text {overall mean}\\
 G_{i}=\text{random effect of the $i$th genotype}\\
 B_{j}= \text {random efect of $j$th block}\\
 C_{k}= \text {random efect of $k$th column}\\
-\varepsilon_{ijk}=\text{error}\\
-\text{here we assume residuals are independent and identically distributed }\varepsilon\sim \text{$iid$N}(0,\sigma_e^2)\\
+\varepsilon_{ijk}=\text{residual error}\\
+\text{here we assume residuals are independent and identically distributed }\epsilon\sim \text{$iid$N}(0,\sigma_\epsilon^2)\\
 \]
 
 **R script in Asreml**
@@ -726,16 +726,16 @@ C_{k}= \text {random efect of $k$th column}\\
 * In this model we account **block**, and **column** effects, and for **spatial trends/effects i.e, correlated residuals both across rows and columns**.
 
 \[
-Y_{ijk}= G_{i} + B_{j}+ C_{k} + \xi\\
+Y_{ijk}= G_{i} + B_{j}+ C_{k} + \epsilon_{ijk}\\
 Y_{ijk}= \text{ is the effect of $i$th genotype in $j$th block and $k$th column} \\
 \mu= \text {overall mean}\\
 G_{i}=\text{random effect of the $i$th genotype}\\
 B_{j}= \text {random efect of $j$th block}\\
 C_{k}= \text {random efect of $k$th column}\\
-\xi=\text  {residual error}\\
+\epsilon_{ijk}=\text  {residual error}\\
 \]
 
-here, we assume $\xi$ is a random effect that represents correlated residuals based on the distance between plots along both the rows and columns, where, $\xi\sim N(0,\mathbf{R})$ and *R* is the covariance matrix of $\xi$. The difference between this model and model 1 and model 2 described above is the structure of the covariance residuals $R ={\sigma_\xi^2\ \Sigma}_c\left(\rho_c\right)\otimes\Sigma_r\left(\rho_r\right)$. $\sigma_\xi^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ and $\  \Sigma_r\left(\rho_r\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ and $\rho_{r\ }$ are the autocorrelation parameters for the columns and rows; $\otimes$ represents the Kronecker product between separable auto-regressive processes of the first order in the row-column dimensions. For more  details on this, these references would be helpful [Gilmour et al., 1997](https://www.jstor.org/stable/1400446); [Gogel et al., 2018](https://doi.org/10.1007/s10681-018-2116-4); [Andrade et al., 2020](https://doi.org/10.1002/csc2.20226); [Bernardeli et al.202]( https://doi.org/10.1002/csc2.20364)
+here, we assume $\epsilon$ is a random effect that represents correlated residuals based on the distance between plots along both the rows and columns, where, $\epsilon\sim N(0,\mathbf{R})$ and *R* is the covariance matrix of $\epsilon$. The difference between this model and model 1 and model 2 described above is the structure of the covariance residuals $R ={\sigma_\epsilon^2\ \Sigma}_c\left(\rho_c\right)\otimes\Sigma_r\left(\rho_r\right)$. $\sigma_\epsilon^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ and $\  \Sigma_r\left(\rho_r\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ and $\rho_{r\ }$ are the autocorrelation parameters for the columns and rows; $\otimes$ represents the Kronecker product between separable auto-regressive processes of the first order in the row-column dimensions. For more  details on this, these references would be helpful [Gilmour et al., 1997](https://www.jstor.org/stable/1400446); [Gogel et al., 2018](https://doi.org/10.1007/s10681-018-2116-4); [Andrade et al., 2020](https://doi.org/10.1002/csc2.20226); [Bernardeli et al.202]( https://doi.org/10.1002/csc2.20364)
 
 
 **R script in Asreml**
@@ -751,14 +751,14 @@ here, we assume $\xi$ is a random effect that represents correlated residuals ba
 * In this model we account only for fixed block effect and  **spatial trends i.e, correlated residuals both across blocks or rows and columns** in row and column directions both.
 
 \[
-Y_{ijk}= G_{i} + B_{j} + \xi\\
+Y_{ijk}= G_{i} + B_{j} + \epsilon\\
 Y_{ijk}= \text{ is the effect of $i$th genotype in $j$th block} \\
 \mu= \text {overall mean}\\
 G_{i}=\text{random effect of the $i$th genotype}\\
 B_{k}= \text {fixed efect of $j$th block}\\
-\xi=\text  {residual error}\\
+\epsilon_{ij}=\text  {residual error}\\
 \]
-here, we assume $\xi$ is a random effect that represents correlated residuals based on the distance between plots along both the rows and columns, where, $\xi\sim N(0,\mathbf{R})$ and **R** is the covariance matrix of $\xi$. Here, $R ={\sigma_\xi^2\ \Sigma}_c\left(\rho_c\right)\otimes\Sigma_r\left(\rho_r\right)$. $\sigma_\xi^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ and $\  \Sigma_r\left(\rho_r\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ and $\rho_{r\ }$ are the autocorrelation parameters for the columns and rows; $\otimes$ represents the Kronecker product between separable auto-regressive processes of the first order in the row-column dimensions.
+here, we assume $\epsilon$ is a random effect that represents correlated residuals based on the distance between plots along both the rows and columns, where, $\epsilon\sim N(0,\mathbf{R})$ and **R** is the covariance matrix of $\epsilon$. Here, $R ={\sigma_\epsilon^2\ \Sigma}_c\left(\rho_c\right)\otimes\Sigma_r\left(\rho_r\right)$. $\sigma_\epsilon^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ and $\  \Sigma_r\left(\rho_r\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ and $\rho_{r\ }$ are the autocorrelation parameters for the columns and rows; $\otimes$ represents the Kronecker product between separable auto-regressive processes of the first order in the row-column dimensions.
 
 **R script in Asreml**
 
@@ -773,16 +773,16 @@ here, we assume $\xi$ is a random effect that represents correlated residuals ba
 * In this model we account for **spatial trends i.e, correlated residuals across columns** only.
 
 \[
-Y_{ijk}= G_{i} + B_{j}+ C_{k} + \xi\\
+Y_{ijk}= G_{i} + B_{j}+ C_{k} + \epsilon\\
 Y_{ijk}= \text{ is the effect of $i$th genotype and $j$th block in $k$th column} \\
 \mu= \text {overall mean}\\
 G_{i}=\text{random effect of the $i$th genotype}\\
 B_{k}= \text {fixed efect of $k$th block}\\
 C_{k}= \text {efect of $k$th column}\\
-\xi=\text  {residual error}\\
+\epsilon_{ijk}=\text  {residual error}\\
 \]
 
-here, we assume $\xi$ is a random effect that represents correlated residual across columns only, where, $\xi\sim N(0,\mathbf{R})$ and **R** is the covariance matrix of $\xi$, and $\mathbf{R}={\sigma_\xi^2\ \Sigma}_c\left(\rho_c\right)\otimes I_r$. $\sigma_\xi^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ the autocorrelation parameters for the columns only; $I_r$ represents independently and identically distributed variance structure for rows.
+here, we assume $\epsilon$ is a random effect that represents correlated residual across columns only, where, $\epsilon\sim N(0,\mathbf{R})$ and **R** is the covariance matrix of $\epsilon$, and $\mathbf{R}={\sigma_\epsilon^2\ \Sigma}_c\left(\rho_c\right)\otimes I_r$. $\sigma_\epsilon^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ the autocorrelation parameters for the columns only; $I_r$ represents independently and identically distributed variance structure for rows.
 
 **R script in Asreml**
 
@@ -1048,18 +1048,18 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 ***
 
 \[
-Y_{ijk}= \mu+G_{i} + E_{j}+G_{i}*E_{j}+ B_{k}(E_{j}) + \xi\\
+Y_{ijk}= \mu+G_{i} + E_{j}+G_{i}*E_{j}+ B_{k}(E_{j}) + \epsilon_{ijk}\\
 Y_{ijk}= \text{ is the effect of $i$th genotype in $j$th environment and $k$th block} \\
 \mu= \text {overall mean}\\
 G_{i}=\text{random effect of the $i$th genotype}\\
 E_{j}=\text{fixed effect of the $j$th environment}\\
 B_{k}= \text {random efect of $k$th block nested in $j$th environment}\\
-\xi=\text{residual error}\\
+\epsilon_{ijk}=\text{residual error}\\
 \]
 
 ***
 
-here, we assume $\xi$ is a random effect that represents correlated residual across columns and or rows depending upon the correlation structure that was fitted.  Further it should be noted we applied a separate spatial trend for each environment in the combined model, and spatial model was decided from the seperate analysis done above. See the Asreml code below:
+here, we assume $\epsilon$ is a random effect that represents correlated residual across columns and or rows depending upon the correlation structure that was fitted.  Further it should be noted we applied a separate spatial trend for each environment in the combined model, and spatial model was decided from the seperate analysis done above. See the Asreml code below:
 
 **R script in Asreml for grain yield**
 
