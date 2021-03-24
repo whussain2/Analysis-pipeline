@@ -626,11 +626,12 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
         ))
   summary.height<-data.frame(lapply(summary.height, function(y) if(is.numeric(y)) round(y, 2) else y)) 
   summary.height<-cbind(data.frame(Trait=c(rep("Height", nrow(summary.height)))),summary.height )
+  # Save the file for analysis
+     write.csv(demo.data.out, file = "~/Documents/GitHub/Analysis-pipeline/Outputs/Tables/demo.data.filtered.csv", row.names = FALSE)  
 # Now combine the all data summeries and view as table
   summary.data<-rbind(summary.Yield, summary.flowering, summary.height)
   datatable(summary.data,options = list(pageLength = 7, dom = 'tip'), rownames = FALSE,caption = htmltools::tags$caption("Data summary after removing outliers.", style="color:black; font-size:130%"))
-# Save the file for analysis
-     write.csv(demo.data.out, file = "~/Documents/GitHub/Analysis-pipeline/Outputs/Tables/demo.data.filtered.csv", row.names = FALSE)        
+      
 ```
 </div>
 
