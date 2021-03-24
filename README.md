@@ -21,7 +21,7 @@ tables or graphics in a unified way as one document.
 #  Source code and Document
 - The source codes and ****.Rmd**** file used to generate the report is available here [Sample. Rmd file](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/sample.report.Rmd)
 
-- The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://whussain2.github.io/Analysis-pipeline/Codes/sample.html).
+- The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://whussain2.github.io/Analysis-pipeline/Codes/sample.report.html).
 
 # How to Use the Source Codes and Run the Pipeline
 
