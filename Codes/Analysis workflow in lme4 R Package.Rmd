@@ -1,0 +1,417 @@
+---
+title: "Analysis workflow in lme4 R Package"
+author: "Prepared by: Rainfed Breeding Team"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    theme: readable
+    highlight: haddock
+    code_folding: show
+    toc: true
+    number_sections: true
+    toc_depth: 6
+    toc_float: 
+      collapsed: true
+      smooth_scroll: true
+---
+
+<style type="text/css">
+
+body 
+{
+   font-size: 18px;
+} 
+code.r{
+  font-size: 14px;
+} 
+pre {
+  font-size: 18px
+}
+
+body, td {
+   font-size: 18px;
+   text-align: justify;
+}
+
+h1.title 
+{/* Header 1 */
+  font-size: 40px;
+  font-family:  "Times New Roman", Times, serif;
+  color: black;
+   background-color:white;
+  text-transform: Capitalize;
+} 
+h1 { /* Header 1 */
+  font-size: 30px;
+  font-family: "Times New Roman", Times, serif;
+  color: black;
+  background-color:#FFF0F5;
+  text-transform: none;
+} 
+h2 { /* Header 2 */
+  font-size: 25px;
+  font-family: "Times New Roman", Times, serif;
+  color: darkblue;
+  text-transform: none;
+} 
+h3 { /* Header 3 */
+  font-size: 22px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkRed;
+  text-transform: none;
+} 
+h4 { /* Header 4 */
+  font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: Darkred;
+  text-transform: none;
+} 
+
+</style>
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+## Global options
+options(max.print="100")
+opts_chunk$set(echo=TRUE,
+               cache=TRUE,
+               prompt=TRUE,
+               collapse=TRUE,
+               comment=NA,
+               strip.white=TRUE,
+               message=FALSE,
+               warning=FALSE,
+               width=65,
+               tidy.opts=list(width.cutoff=65, tidy=TRUE))
+```
+
+```{r setup, include=FALSE, echo=FALSE}
+  require("knitr")
+  opts_knit$set(root.dir = "~/Documents//Analysis-pipeline")
+```
+
+***
+<span style="color: black; font-size: 24pt">**Load the Required Libraries**</span>
+
+***
+
+```{r, warning=FALSE, message=FALSE}
+# Load the libraries
+  library(easypackages)
+  libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", 
+  "tidyverse","lme4", "data.table", "readr","plotly", "DT",
+  "pheatmap", "VennDiagram", "patchwork", "heatmaply", 
+  "ggcorrplot", "RColorBrewer", "hrbrthemes", "tm", "proustr", "arm",
+   "gghighlight", "desplot", "gridExtra", "TeachingDemos", "scales", "ASExtras4",
+  "FactoMineR", "corrplot", "factoextra", "emmeans")
+```
+
+
+
+<span style="color: darkblue; font-size: 16pt">**This section shows the analysis of filtered phenotypic data in lme4 R package. The filtered data set was obtained after pre-processing and Quality check of data** </span>
+
+***
+# Phenotypic Data Analysis in lme4 R Package
+***
+
+* Here in this section phenotypic data analysis is performed in an open source R package called **lme4**. More on this R package can be found here [lme4 Tutorial 1](https://cran.r-project.org/web/packages/lme4/lme4.pdf), and [lme4 Tutorial 2](https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf).
+
+* The purpose of this section is to repeat the phenotypic data analysis in lme4 as ASReml R package is commercial package and may not available for all the users. 
+
+* Filtered data set will be used, same one used in ASReml R package to perform the analysis in lme4.
+
+* ANOVA, variance components, BLUPS, BLUES and heritability is extracted for the results part.
+
+## Upload the Filtered Phenotypic Data
+
+```{r}
+rm(list=ls())
+# Read the saved csv file, if working directly 
+  if(exists('demo.data.filtered') && is.data.frame(get('demo.data.filtered'))){
+  demo.data.filtered=demo.data.filtered
+  }else{
+  demo.data.filtered<-read.csv(file="~/Documents/Analysis-pipeline/Outputs/Tables/demo.data.filtered.csv",
+                               header = TRUE)
+# factor conversion if below are not in factors 
+  columns<-c("Environment", "Genotype", "Rep", "Block", "Row", "Column", "Line.type")
+  demo.data.filtered[, columns]<-lapply(columns, function(x) as.factor(demo.data.filtered[[x]]))
+  demo.data.filtered$Yield<-as.numeric(demo.data.filtered$Yield)
+  demo.data.filtered$HT<-as.numeric(demo.data.filtered$HT)
+  demo.data.filtered$DTF<-as.numeric(demo.data.filtered$DTF)
+  }
+# Subset the required columns
+  demo.data.filtered<-demo.data.filtered[, c("Environment", "Genotype", "Rep", 
+                                             "Block", "Row", "Column", "Line.type",
+                                             "Yield", "HT", "DTF")]
+# First we will arrange the rows and columns for spatial analysis.
+# Now we will subset the environments and Yields for analysis
+  demo.data.filtered<-data.frame(demo.data.filtered%>% group_by(Environment)%>%arrange(Row, Column)) # arrange by row and column
+  demo.data.filtered<-data.frame(demo.data.filtered%>% arrange(Environment)) # Arrange by environment
+
+#demo.data.filtered<-demo.data.filtered[!demo.data.filtered$Environment %in% c("Env2", "Env5","Env8", "Env9"), ]
+
+```
+
+## Seperate Analayis
+
+* First let us subset the data for on environment to show how to perform the analysis for one trial or environment in lme4 R package
+
+* We will run models which are feasible in lme4 R package. Note spatial models are not possible to run in lme4 R package. 
+
+* We will use basic models and show how to extract the results
+
+
+
+### Subset the Data
+
+* Subset the data for one environment first.
+
+```{r}
+# Subset the environment 1
+sub.data<-subset(demo.data.filtered, Environment=="Env1")
+sub.data<-droplevels.data.frame(sub.data)
+```
+
+### Run the models
+
+<span style="color: darkred;font-size: 20pt">**Model 1.lme4**</span>
+
+* The model described below is equivalent to *model 1* described in ASReml R package analysis.
+
+
+***
+
+\[
+y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k} + \epsilon_{ijk}\\
+y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
+\mu= \text {overall mean}\\
+g_{i}=\text{random effect of the $i$th genotype}\\
+r_{j}=\text{fixed effect of the $j$th replication}\\
+b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+\varepsilon_{ijk}=\text{residual error}\\
+\text{here we assume errors are independent and identically distributed }\epsilon\sim \text{$iid$N}(0,\sigma_\epsilon^2)\\
+\]
+
+***
+
+```{r}
+# Now apply model
+  model1<-lmer(Yield~Rep+(1|Genotype)+ (1|Rep:Block), data =sub.data)
+```
+
+### Results
+
+* Here we will summarize the results using ***summary()*** function. The first few lines of output indicate that the model was fitted by REML as well as the value of the REML criterion. The second piece of the summary output provides information regarding the random-effects and residual variation.
+The third piece of the summary output provides information regarding the fixed-effects and the fourth piece of summary output provides information regarding the correlation of fixed effects.
+
+```{r}
+# Summarise the results
+  summary(model1)
+```
+
+#### Extract variance components
+
+* Here we will extract variance components
+
+```{r}
+  Ve<- VarCorr(model1)
+  Ve
+```
+
+#### Plot the residual vs fitted plot
+
+* Here will show how to check for check for homoscedasticicty
+
+```{r}
+# Plot the residual plot
+  plot(fitted(model1), resid(model1), type="pearson")
+  abline(0,0, col="blue")
+# Plot QQ plot
+  qqnorm(resid(model1))
+# Residual plot
+  plot(residuals(model1,type="pearson"), main='Model residuals', 
+  ylab='Pearson residual value')
+```
+
+#### ANOVA for fixed effects
+```{r}
+# ANOVA
+  anova(model1)
+```
+ 
+
+#### Extract the Fixed effects
+
+* Here will show how to extract the BLUEs.
+
+```{r}
+  BLUEs<-fixef(model1)
+  BLUEs
+```
+
+#### Extract the Random effects
+
+* Here will show how to extract the BLUPs.
+
+```{r}
+# Extract the Random effects
+  BLUPs<-data.frame(Blups.yield=ranef(model1)$Genotype)
+  GV<-data.frame(BLUps.GY=coef(model1)$Genotype[,1]) #Genotype values (Blups +Intercept)
+```
+
+### Heritability
+
+* Here will show how to calculate the heritability. Two approaches will be show how to estimate heritability: 1) Based on Variance components and 2) Based on [Cullis et al. 2006](https://link.springer.com/article/10.1198%2F108571106X154443) is also ....$1-\frac{\overline{V}_{BLUp}}{2\sigma^{2}g}$. Where $\overline{V}_{BLUP}$ is mean variance difference of two genotypes based on BLUPs and $\sigma^{2}g$ is variance of genotypes.
+
+```{r}
+# Extract the variance components
+  Ve<- data.frame (VarCorr(model1))
+  Ve
+# Now calculate heritability using variance components
+  genotype.var=Ve[1,4]
+  error.var=Ve[2,4]
+# Now heritability
+  h2=genotype.var/(genotype.var+error.var)*100
+  h2
+# Reliability
+  std.err<-se.ranef(model1)$Genotype
+  v_BLUP<- mean(std.err)
+# Heritability/Reliability 
+  h2<- (1-((v_BLUP)^2/(Ve[1,4]*2)))*100
+  h2
+```
+
+***
+## MET Analysis 
+***
+
+<span style="color: darkred;font-size: 20pt">**Model 2.lme4**</span> 
+
+* Here we will analyze all the environments jointly and extract the single BLUPs for each genotype. We will use mixed model analysis in lme4 r package model. We will treat genotypes as random and environment as fixed effect.
+
+
+### Combined ANOVA
+
+* Here ANOVA will be generated for all the factor levels.
+
+* Replications are nested with environments and Blocks are within Replications which are nested within environment.
+
+```{r}
+# Linear model to get ANOVA
+  demo.data.filtered$Environment<-as.factor(demo.data.filtered$Environment)
+  model.anova<-lm(formula = Yield~Genotype+Environment+Genotype*Environment+Environment:Rep+ Environment:Rep:Block,
+data=demo.data.filtered)
+# Get ANOVA
+  anova(model.anova)
+```
+
+<span style="color: blue;font-size: 12pt">**Significant differences are observed for all factors and genotype by environment interactions are significant**</span> 
+
+### Check for Homogeneity of Variance
+
+* Some test can be used to check variance between pair of environments as given below:
+* More on this can be found on this: [Source 1 ](https://www.datanovia.com/en/lessons/homogeneity-of-variance-test-in-r/), [Source 2](https://www.geeksforgeeks.org/homogeneity-of-variance-test-in-r-programming/)
+
+* Here we will check the distribution of residuals and see how they vary as we have more than two environments. For that we will run the mixed model in lme4 and then plot the residuals
+
+```{r}
+# 
+model2<- lmer(Yield~Environment+(1|Genotype)+
+          (1|Environment:Rep)+(1|Environment:Rep:Block),
+          data=demo.data.filtered)
+
+#plot residuals 
+plot(residuals(model2,type="pearson"), main='Model residuals', 
+ylab='Pearson residual value')
+#var.test(Yield~Environment,data=demo.data.filtered)
+```
+<span style="color: blue;font-size: 12pt">**From the plot it is clear that residuals are not same and highly different**</span> 
+
+### Combined Analysis in lme4
+* The model we will use is give below:
+
+***
+\[
+Y_{ijk}= \mu + G_{i} + E_{j} + G_{i}*E_{j}+ R_{k}(E_{j})+ B_{l}(R_{K}(E_{j}))+ \varepsilon_{ijk}\\
+Y_{ij}= \text{ is the effect of $i$th genotype in $j$th environment and $k$th block} \\
+\mu= \text {overall mean}\\
+G_{i}=\text{random effect of the $i$th genotype}\\
+E_{j}= \text {fixed effect of $j$th environment}\\
+G_{i}*G_{j}=  \text {interaction effect of $i$th genotype in $j$th environment}\\
+R_{k}(E_{j})= \text {is effect of $k$th replication nested in $j$th environment}\\
+B_{l}(R_{K}(E_{j}))=  \text {effect of $k$th block nested within $k$th and$j$th environment}\\
+e_{ijk}=\text{error}\\
+\text{here we assume residuals are independent and identically distributed }\varepsilon\sim \text{$iid$N}(0,\sigma_e^2)\\
+\]
+
+***
+
+* Mixed models are powerful tools to handle assumptions of linear model [Read this one](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13434)
+
+* We will extract variance components and also calculate heritability.
+
+```{r}
+demo.data.filtered$Environment<-as.factor(demo.data.filtered$Environment)
+Model3.lme4<-lmer(Yield~Environment+(1|Genotype)+(1|Environment:Genotype)+
+          (1|Environment:Rep)+(1|Environment:Rep:Block), data=demo.data.filtered)
+
+```
+
+#### Summary of MET results
+
+* In summary we will get following summarized results: 1) Description of model we used, 2) Random effects and varainces, 3) Fixed effects, 4) Correlation of fixed efefcts
+```{r}
+summary(Model3.lme4)
+```
+
+#### Plot of model
+
+* With the plot function model we will get the residuals vs fitted values
+
+```{r}
+plot(Model3.lme4)
+
+```
+
+#### Extract the variance components
+
+```{r}
+Ve<- data.frame (VarCorr(Model3.lme4))
+Ve
+```
+
+
+#### Heritability
+
+* Here will estimate the combined heritability  based on **Cullis et al.2006**
+
+```{r}
+std.err<-se.ranef(Model3.lme4)$Genotype
+v_BLUP<- mean(std.err)
+# Heritability/Reliability 
+h2<- (1-((v_BLUP)^2/(Ve[2,4]*2)))*100
+h2
+```
+
+# Additional Resources
+
+* Here In this section we have provided additional R resources where similar analysis and mixed models can be run:
+
+- [Fitting linear mixed-effects models using lme4](https://arxiv.org/pdf/1406.5823.pdf)
+
+- [Linear Mixed-Effects Models Using R](https://www.springer.com/gp/book/9781461438991)
+
+- [sommer: Solving Mixed Model Equations in R](https://cran.r-project.org/web/packages/sommer/index.html)
+
+- [robustlmm](https://github.com/kollerma/robustlmm)
+
+- [INTRODUCTION TO LINEAR MIXED MODELS](https://ourcodingclub.github.io/tutorials/mixed-models/)
+
+***
+*Note: For questions specific to data analysiss shown here contact waseem.hussain@irri.org*
+
+***
+
+<span style="color: blue;font-size: 14pt;font-family: fantansy">*If your experiment needs a statistician, you need a better experiment - Ernest Rutherford*</span>
+
+

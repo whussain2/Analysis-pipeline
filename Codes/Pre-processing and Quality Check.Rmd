@@ -1,0 +1,798 @@
+---
+title: 'Sample Report: Pre-Processing and Quality Check of Phenotypic Data'
+author: "Prepared by: Rainfed Breeding Team"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    theme: readable
+    highlight: haddock
+    code_folding: show
+    toc: true
+    number_sections: true
+    toc_depth: 6
+    toc_float: 
+      collapsed: true
+      smooth_scroll: true
+---
+
+<style type="text/css">
+
+body 
+{
+   font-size: 18px;
+} 
+code.r{
+  font-size: 14px;
+} 
+pre {
+  font-size: 18px
+}
+
+body, td {
+   font-size: 18px;
+   text-align: justify;
+}
+
+h1.title 
+{/* Header 1 */
+  font-size: 40px;
+  font-family:  "Times New Roman", Times, serif;
+  color: black;
+   background-color:white;
+  text-transform: Capitalize;
+} 
+h1 { /* Header 1 */
+  font-size: 30px;
+  font-family: "Times New Roman", Times, serif;
+  color: black;
+  background-color:#FFF0F5;
+  text-transform: none;
+} 
+h2 { /* Header 2 */
+  font-size: 25px;
+  font-family: "Times New Roman", Times, serif;
+  color: darkblue;
+  text-transform: none;
+} 
+h3 { /* Header 3 */
+  font-size: 22px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkRed;
+  text-transform: none;
+} 
+h4 { /* Header 4 */
+  font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: Darkred;
+  text-transform: none;
+} 
+
+</style>
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+## Global options
+options(max.print="100")
+opts_chunk$set(echo=TRUE,
+               cache=TRUE,
+               prompt=TRUE,
+               collapse=TRUE,
+               comment=NA,
+               strip.white=TRUE,
+               message=FALSE,
+               warning=FALSE,
+               width=65,
+               tidy.opts=list(width.cutoff=65, tidy=TRUE))
+```
+
+```{r setup, include=FALSE, echo=FALSE}
+  require("knitr")
+  opts_knit$set(root.dir = "~/Documents/Analysis-pipeline")
+```
+
+***
+<span style="color: black; font-size: 24pt">**Load the Required Libraries**</span>
+
+***
+
+```{r, warning=FALSE}
+library(easypackages)
+libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", 
+          "tidyverse","lme4", "data.table", "readr","plotly", "DT",
+          "pheatmap","asreml", "VennDiagram", "patchwork", "heatmaply", 
+          "ggcorrplot", "RColorBrewer", "hrbrthemes", "tm", "proustr", "arm",
+          "gghighlight", "desplot", "gridExtra")
+```
+
+***
+#  General Information on Demo Data
+***
+
+**Study**: Rainfed Rice Breeding Trials
+
+**Experimental Design**: Alpha Lattice Design; 
+
+- 4 blocks 
+
+- 2 Replications, 192 entries and 8 checks.
+
+**Season**: Wet-season (WS).
+
+**Location**: East-south Africa
+
+**Year**: 2020.
+
+**Contact Person**: ***Waseem Hussain***
+
+***
+
+<span style="color: darkblue; font-size: 16pt">**NOTE: Due to IRRI's data policies, the actual names of lines and complete metadata information is not given in this demo report.** </span>
+
+
+***
+# Description of Demo Data Set
+***
+* Demo data set used in this analysis pipeline was evaluated in Alpha lattice experimental design across 11 locations in Africa. 
+
+* Data from three traits  grain yield, plant height (HT) and days to flowering (DTF) will be used.
+
+
+
+```{r, echo=TRUE}
+# Remove previous work
+  rm(list=ls())
+# Upload the demo data set
+  demo.data<-read_excel("~/Documents/Analysis-pipeline/Data/demo.data.xlsx", 
+                    sheet=1)
+# Convert variables into appropriate data types
+  demo.data$Genotype<-as.factor(demo.data$Genotype) # Genotypes as factor
+  demo.data$Block<-as.factor(demo.data$Block) # Block as factor
+  demo.data$Row<-as.factor(demo.data$Row) # Row as factor
+  demo.data$Rep<-as.factor(demo.data$Rep) # Replication as factor
+  demo.data$Column<-as.factor(demo.data$Column) # Column as factor
+  demo.data$Environment<-as.factor(demo.data$Environment)  # Env. as factor
+  # Order the factor levels
+  demo.data$Environment<- factor(demo.data$Environment, 
+                        levels = c("Env1","Env2", "Env3",  "Env4", "Env5","Env6",
+                                   "Env7",  "Env8",  "Env9",  "Env10", "Env11"))
+# View as data table
+  print_table <- function(table, ...){
+  datatable(table, extensions = 'Buttons',
+  options = list(scrollX = TRUE, 
+  dom = '<<t>Bp>',
+  buttons = c('copy', 'excel', 'pdf', 'print')), ...)
+  }
+  print_table(demo.data, editable = 'cell', 
+rownames = FALSE, caption = htmltools::tags$caption("Table: Showing all the Raw data for grain yield (kg/ha), days to flowering (DTF) and plant height (HT) in 11 environments.",style="color:black; font-size:130%"), filter = 'top')
+```
+
+***
+# Pre-processing of Data: Checking Quality of Phenotypic Data
+***
+
+* Here in this section we will show various steps how to check the quality of data. 
+* We will only retain high quality data points for downstream analysis to have more reliable and accurate estimates or predictors. 
+
+* The steps in pre-processing involves:
+  - Looking for missing data.
+  - Descriptive statistics for each variable.
+  - Heat-maps of field experimental design.
+  - Data visualizations as box-plots, histograms and QQ plots.
+  - Look and filter for outliers.
+  - Reliability of the each trial.
+   
+  
+***
+## Missing Data.
+***
+* Here we will check whether the data has any missing values
+
+* We will check for all the variables and visualize the missing data.
+
+* We will filter the missing data based on certain percentage.
+
+  
+***
+### Visualize the Missing Data
+
+***
+```{r}
+# Let us get Missing Data Count for each variable
+  Data.missing<-data.frame(demo.data %>%group_by(Environment) %>%
+                             summarise_each(funs(sum(is.na(.))/length(.))))
+# Extract the three variables
+  Data.missing<-Data.missing[, c("Environment", "Yield", "DTF", "HT")]
+  Data.missing<-melt(setDT(Data.missing), id.vars = c("Environment"), variable.name = "Trait")
+  
+  # Plot the missing plot for Grain Yield
+  #png(file = "./Outputs/Plots/Missing.data.png", width =12, 
+     # height =6, units = "in", res = 600)
+  ggplot(Data.missing, aes(x=Environment, y=value))+ 
+    geom_point(size=3) + 
+    geom_segment(aes(x=Environment, 
+                     xend=Environment, 
+                     y=0, 
+                     yend=value)) + 
+    labs(title="", y="Proportion of Missing Data", x="Environments" )+
+    theme_classic()+
+    theme(axis.text.x = element_text(angle=90, vjust=0.6))+
+    #gghighlight(max(value) > .05, label_key =Environment)+
+    facet_wrap(~Trait , ncol = 3,nrow=1,scales = "free")+
+    theme (plot.title = element_text(color="black", size=14, hjust=0.5),
+           axis.title.x = element_text(color="black", size=24),
+           axis.title.y = element_text(color="black", size=24))+
+    theme(axis.text= element_text(color = "black", size = 10))
+  #dev.off() 
+```
+
+<span style="color: darkblue;">**Note: Environment 4 has  more than 20% missing, thus will be dropped from the downstream analysis.**</span>
+
+***
+### Filter the Missing Data
+
+***
+
+* Here in this section we will filter for the environment that has more missing data. 
+
+* We will drop the trials/environments that has more than 20% missing data
+
+```{r}
+# First let us identify the environment that has more than 20% missing data
+missing.20<-Data.missing %>% group_by(Trait) %>% filter(value>0.20)
+missing.20
+# Environment 4 has more than 20% missing data
+# Let us filter it from raw.data
+demo.data<-subset(demo.data, Environment!="Env4")
+demo.data<-droplevels.data.frame(demo.data)
+# Now visualize again
+    Data.missing<-data.frame(demo.data %>%group_by(Environment) %>%
+                             summarise_each(funs(sum(is.na(.))/length(.))))
+# Extract the three variables
+  Data.missing<-Data.missing[, c("Environment", "Yield", "DTF", "HT")]
+  Data.missing<-melt(setDT(Data.missing), id.vars = c("Environment"), variable.name = "Trait")
+ggplot(Data.missing, aes(x=Environment, y=value))+ 
+    geom_point(size=3) + 
+    geom_segment(aes(x=Environment, 
+                     xend=Environment, 
+                     y=0, 
+                     yend=value)) + 
+    labs(title="Missing Data After Filtering", y="Proportion of Missing Data", x="Environments" )+
+    theme_classic()+
+    theme(axis.text.x = element_text(angle=90, vjust=0.6))+
+    #gghighlight(max(value) > .05, label_key =Environment)+
+    facet_wrap(~Trait , ncol = 3,nrow=1,scales = "free")+
+    theme (plot.title = element_text(color="black", size=14, hjust=0.5),
+           axis.title.x = element_text(color="black", size=24),
+           axis.title.y = element_text(color="black", size=24))+
+    theme(axis.text= element_text(color = "black", size = 10))
+```
+
+
+
+***
+##  Descriptive Statistics
+***
+
+* Here basic data description is provided to get handful information on data quality..
+
+```{r, results='asis'}
+# Summary for grain yield
+  summary.Yield<-data.frame(demo.data %>% 
+  group_by(Environment)%>% 
+  summarize(Mean = mean(Yield, na.rm=TRUE),
+        Median= median(Yield, na.rm=TRUE),
+        SD =sd(Yield, na.rm=TRUE),
+        Min.=min(Yield, na.rm=TRUE),
+        Max.=max(Yield, na.rm=TRUE),
+        CV=sd(Yield, na.rm=TRUE)/mean(Yield, na.rm=TRUE)*100,
+        St.err= sd(Yield, na.rm=TRUE)/sqrt(length(Yield))
+        ))
+  summary.Yield<-data.frame(lapply(summary.Yield, function(y) if(is.numeric(y)) round(y, 2) else y)) 
+
+  summary.Yield<-cbind(data.frame(Trait=c(rep("Yield", nrow(summary.Yield)))),summary.Yield )
+# Summary for DTF
+  summary.flowering<-data.frame(demo.data %>% 
+  group_by(Environment)%>% 
+  summarize(Mean = mean(DTF, na.rm=TRUE),
+        Median= median(DTF, na.rm=TRUE),
+        SD =sd(DTF, na.rm=TRUE),
+        Min.=min(DTF, na.rm=TRUE),
+        Max.=max(DTF, na.rm=TRUE),
+        CV=sd(DTF, na.rm=TRUE)/mean(DTF, na.rm=TRUE)*100,
+        St.err= sd(DTF, na.rm=TRUE)/sqrt(length(DTF))
+        ))
+  summary.flowering<-data.frame(lapply(summary.flowering, function(y) if(is.numeric(y)) round(y, 2) else y)) 
+  summary.flowering<-cbind(data.frame(Trait=c(rep("Flowering", nrow(summary.flowering)))),summary.flowering )
+# Summary for plant HT
+  summary.HT<-data.frame(demo.data %>% 
+  group_by(Environment)%>% 
+  summarize(Mean = mean(HT, na.rm=TRUE),
+        Median= median(HT, na.rm=TRUE),
+        SD =sd(HT, na.rm=TRUE),
+        Min.=min(HT, na.rm=TRUE),
+        Max.=max(HT, na.rm=TRUE),
+        CV=sd(HT, na.rm=TRUE)/mean(HT, na.rm=TRUE)*100,
+        St.err= sd(HT, na.rm=TRUE)/sqrt(length(HT))
+        ))
+  summary.HT<-cbind(data.frame(Trait=c(rep("Plant height", nrow(summary.HT)))),summary.HT )
+# Now combine the all data summeries and view as table
+  summary.data<-rbind(summary.Yield, summary.flowering, summary.HT)
+  summary.data<-data.frame(lapply(summary.data, function(y) if(is.numeric(y)) round(y, 2) else y)) 
+# Add options to print and export
+  print_table(summary.data, rownames = FALSE,caption = htmltools::tags$caption("Data summary including mean, median, standard deviation (SD), coefficient of variation (CV), and standard error (St.err) for yield (kg/ha), days to flowering and plant height (cm).", style="color:black; font-size:130%"))
+
+```
+
+<span style="color: darkblue;">**Note: High CV for grain yield in environment 7 and unexpected maximum value for grain yield in environment 9**</span>
+
+***
+
+***
+## Heat Maps of the Field Experimental Design
+***
+
+* Experimental design in the field for **grain yield** is visualized through heat map to get better idea about the field design and spatial variations in the field.
+
+* For demo purpose here we will generate the field design for one environment.
+
+* Heatmap of field designs for all the environments will be shown using heatmap using [**desplot**](https://github.com/kwstat/desplot) R package. 
+
+
+### Heat map in ggplot package
+
+#### Under replication 1
+
+```{r,fig.height = 6, fig.width =8}
+# Subset the environment 1
+Env1<-subset(demo.data, Environment=="Env1",
+             select=c("Column", "Row", "Rep", "Yield") )
+Env1<-droplevels.data.frame(Env1)
+par(mfrow = c(1, 1))
+# For rep 1
+  env1.rep1<- subset(Env1,Rep=="1")
+  env1.rep1<- env1.rep1[, c("Column", "Row", "Yield")]
+  env1.rep1<-droplevels.data.frame(env1.rep1)
+  env1.rep1<-data.frame(env1.rep1%>% group_by(Column)%>% arrange(Column) %>%arrange(Row))
+  env1.rep1<-droplevels.data.frame(env1.rep1)
+  env1.rep1<-reshape(env1.rep1, idvar = "Row", timevar = "Column", direction = "wide")
+  row.names(env1.rep1)<-paste0("Row",  env1.rep1$Row)
+  colnames(env1.rep1) <- gsub(x = colnames(env1.rep1), pattern = "Yield.", replacement = "") 
+  env1.rep1<-melt(env1.rep1, value.name = "Yield")
+  colnames(env1.rep1)[2]<-"Column"
+ plot.rep1<- ggplot(env1.rep1, aes(Column, Row, fill= Yield)) + 
+ geom_tile()+scale_fill_distiller(palette = 'Spectral')+
+   theme(axis.text.x = element_text(angle = 90))+
+   ggtitle("Field heat map for Replication 1")
+  plot.rep1<-ggplotly(plot.rep1)
+  plot.rep1
+```
+
+#### Under replication 2
+
+```{r, fig.height = 6, fig.width =8}
+  # For rep 2
+  env1.rep2<- subset(Env1,Rep=="2")
+  env1.rep2<- env1.rep2[, c("Column", "Row", "Yield")]
+  env1.rep2<-droplevels.data.frame(env1.rep2)
+  env1.rep2<-data.frame(env1.rep2%>% group_by(Column)%>% arrange(Column) %>%arrange(Row))
+  env1.rep2<-droplevels.data.frame(env1.rep2)
+  env1.rep2<-reshape(env1.rep2, idvar = "Row", timevar = "Column", direction = "wide")
+  row.names(env1.rep2)<-paste0("Row",  env1.rep2$Row)
+  colnames(env1.rep2) <- gsub(x = colnames(env1.rep2), pattern = "Yield.", replacement = "") 
+  env1.rep2<-melt(env1.rep2, value.name = "Yield")
+  colnames(env1.rep2)[2]<-"Column"
+ plot.rep2<- ggplot(env1.rep2, aes(Column, Row, fill= Yield)) + 
+ geom_tile()+scale_fill_distiller(palette = 'Spectral')+
+   theme(axis.text.x = element_text(angle = 90))+
+   ggtitle("Field heat map for Replication 1")
+  plot.rep2<-ggplotly(plot.rep2)
+  plot.rep2
+```
+
+#### Heat map in Desplot package
+
+* Here we will plot heat map of field experimental design for all the environments using *desplot* R package.
+
+```{r,fig.width = 10, fig.height=8, warning=FALSE}
+
+# # Under environment one only 
+  #desplot(Env1, Yield ~ Row+Column, text=Rep, cex=1,
+       # main="Heat map For Field Design")
+
+# Under all the environments
+plot.all<- desplot(Yield ~ Column + Row | Environment, data=demo.data,
+              main="", col.regions = RedGrayBlue , gg=T)+ theme_bw()
+ggplotly(plot.all)
+
+
+```
+
+<span style="color: darkblue;">**Note: As compared to other environments check the extremely high values shown in blue color in Env9. White lines show the missing data.**</span>
+
+***
+##  Data Visualization
+***
+
+* Here in this section we will visualize the data using **Box plot**, **Histograms**, and **QQ plot**.
+
+### Box plot 
+
+```{r, fig.height=10, fig.width=10}
+# First let us visualize the data using boxplots
+  myboxplot<- function(dataframe,x,y){
+   aaa <- enquo(x)
+   bbb <- enquo(y)
+   dfname <- enquo(dataframe)
+   dataframe %>%
+	 filter(!is.na(!! aaa), !is.na(!! bbb))  %>%
+      #group_by(!! aaa,!! bbb) %>%
+      #count() %>%
+    ggplot(aes_(fill=aaa, x=aaa, y=bbb))+ 
+    theme_classic()+
+    geom_boxplot()+
+     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +# fill by timepoint to give different color
+      #scale_fill_manual(values = c("", ""))+
+      #scale_color_manual(values = c("", ""))
+      theme (plot.title = element_text(color="black", size=12,hjust=0.5, face = "bold"), # add and modify the title to plot
+    axis.title.x = element_text(color="black", size=12, face = "bold"), # add and modify title to x axis
+    axis.title.y = element_text(color="black", size=12, face="bold")) + # add and modify title to y axis
+  #scale_y_continuous(limits=c(0,15000), breaks=seq(0,15000,1000), expand = c(0, 0))+
+    theme(axis.text= element_text(color = "black", size = 10))+ # modify the axis text
+    theme(legend.title = element_text(colour="black", size=16), legend.position = "none",
+                  legend.text = element_text(colour="black", size=14))+ # add and modify the legends
+                  guides(fill=guide_legend(title="Environments"))+
+  stat_summary(fun.y=mean, geom="line", aes(group=1))  + 
+  stat_summary(fun=mean, geom="point")
+  }
+
+# Now draw the box plot for yield
+  p1<-boxplot.yield<-myboxplot(demo.data,x=Environment,y=Yield)+
+  labs(title="",x="Environments", y = "Grain Yield (kg/ha)")
+  #stat_compare_means(method = "anova", label.x = 1.6, label.y = 10000)
+ # p1<-ggplotly(boxplot.yield)
+
+# Now draw the box plot for flowering
+  p2<-boxplot.flowering<-myboxplot(demo.data,x=Environment,y=DTF)+
+  labs(title="",x="Environments", y = "Days to flowering")
+  #stat_compare_means(method = "anova", label.x = 1.6, label.y = 130)
+#p2<-ggplotly(boxplot.flowering)
+
+# Now draw the box plot height
+  p3<-boxplot.height<-myboxplot(demo.data,x=Environment,y=HT)+
+  labs(title="",x="Environments", y = "Plant Height (cm)")
+  #stat_compare_means(method = "anova", label.x = 1.6, label.y = 167)
+#p3<-ggplotly(boxplot.height)
+grid.arrange(p1, p2,p3, nrow = 3)
+```
+
+<span style="color: darkblue;">**Note: Seems outliers are present in Env9 for grain yield. The values for all the traits varied highly across the environments.**</span>
+
+
+**Histograms** and **QQ plots** are also available , click the buttons below
+
+
+### Histogram plots 
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#hist"> Click to Show Histograms</button>  
+<div id="hist" class="collapse"> 
+
+* Histograms for all traits to check distribution of data.
+
+#### Histograms for Grain Yield 
+
+```{r,fig.height = 10, fig.width = 10}
+# For grain yield
+  par(mfrow=c(3,4))
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
+  level_envi <- demo.data[which(demo.data$Environment==envi[i]),]
+  hist(level_envi$Yield, col = "pink", xlab="Grain yield (kg/ha)",
+  main=paste(envi[i]))
+  
+  }
+```
+
+#### Histograms for Days to Flowering
+
+```{r,fig.height = 10, fig.width = 10}
+  par(mfrow=c(3,4))
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
+  level_envi <- demo.data[which(demo.data$Environment==envi[i]),]
+  hist(level_envi$DTF, col = "pink", xlab="Days to flowering",
+  main=paste(envi[i]))
+  
+  }
+```
+
+#### Histograms for Plant Height
+
+```{r, fig.height = 10, fig.width = 10}
+
+# For Plant height
+  par(mfrow=c(3,4))
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
+  level_envi <- demo.data[which(demo.data$Environment==envi[i]),]
+  hist(level_envi$HT, col = "pink", xlab="Plant Height (cm)",
+  main=paste(envi[i]))
+  
+}
+```
+
+
+</div>
+
+### QQ plots
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#qq"> Click to Show QQ plots/Hide </button>  
+<div id="qq" class="collapse"> 
+
+
+* QQ plots are drawn to check the normality of the data. It is just to to see if our data assumptions are plausible. 
+* We expect line to be straight, if it deviates then it indicates some issues with data. More information on QQ plots can be found here on this [link](https://data.library.virginia.edu/understanding-q-q-plots/)
+
+
+#### QQ plots for Grain Yield
+
+```{r , fig.height = 10, fig.width = 10}
+## QQ plots to check normality assumption
+# For the grain Yield
+  par(mfrow=c(3,4))
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
+  level_envi <- demo.data[which(demo.data$Environment==envi[i]),]
+  qqnorm(level_envi$Yield, pch = 1, frame = TRUE,  main=paste(envi[i],".Yield"))
+  qqline(level_envi$Yield, col = "steelblue", lwd = 2)
+  }
+  
+```
+
+
+#### QQ plots for days to flowering
+
+```{r, fig.height = 10, fig.width = 10}
+  par(mfrow=c(3,4))
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
+  level_envi <- demo.data[which(demo.data$Environment==envi[i]),]
+  qqnorm(level_envi$DTF, pch = 1, frame = TRUE,  main=paste(envi[i],".Flowering"))
+  qqline(level_envi$DTF, col = "steelblue", lwd = 2)
+  }
+  
+```
+
+
+#### QQ plots for plant height
+
+```{r, fig.height = 10, fig.width = 10}
+  par(mfrow=c(3,4))
+  envi<-unique(demo.data$Environment)
+  for(i in 1:length(envi)){
+  level_envi <- demo.data[which(demo.data$Environment==envi[i]),]
+  qqnorm(level_envi$HT, pch = 1, frame = TRUE,  main=paste(envi[i],".Height"))
+  qqline(level_envi$HT, col = "steelblue", lwd = 2)
+  }
+```
+<span style="color: darkblue;">**Some deviations are observed for the triats in certain environments.**</span>
+</div>
+
+***
+## Identify and Remove Outliers
+***
+
+**Note: Outliers may drastically change the estimates, ranking (BLUPs or BLUEs) and predictions!! Further reading [Resource 1](https://www.g3journal.org/content/4/12/2317); [Resource 2](https://academic.oup.com/jxb/article/70/15/3693/5479455); [Resource 3](https://onlinelibrary.wiley.com/doi/abs/10.1111/biom.13216)**
+
+
+<style>
+div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+* Here we will use **Bonferroni–Holm test** method briefly describe in this [article](https://link.springer.com/article/10.1007/s00122-016-2666-6), and is suitable for replicated data to identify potential outliers. It compares the data across replications or locations and identify the real outliers in the data.
+
+* First we will construct the a function called **outlier.R** which will be used to flag out the outliers. The outlier function is provided in the working folder. 
+
+* The R codes on this outlier function was orginally borrowed from the work available at [Click the link](https://static-content.springer.com/esm/art%3A10.1007%2Fs00122-016-2666-6/MediaObjects/122_2016_2666_MOESM2_ESM.pdf).
+
+* The Steps involved in identifying the outliers are:
+    - First run the model using data across all the environments for each trait.
+    - Then use outlier function to test the significance of residuals.
+    - Then we will flag out outliers based on the significance test.
+
+</div>
+
+
+***
+### Identify Outliers
+***
+
+```{r}
+# Run the model to get residuals.
+# Grain Yield
+model.gy<-asreml(fixed= Yield ~Genotype+Environment, random = ~Rep:Block,
+                    na.action=na.method(x="include"), data =demo.data)
+# Flowering data
+model.dtf<-asreml(fixed= DTF ~Genotype+Environment, random = ~Rep:Block,
+                    na.action=na.method(x="include"), data =demo.data)
+# Plant height
+model.ht<-asreml(fixed= HT ~Genotype+Environment, random = ~Rep:Block,
+                    na.action=na.method(x="include"), data =demo.data)
+#plot(model.gy.ns)
+
+# Now get outliers flag out based on significance test using outlier function
+# First upload source function
+source("./outlier.R")
+data.gy.outlier<-outliers(demo.data,model.gy, name="Outlier.YKGH")
+data.dtf.outlier<-outliers(data.gy.outlier,model.dtf, name="Outlier.DTF")
+demo.data.out<-outliers(data.dtf.outlier,model.ht, name="Outlier.HT")
+# View as table
+   print_table <- function(table, ...){
+  datatable(table, extensions = 'Buttons',
+          options = list(scrollX = TRUE, 
+                         dom = '<<t>Bp>',
+                         buttons = c('copy', 'excel', 'pdf', 'print')), ...)
+   }
+  print_table(demo.data.out[, c(1,3,4,8:14)], editable = 'cell', rownames = FALSE, caption = htmltools::tags$caption("Table: Showing data with outliers flagged in all the Environments,",style="color:black; font-size:130%"), filter = 'top')
+```
+
+
+***
+### Filter Outliers
+***
+
+<style>
+div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+* In this section we will convert the outliers into the missing values for all the three traits and save the file for downstream analysis.
+* Users can also convert them into mean values. See the codes given below for more details.
+</div>
+
+```{r}
+# For grain yield
+  demo.data.out$Yield<- ifelse(demo.data.out$Outlier.YKGH==".", demo.data.out$Yield, NA)
+# For plant height
+  demo.data.out$HT<- ifelse(demo.data.out$Outlier.HT==".", demo.data.out$HT, NA)
+# For plant height
+  demo.data.out$Outlier.DTF<- ifelse(demo.data.out$Outlier.DTF==".", demo.data.out$DTF, NA)
+# We can also conver the outliers into mean values 
+    #data<-data.frame(matrix())
+    #env<- unique(TEST$Envi)
+	  #for(i in 1:length(env)){
+	  #data1<-TEST[which(TEST$Envi==env[i]),]
+	  #data1$Yield <- ifelse(data1$out.all==".", data1$Yield, mean(data1$Yield))
+	  #return(data1)
+	  #data2<-rbind(data1, data)
+	   #}
+```
+
+ 
+***
+### Box Plots after filtering Outliers
+
+***
+
+
+```{r, fig.height=8, fig.width=10, fig.cap="Box plot showing distribution for all traits."}
+# Now draw the box plot
+# Now draw the box plot for yield
+  p1<-boxplot.yield<-myboxplot(demo.data.out,x=Environment,y=Yield)+
+  labs(title="",x="Environments", y = "Grain Yield (kg/ha)")
+  #stat_compare_means(method = "anova", label.x = 1.6, label.y = 10000)
+ # p1<-ggplotly(boxplot.yield)
+
+# Now draw the box plot for flowering
+  p2<-boxplot.flowering<-myboxplot(demo.data.out,x=Environment,y=DTF)+
+  labs(title="",x="Environments", y = "Days to flowering")
+  #stat_compare_means(method = "anova", label.x = 1.6, label.y = 130)
+#p2<-ggplotly(boxplot.flowering)
+
+# Now draw the box plot height
+  p3<-boxplot.height<-myboxplot(demo.data.out,x=Environment,y=HT)+
+  labs(title="",x="Environments", y = "Plant Height (cm)")
+  #stat_compare_means(method = "anova", label.x = 1.6, label.y = 167)
+#p3<-ggplotly(boxplot.height)
+grid.arrange(p1, p2,p3, nrow = 3)
+
+```
+
+<span style="color: darkblue;font-size: 10pt">**Note: Boxplots for all the traits looks much better. We did good job in removing the bad data points.**</span>
+
+
+## Reliability of Each Environment
+
+<style>
+div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+* We will  calculate the reliability [Book: Genetic Data Analysis for Plant and Animal Breeding; Chapter 7](https://link.springer.com/book/10.1007%2F978-3-319-55177-7). of each environment.  The reliability is give by following equation: $R=1-\frac{PEV}{\sigma^{2}g}$.  The expectation of average reliability across all tested genotypes is the generalized heritability applicable to predicting response to selection based on genotype BLUPs[Piepho and M€ohring (2007)](https://link.springer.com/article/10.1007/s10681-007-9449-8). This is more appropriate to for complex residual structures and unbalanced experimental designs. The equation is: $H_{C}=1-\frac{\overline{V}_{BLUP}}{2\sigma^{2}g}$. Where $\overline{V}_{BLUP}$ is mean variance difference of difference of two BLUP and $\sigma^{2}g$ is variance of genotypes. Note this definition of heritability is related to reliability of breeding value predictions. For more details please check the [Book: Genetic Data Analysis for Plant and Animal Breeding; Chapter 7](https://link.springer.com/book/10.1007%2F978-3-319-55177-7)
+
+* We will use above equation to calculate heritability and the trials with less than *.20* heritability will be dropped from analysis.  Trials with lower reliability/heritability usually provide very little information and is not useful in multi-enviornment analysis. 
+
+
+</div>
+
+### Estimate Reliability for Each Environment
+
+* * We will develope a function called ***my.blup*** which will be used to extract the reliability using the 
+equation : $H_{C}=1-\frac{\overline{V}_{BLUP}}{2\sigma^{2}g}$
+
+```{r, warning=FALSE, message=FALSE, results='hide'}
+
+demo.data$Environment<- as.character(demo.data$Environment)
+un.en<- unique(demo.data$Environment)
+for(i in 1:length(un.en)){
+  sub<- droplevels.data.frame(demo.data[which(demo.data$Environment==un.en[i]),])
+    model<- asreml(fixed = Yield ~Rep,random = ~Genotype+Rep:Block,
+                   residual = ~idv(units),na.action=na.method(x="include"), data=sub)
+    #n.rep<-nlevels(sub$Rep)
+    # n.Environment<-nlevels(sub$Environment)
+    #n.Block<-nlevels(sub$Block)
+    #tot.err<- n.rep* n.Environment* n.Block
+    #predicted.her.ns<-vpredict(model, hA ~  V4/(V1/(n.Environment)+V2/(n.rep)+V3/(n.Block)+V4+V5/(tot.err)))
+    vc.g <- summary(model)$varcomp['Genotype','component']
+    vc.g
+    # Mean variance of a difference of two genotypic BLUEs
+    vdBLUP.mat <- predict(model, classify="Genotype", sed=TRUE)$sed^2 # obtain squared s.e.d. matrix 
+    vdBLUP.avg <- mean(vdBLUP.mat[upper.tri(vdBLUP.mat, diag=FALSE)]) # take mean of upper triangle
+    vdBLUP.avg
+    #############
+    # H2 Cullis #
+    #############
+    H2Cullis <- 1 - (vdBLUP.avg/(vc.g*2))
+    H2Cullis
+  heritability<-data.frame(H2Cullis, Environment=un.en[i])
+  if(i>1){
+   Reliability<-rbind(Reliability,heritability)
+  }
+  else{
+   Reliability<- heritability
+  }
+}
+```
+
+### Visualize Reliability for Each Environment
+
+
+```{r}
+# Plot them in bar plot
+#png(file = "./Outputs/Figures/Heritabilities.png", width =6, 
+   # height =6, units = "in", res = 500)
+ggbarplot(Reliability, x = "Environment", y = "H2Cullis",
+          fill = "lightblue",           # change fill color by mpg_level
+          color = "black",  
+         merge = TRUE,# Set bar border colors to white
+          palette = "jco",            # jco journal color palett. see ?ggpar
+          #sort.by.groups =FALSE,
+          x.text.angle = 90,          # Rotate vertically x axis texts
+          ylab = "Reliability",
+          xlab = FALSE,
+          rotate=FALSE,
+          x.text.col = TRUE,
+          legend = "top",
+          ggtheme =theme_classic() ,
+          font.legend = 18,
+          #legend.title = "Treatment"
+)+
+  font("xlab", size = 25, color = "black")+
+  font("ylab", size = 25, color = "black")+
+  font("xy.text", size = 12, color = "black")
+
+# Save the filtered data set
+
+# Save the file for analysis
+     write.csv(demo.data.out, file = "~/Documents/Analysis-pipeline/Outputs/Tables/demo.data.filtered.csv", row.names = FALSE)   
+```
+
+<span style="color: darkblue;font-size: 12pt">**Note: None of the trials/environments have reliability less than .20, so all of the environments will be retained for the downstream analysis.**</span>
+
+***
+*Note: For questions specific to data analysiss shown here contact waseem.hussain@irri.org*
+
+***
+
+<span style="color: blue;font-size: 14pt;font-family: fantansy">*If your experiment needs a statistician, you need a better experiment - Ernest Rutherford*</span>
+
+

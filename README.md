@@ -1,13 +1,14 @@
 # [Phenotypic Data Analysis Workflow and Documentation](https://whussain2.github.io/Analysis-pipeline/Codes/sample.html)
 
-- This repository contains the phenotypic data analysis pipeline and complete documentation of analysis workflow as R Markdown generated HTML file.
+- This repository contains the end-to-end analysis workflow of phenotypic data. The workflow is divided into two parts: 1) Pre-processing and Quality Check
+ and 2) Data Analysis analysis in ASReml R package and lme4 R package.
 
 # Description
 
 ```
 In this pipeline we provide an overview of how rainfed breeding program at IRRI has leveraged R 
 computational power with open-source resource tools like R Markdown, plotly, LaTeX and HTML
-to develop a unique data analysis workflow and redesigned it to a reproducible document for
+to develop a data analysis workflow and redesigned it to a reproducible document for
 better interpretation, visualization and seamlessly sharing with partners. The generated report 
 is the state-of-the-art implementation of analysis workflow and outputs either in text, 
 tables or graphics in a unified way as one document. 
@@ -19,9 +20,26 @@ tables or graphics in a unified way as one document.
 ![](www/workflow.png)
 
 #  Source code and Document
-- The source codes and ****.Rmd**** file used to generate the report is available here [Sample. Rmd file](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/sample.report.Rmd)
 
-- The R Markdown generated html document showing complete analysis pipeline with detailed description can be accessed here [Sample document](https://whussain2.github.io/Analysis-pipeline/Codes/sample.report.html).
+## Pre-Processing and Quality Check
+
+- The source in ****.Rmd****  is available here [Sample:Pre-Processing](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/Pre-processing and Quality Check.Rmd)
+- The HTML file is available here [Sample:Pre-Processing HMTL](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Pre-processing-and-Quality-Check.html)
+
+## Data Analysis
+
+- Data analysis is shown both in ASReml R package and in lme4 R package. The reason to show analysis in lme4 R package is because it is free and open source R package and can be used by all users.  For ASReml R users need license. 
+
+### Analysis in ASReml R
+
+- The source in ****.Rmd****  is available here [Analysis workflow:ASReml R](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/Analaysis workflow in ASReml R Package.Rmd)
+- The HTML file is available here [Analysis workflow ASReml R HMTL](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Analaysis workflow in ASReml R Package.html)
+
+### Analysis in lme4 R
+
+- The source in ****.Rmd****  is available here [Analysis workflow:lme4 R](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/Analysis-workflow-in-lme4-R-Package.Rmd)
+- The HTML file is available here [Analysis workflow lme4 HMTL](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Analysis-workflow-in-lme4-R-Package.html)
+
 
 # How to Use the Source Codes and Run the Pipeline
 
@@ -36,13 +54,15 @@ The steps to use the source codes and run it on local computer is given below:
 
 ```
 library(easypackages)
-libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", 
-          "tidyverse","lme4", "data.table", "readr","plotly", "DT",
-          "pheatmap","asreml", "VennDiagram", "patchwork", "heatmaply", 
-          "ggcorrplot", "RColorBrewer", "hrbrthemes", "tm", "proustr", "arm")
+  libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", 
+  "tidyverse","lme4", "data.table", "readr","plotly", "DT",
+  "pheatmap","asreml", "VennDiagram", "patchwork", "heatmaply", 
+  "ggcorrplot", "RColorBrewer", "hrbrthemes", "tm", "proustr", "arm",
+   "gghighlight", "desplot", "gridExtra", "TeachingDemos", "scales", "ASExtras4",
+  "FactoMineR", "corrplot", "factoextra", "asremlPLUS")
 ```
 
-Note: The pipeline requires asreml R package to do the analysis. 
+Note: The pipeline requires asreml R package to do the analysis.  If you dont have license for ASReml R then use lme4 R workflow to perform analysis. 
 
 # Manuscript
 

@@ -1,0 +1,1287 @@
+---
+title: "Analysis workflow in ASReml R Package"
+author: "Prepared by: Rainfed Breeding Team"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    theme: readable
+    highlight: haddock
+    code_folding: show
+    toc: true
+    number_sections: true
+    toc_depth: 6
+    toc_float: 
+      collapsed: true
+      smooth_scroll: true
+---
+
+<style type="text/css">
+
+body 
+{
+   font-size: 18px;
+} 
+code.r{
+  font-size: 14px;
+} 
+pre {
+  font-size: 18px
+}
+
+body, td {
+   font-size: 18px;
+   text-align: justify;
+}
+
+h1.title 
+{/* Header 1 */
+  font-size: 40px;
+  font-family:  "Times New Roman", Times, serif;
+  color: black;
+   background-color:white;
+  text-transform: Capitalize;
+} 
+h1 { /* Header 1 */
+  font-size: 30px;
+  font-family: "Times New Roman", Times, serif;
+  color: black;
+  background-color:#FFF0F5;
+  text-transform: none;
+} 
+h2 { /* Header 2 */
+  font-size: 25px;
+  font-family: "Times New Roman", Times, serif;
+  color: darkblue;
+  text-transform: none;
+} 
+h3 { /* Header 3 */
+  font-size: 22px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkRed;
+  text-transform: none;
+} 
+h4 { /* Header 4 */
+  font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: Darkred;
+  text-transform: none;
+} 
+
+</style>
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+## Global options
+options(max.print="100")
+opts_chunk$set(echo=TRUE,
+               cache=TRUE,
+               prompt=TRUE,
+               collapse=TRUE,
+               comment=NA,
+               strip.white=TRUE,
+               message=FALSE,
+               warning=FALSE,
+               width=65,
+               tidy.opts=list(width.cutoff=65, tidy=TRUE))
+```
+
+```{r setup, include=FALSE, echo=FALSE}
+  require("knitr")
+  opts_knit$set(root.dir = "~/Documents/Analysis-pipeline")
+```
+
+***
+<span style="color: black; font-size: 24pt">**Load the Required Libraries**</span>
+
+***
+
+```{r, warning=FALSE, message=FALSE}
+  library(easypackages)
+  libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2", 
+  "tidyverse","lme4", "data.table", "readr","plotly", "DT",
+  "pheatmap","asreml", "VennDiagram", "patchwork", "heatmaply", 
+  "ggcorrplot", "RColorBrewer", "hrbrthemes", "tm", "proustr", "arm",
+   "gghighlight", "desplot", "gridExtra", "TeachingDemos", "scales", "ASExtras4",
+  "FactoMineR", "corrplot", "factoextra", "asremlPLUS")
+```
+
+
+
+<span style="color: darkblue; font-size: 16pt">**This section shows the analysis of filtered phenotypic data in ASReml R package. The filtered data set was obtained after pre-processing and Quality check of data** </span>
+
+
+***
+# Data Analysis for Grain Yield in ASReml R Package
+***
+
+<style>
+div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+* In this section, data analysis will be shown only for grain yield trait using a **Linear Mixed-Model Approach** in [ASReml-R package](https://asreml.kb.vsni.co.uk/wp-content/uploads/sites/3/2018/02/ASReml-R-Reference-Manual-4.pdf).
+
+* Demo data analysis for grain yield will also be shown using freely available [lme4 R Package](https://cran.r-project.org/web/packages/lme4/lme4.pdf) package, and will be useful to the users which do not have access to the commercial **ASReml-R package**. See the another HTML file for analysis in *lme4* R package.
+
+* In general analysis is divided in two parts:
+  1. **Separate analysis**: In this each environment/trial is analyzed separately. 
+  
+    - We will be testing **various mixed models** correcting for experimental design factors (Blocks and Replications) and spatial trends in the field. 
+    - Best model will be identified and selected (model having lowest *AIC* value ) and will be used  to extract the ***BLUPs or predicted means*** and ***Heritability***. 
+    
+    - Just a note, BLUPs are best for phenotypic selection, users can also extract the BLUEs for treating genotypes as *Fixed*
+
+2. **Combined analysis or Multi-environment trial (MET) analysis**: In this analysis all the environments will be analyzed jointly.
+
+  - Various mixed models from basic to advanced models will be used will for MET analysis. 
+</div>
+
+***
+## Separate Analysis 
+***
+
+* As mentioned above **five mixed models** will be used to account for *experimental design factors* and accounting for *spatial trends in field*. 
+
+* The five models shown here are for demo purpose, more models can be used to model the phenotypic data. For more information on these models and other advanced additional mixed models is available here: [Asreml-R-Tutorial: Go to section 4.1](https://asreml.kb.vsni.co.uk/wp-content/uploads/sites/3/2018/02/ASReml-R-Reference-Manual-4.pdf); [Book: Genetic Data Analysis for Plant and Animal Breeding; Chapter 7](https://link.springer.com/book/10.1007%2F978-3-319-55177-7). 
+
+
+* Click button below for more description on the models:
+
+
+<button class="btn btn-primary" data-toggle="collapse" data-target="#models"> Click Mixed-Models Description/Hide </button>  
+<div id="models" class="collapse">  
+
+<span style="color: darkred;font-size: 20pt">**Model 1**</span>
+
+* In this model we account for just experimental design factor *Block* and no spatial effects.
+
+* Note we used block as random effect and replication as fixed effect (due to less than 5 degrees of freedom). If you are interested to know whether to use block fixed or random in model I highly recommend this [Blocks Fixed or Random?](https://lib.dr.iastate.edu/cgi/viewcontent.cgi?article=1005&context=stat_las_conf)
+
+***
+\[
+y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k} + \epsilon_{ijk}\\
+y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
+\mu= \text {overall mean}\\
+g_{i}=\text{random effect of the $i$th genotype}\\
+r_{j}=\text{fixed effect of the $j$th replication}\\
+b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+\varepsilon_{ijk}=\text{residual error}\\
+\text{here we assume errors are independent and identically distributed }\epsilon\sim \text{$iid$N}(0,\sigma_\epsilon^2)\\
+\]
+
+**R script in Asreml**
+
+<span style="color: darkblue;font-size: 10pt">**model1<-asreml(fixed=trait~Rep, random=~Genotype+Rep:Block, na.method="include", data=data)**</span>
+
+* In the above model block and genotype is treated as random effect and replication as fixed effect
+
+***
+<span style="color: darkred;font-size: 20pt">**Model 2**</span>
+
+* In this model we account for just experimental design factor *block*, *column* and *row* with no spatial effects. 
+
+***
+\[
+y_{ijklm}= \mu+g_{i} + r_{j}+ r_{j}:b_{k} + c_{l}+ ro_{l}:c_{m}+\epsilon_{ijklm}\\
+y_{ijklm}= \text{ is the effect of $i$th genotype in $j$th replication, $k$th block (within the $j$th replication) in $l$th column and $m$th row (within the $l$th column)} \\
+\mu= \text {overall mean}\\
+g_{i}=\text{random effect of the $i$th genotype}\\
+r_{j}=\text{fixed effect of the $j$th replication}\\
+b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+c_{l}=\text {random effect of $l$th column}\\
+ro_{l}=\text {random effect of $m$th row nested with $l$th column}\\
+\varepsilon_{ijklm}=\text{residual error}\\
+\text{here we assume residuals are independent and identically distributed }\epsilon\sim \text{$iid$N}(0,\sigma_\epsilon^2)\\
+\]
+
+**R script in Asreml**
+
+<span style="color: darkblue;font-size: 10pt">**model2<-asreml(fixed=trait~Rep, random=~Genotype+Rep:Block+Column+Column:Row, na.method="include", data=data)**</span>
+
+* Replication is fixed effect and all other factors are random
+
+***
+
+<span style="color: darkred;font-size: 20pt">**Model 3**</span>
+
+* In this model we account experimental design *block* and *Replication*, and for *spatial trends/effects* i.e, correlated residuals both across rows and columns.
+
+\[
+y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k}  + \epsilon_{ijk}\\
+y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
+\mu= \text {overall mean}\\
+g_{i}=\text{random effect of the $i$th genotype}\\
+r_{j}=\text{fixed effect of the $j$th replication}\\
+b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+\epsilon_{ijk}=\text  {residual error}\\
+\]
+
+here, we assume $\epsilon$ is a random effect that represents correlated residuals based on the distance between plots along both the rows and columns, where, $\epsilon\sim N(0,\mathbf{R})$ and *R* is the covariance matrix of $\epsilon$. The difference between this model and model 1 and model 2 described above is the structure of the covariance residuals $R ={\sigma_\epsilon^2\ \Sigma}_c\left(\rho_c\right)\otimes\Sigma_r\left(\rho_r\right)$. $\sigma_\epsilon^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ and $\  \Sigma_r\left(\rho_r\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ and $\rho_{ro\ }$ are the autocorrelation parameters for the columns and rows; $\otimes$ represents the Kronecker product between separable auto-regressive processes of the first order in the row-column dimensions. For more  details on this, these references would be helpful [Gilmour et al., 1997](https://www.jstor.org/stable/1400446); [Gogel et al., 2018](https://doi.org/10.1007/s10681-018-2116-4); [Andrade et al., 2020](https://doi.org/10.1002/csc2.20226); [Bernardeli et al.202]( https://doi.org/10.1002/csc2.20364)
+
+
+**R script in Asreml**
+
+<span style="color: darkblue;font-size: 10pt">**model3<-asreml(fixed=trait~Rep, random=~Rep:Block+Genotype,residual =~ar1v(Block):ar1(Column),  na.method="include", data=data)**</span>
+
+* Block, column and genotype all are used as random effects.
+
+***
+
+<span style="color: darkred;font-size: 20pt">**Model 4**</span>
+
+* In this model we account for experimental design factors *block* and *replication* and  *spatial trends* i.e, correlated residuals in row direction only.
+
+\[
+y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k}  + \epsilon_{ijk}\\
+y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
+\mu= \text {overall mean}\\
+g_{i}=\text{random effect of the $i$th genotype}\\
+r_{j}=\text{fixed effect of the $j$th replication}\\
+b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+\epsilon_{ijk}=\text  {residual error}\\
+\]
+here, we assume $\epsilon$ is a random effect that represents correlated residual across rows only, where, $\epsilon\sim N(0,\mathbf{R})$ and **R** is the covariance matrix of $\epsilon$, and $\mathbf{R}={\sigma_\epsilon^2\ \Sigma}_c\left(\rho_c\right)\otimes I_r$. $\sigma_\epsilon^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ represents the first-order autoregressive correlation matrices and $\rho_{ro\ }$ the autocorrelation parameters for the rows only; $I_r$ represents independently and identically distributed variance structure for rows.
+
+**R script in Asreml**
+
+<span style="color: darkblue;font-size: 10pt">**model4<-asreml(fixed=trait~Rep, random=~Genotype+Rep:Block,residual =~ar1(Row):idv(Column), na.method="include", data=data)**</span>
+
+* Block is fixed and  genotype as random effects.
+
+
+***
+<span style="color: darkred;font-size: 20pt">**Model 5**</span>
+
+* In this model we account for *spatial trends* i.e, correlated residuals across columns only.
+
+\[
+y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k}  + \epsilon_{ijk}\\
+y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
+\mu= \text {overall mean}\\
+g_{i}=\text{random effect of the $i$th genotype}\\
+r_{j}=\text{fixed effect of the $j$th replication}\\
+b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+\epsilon_{ijk}=\text  {residual error}\\
+\]
+
+here, we assume $\epsilon$ is a random effect that represents correlated residual across columns only, where, $\epsilon\sim N(0,\mathbf{R})$ and **R** is the covariance matrix of $\epsilon$, and $\mathbf{R}={\sigma_\epsilon^2\ \Sigma}_c\left(\rho_c\right)\otimes I_r$. $\sigma_\epsilon^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ the autocorrelation parameters for the columns only; $I_r$ represents independently and identically distributed variance structure for rows.
+
+**R script in Asreml**
+
+<span style="color: darkblue;font-size: 10pt">**model5<-asreml(fixed=trait~Rep, random=~Genotype+Rep:Block,residual =~idv(Row):ar1(Column),  na.method="include", data=data))**</span>
+
+* Block as fixed and genotype as random effects.
+
+</div>
+
+
+### Best Model for Grain Yield
+
+* Here we will read the filtered data set from the file.
+* Then we will use function to run all the *Five models* described above for grain yield in all the environments.
+* We will extract the AIC values for all, and the extract the model with minimum AIC value in all the environments.
+* Best model will be selected based on AIC , and the best model will be used to extract **BLUPs**, **Heritability** and **Variance Componnets**.
+
+***
+#### Read the Filtered Data set
+***
+
+* Here we will read filtered data set and arrange the rows and columns for spatial variation modelling in ASReml Package. More on this can be found here [Click Link](https://www.youtube.com/watch?v=IcTWmLtCXDs)
+
+```{r, message=FALSE}
+  rm(list=ls()) # Remove previous work
+# Read the saved csv file, if not present then read it from working directory
+  if(exists('demo.data.filtered') && is.data.frame(get('demo.data.filtered'))){
+  demo.data.filtered=demo.data.filtered
+  }else{
+  demo.data.filtered<-read.csv(file="~/Documents/Analysis-pipeline/Outputs/Tables/demo.data.filtered.csv",
+                               header = TRUE)
+  # Factor conversion 
+  columns<-c("Environment", "Genotype", "Rep", "Block", "Row", "Column", "Line.type")
+  demo.data.filtered[, columns]<-lapply(columns, function(x) as.factor(demo.data.filtered[[x]]))
+  demo.data.filtered$Yield<-as.numeric(demo.data.filtered$Yield)
+  demo.data.filtered$HT<-as.numeric(demo.data.filtered$HT)
+  demo.data.filtered$DTF<-as.numeric(demo.data.filtered$DTF)
+  }
+# Subset the required columns
+  demo.data.filtered<-demo.data.filtered[, c("Environment", "Genotype", "Rep", "Block", 
+                                           "Row", "Column", "Line.type", "Yield", "HT", "DTF")]
+
+# First we will arrange the rows and columns for spatial analysis.
+  demo.data.filtered<-data.frame(demo.data.filtered%>% group_by(Environment)%>%arrange(Row, Column)) # arrange by row and column
+  demo.data.filtered<-data.frame(demo.data.filtered%>% arrange(Environment)) # Arrange by environment
+  #demo.data.filtered<-demo.data.filtered[!demo.data.filtered$Environment %in% c("Env2", "Env5","Env8",   "Env9"), ]
+```
+
+***
+#### Extract the AIC values
+***
+
+* In this section we will run all the **Five models** described above and extract the model with lower AIC values in each environment. More on AIC and BIC values can be found here [Click here](https://onlinelibrary.wiley.com/doi/abs/10.1111/anzs.12254).
+
+* We will use *for loop* to run all the five models across all the environments
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+# Run the for loop to extract the AIC values
+  demo.data.filtered$Environment<- as.character(demo.data.filtered$Environment)
+  un.en<- unique(demo.data.filtered$Environment)
+# models<-c("model1", "model2", "model3", "model4", "model5")
+  AIC<-data.frame()
+  for(i in 1:length(un.en)){
+  sub<- droplevels.data.frame(demo.data.filtered[which(demo.data.filtered$Environment==un.en[i]),])
+# Accounting blocks and replications
+  model1<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block, 
+  na.method="include", data=sub)
+  aic.model1<- -2 *model1$loglik +2 *length(model1$vparameters)
+# Model 2: Accounting blocks, replications and rows and columns.
+  model2<-asreml(fixed=Yield~Rep, random=~Genotype+Column+Block:Row, 
+  na.method="include", data=sub)
+  aic.model2<- -2 *model2$loglik +2 *length(model2$vparameters)
+# Model 3: Accounting block, Replication, and for spatial trends rows and columns.
+  model3<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,
+  residual =~ar1v(Row):ar1(Column), na.method="include", data=sub)
+  aic.model3<- -2*model3$loglik +2*length(model3$vparameters)
+# Model 4: Accounting for experimental design factors and spatial trends.
+  model4<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,
+  residual =~ar1(Row):idv(Column), na.method="include", data=sub)
+  aic.model4<- -2*model4$loglik +2*length(model4$vparameters)
+# Model 5: In this model we account for spatial trends across columns only.
+  model5<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,
+  residual =~idv(Row):ar1(Column), na.method="include", data=sub)
+  aic.model5<- -2*model5$loglik +2*length(model5$vparameters)
+  AIC<-data.frame(model1=aic.model1, model2=aic.model2, model3=aic.model3, 
+  model4=aic.model4, model5=aic.model5,  Environment=un.en[i])
+  if(i>1){
+  AIC.all<-rbind(AIC.all, AIC)
+  }
+  else{
+  AIC.all<-AIC
+  }
+  #models<-list( model1,  model2,  model3,  model4, model5)
+  #all.plots<-list(plot.model1, plot.model1,plot.model1, plot.model1,plot.model1)
+  #return(AIC.all)
+  }
+```
+
+```{r, message=FALSE, warning=FALSE}
+# Round the AIC values
+  AIC.all<-data.frame(lapply(AIC.all, function(y) if(is.numeric(y)) round(y, 2) else y))
+# View as table
+  print_table <- function(table, ...){
+  datatable(table, extensions = 'Buttons',
+  options = list(scrollX = TRUE, 
+  dom = '<<t>Bp>',
+  buttons = c('copy', 'excel', 'pdf', 'print')), ...)
+  }
+ 
+  print_table(AIC.all, editable = 'cell', 
+  rownames = FALSE, caption = htmltools::tags$caption("Table: Showing the models with AIC values in all the environments.",style="color:black; font-size:130%"), filter = 'top')
+```
+
+***
+#### Select the model with lower AIC values
+***
+
+
+* In this section we will extract the models with lower AIC values (lower the AIC value better is the model). 
+
+```{r}
+    row.names(AIC.all)<-AIC.all$Environment
+    AIC.all<-AIC.all[,-6]
+    #AIC.all<-as.matrix(AIC.all)
+    AIC.min<-as.data.frame(apply( AIC.all, 1, which.min))
+    colnames(AIC.min)<-"AIC.value"
+    datatable(AIC.min)
+```
+
+<span style="color: darkblue;font-size: 10pt">**Second column shows which model is best in each environment.**</span>
+
+***
+### Extract the BLUPs and Heritability
+***
+
+<style>
+div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+* Here in this section we will select and run the best model and extract BLUPs ([know more on BLUPs or BLUEs here](http://nitro.biosci.arizona.edu/workshops/TWIPB2013/Mod3/Mod3-5.pdf)).
+
+* Best model will be selected based on lower AIC values and also residual plot. Lower the AIC value better is the model. For example for grain yield under environment 1 Model 5 has lower AIC values and will be used to extract the BLUPs
+
+* We will also calculate the heritability's. Note we are dealing with complex models so we will not use basic formula as: $h{^2}=  \frac{\sigma^{2}g}{\sigma^{2}g+\sigma^{2}e}$ to calculate entry mean based heritability. Alternative methods have been proposed to genralize the heritability and is very well described in this paper [click here](https://academic.oup.com/genetics/article/212/4/991/5931331) 
+
+* Two alternative methods ( based on variance of a difference between genotypes) can be used to calculate heritability: 
+  - 1) [Piepho and M€ohring (2007)](https://link.springer.com/article/10.1007/s10681-007-9449-8) is more appropriate for complex residual structures and unbalanced experimental designs. The equation is: $H_{P}=1-\frac{\sigma^{2}g}{\sigma^{2}g+\frac{\overline{V}_{BLUE}}{2}}$. Where $\overline{V}_{BLUE}$ is mean variance difference of two genotypes based on BLUEs and $\sigma^{2}g$ is variance of genotypes.
+
+  - 2) [Cullis et al. 2006](https://link.springer.com/article/10.1198%2F108571106X154443) is also ....$1-\frac{\overline{V}_{BLUp}}{2\sigma^{2}g}$. Where $\overline{V}_{BLUP}$ is mean variance difference of two genotypes based on BLUPs and $\sigma^{2}g$ is variance of genotypes.
+
+* The above two methods are more appropriate in breeding and selection of genotypes to calculate heritability through estimating genotype differences ratherthan the precision of the genotype effect estimates. Further this definition of heritability is related to reliability of breeding value predictions. For more details please check the [Book: Genetic Data Analysis for Plant and Animal Breeding; Chapter 7](https://link.springer.com/book/10.1007%2F978-3-319-55177-7); [Paper](https://academic.oup.com/genetics/article/212/4/991/5931331), and this beautiful resource [Summary of heritability equations](https://shantel-martinez.github.io/resources.html)
+
+</div>
+
+***
+#### Extract BLUPs and Heritability for all Environments
+***
+
+* In this section I will show how to use *for loop* and *if function* to run the best models identified above (based on AIC values) simultaneously in all the 10 environments and extract **BLUPs** or **predicted means**, and **Heritability** based on [Cullis et al. 2006](https://link.springer.com/article/10.1198%2F108571106X154443) in for each environment
+
+```{r, warning=FALSE, message=FALSE, results='hide'}
+  demo.data.filtered$Environment<- as.character(demo.data.filtered$Environment)
+  un.en<- unique(demo.data.filtered$Environment)
+#models<-c("model1", "model2", "model3", "model4", "model5")
+  AIC<-data.frame()
+  for(i in 1:length(un.en)){
+  sub<- droplevels.data.frame(demo.data.filtered[which(demo.data.filtered$Environment==un.en[i]),]) 
+# Model 5 is best in Env1
+  if (sub$Environment=="Env1") {
+  model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,residual =~idv(Row):ar1(Column), 
+  na.method="include", data=sub)
+# Model 5 is best in Env6  
+  } else if(sub$Environment=="Env6"){
+   model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,residual =~idv(Row):ar1(Column), 
+  na.method="include", data=sub) 
+# Model 3 is best in Env7  
+  } else if (sub$Environment=="Env7") {
+  model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,residual =~ar1v(Row):ar1(Column),  na.method="include", data=sub)
+# Model 3 is best in Env7 
+  }else if (sub$Environment=="Env10") {
+  model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,residual =~ar1v(Row):ar1(Column), na.method="include", data=sub)
+  } else {
+# In rest of environments model 1 was best
+  model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block, na.method="include", data=sub)
+  }
+  vc.g <- summary(model)$varcomp['Genotype','component']
+  vc.g
+# Mean variance of a difference of two genotypic BLUPs
+  vdBLUP.mat <- predict(model, classify="Genotype", sed=TRUE)$sed^2 
+  vdBLUP.avg <- mean(vdBLUP.mat[upper.tri(vdBLUP.mat, diag=FALSE)])
+  vdBLUP.avg
+  
+# H2 Cullis method only #
+  H2Cullis <- 1 - (vdBLUP.avg/(vc.g*2))
+  H2Cullis
+  heritability<-data.frame(H2Cullis, Environment=un.en[i])
+#Extract BLUPS
+  
+  predicted.gy<-predict(model, "Genotype", sed=T)$pvals
+  predicted.gy<-data.frame(predicted.gy, Environment=un.en[i])
+  if(i>1){
+    Reliability<-rbind(Reliability,heritability) 
+    predicted.all<-rbind(predicted.all, predicted.gy) 
+  }
+  else{
+  Reliability<- heritability 
+  predicted.all<- predicted.gy
+  }
+  }
+
+```
+
+***
+##### View BLUPs in table for all environments
+***
+
+```{r, warning=FALSE}
+# Round the  values
+  predicted.all<-data.frame(lapply(predicted.all[,-4], 
+  function(y) if(is.numeric(y)) round(y, 2) else y))
+  print_table(predicted.all,editable = 'cell', rownames = FALSE,
+  caption = htmltools::tags$caption("BLUPs along with standard errors for grain yield in all environments.", style="color:black; font-size:130%"), filter = 'top')
+
+```
+
+***
+##### View Heritability for all
+***
+
+```{r}
+  ggbarplot(Reliability, x = "Environment", y = "H2Cullis",
+          fill = "lightblue",           # change fill color by mpg_level
+          color = "black",  
+         merge = TRUE,# Set bar border colors to white
+          palette = "jco",            # jco journal color palett. see ?ggpar
+          #sort.by.groups =FALSE,
+          x.text.angle = 90,          # Rotate vertically x axis texts
+          ylab = "Reliability",
+          xlab = FALSE,
+          rotate=FALSE,
+          x.text.col = TRUE,
+          legend = "top",
+          ggtheme =theme_classic() ,
+          font.legend = 18,
+          #legend.title = "Treatment"
+  )+
+  font("xlab", size = 25, color = "black")+
+  font("ylab", size = 25, color = "black")+
+  font("xy.text", size = 12, color = "black")
+
+# Save the file for analysis
+  write.csv(predicted.all, file = "~/Documents/Analysis-pipeline/Outputs/Tables/BLUPs.all.csv",
+  row.names = FALSE)  
+```
+
+***
+#### Extract BLUPs, Heritability in One Environment
+***
+
+* In this section we will show how to extract the **BLUPs**, **Heritability**, **variance components** and other things using data from single environment. We will use the best model identified above to extract all these results
+
+```{r, results='hide', warning=FALSE, message=FALSE}
+# Let us subset the environment 1
+  env1.data<-subset(demo.data.filtered, Environment=="Env1")
+  env1.data<-droplevels.data.frame(env1.data)
+# Now run the model that came out best
+  model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,
+  residual =~idv(Row):ar1(Column), 
+  na.method="include", data=env1.data)
+```
+
+***
+##### Extract the variance components
+***
+
+```{r}
+  summary(model)$varcomp
+```
+
+***
+##### Get AIC and BIC values
+***
+
+```{r}
+  summary(model)$bic
+  summary(model)$aic
+```
+
+***
+##### ANOVA (wald test-for fixed effects)
+***
+
+```{r}
+  wald(model)
+```
+
+***
+##### Variogram to check field spatial variations
+***
+
+```{r}
+  plot(varioGram(model5))
+```
+
+***
+##### BLUPs for Genotypes
+***
+
+```{r}
+# Blups with Standard error
+  blups <- predict(model5, classify = "Genotype")$pvals
+# Average standard error of difference
+  avgsed<- predict(model5, classify = "Genotype")$avsed
+```
+
+***
+##### Heritability Cullis et al.2006
+***
+
+```{r}
+# Get varaince of genotypes
+  vc.g <- summary(model)$varcomp['Genotype','component']
+  vc.g
+# Mean variance of a difference of two genotypic BLUEs
+  vdBLUP.mat <- predict(model, classify="Genotype", sed=TRUE)$sed^2 # obtain squared s.e.d. matrix 
+  vdBLUP.avg <- mean(vdBLUP.mat[upper.tri(vdBLUP.mat, diag=FALSE)]) # take mean of upper triangle
+  vdBLUP.avg
+#  Heritability H2 Cullis 
+  H2Cullis <- 1 - (vdBLUP.avg/(vc.g*2))
+  H2Cullis
+```
+
+
+***
+## Multi-environment Trial (MET) Analaysis
+***
+
+<style>
+div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+* In this section, we will show how to analyze multi-environment data. More on this can be found here: [Paper1](https://doi.org/10.2135/cropsci2015.06.0336), [Paper2](https://doi.org/10.3389/fphys.2012.00156).
+
+
+* The MET data analysis can be divided into ways: 1) **One-step or Single stage Approach** and 2) **Two Step or Stage-wise Approach**.  More on this can be found here [Paper1](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-842X.2010.00570.x), [Paper2](https://onlinelibrary.wiley.com/doi/abs/10.1002/bimj.201100219), [Paper3](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.0006-341X.2001.01138.x), [Paper4](https://doi.org/10.2135/cropsci2009.02.0083), and [Paper5]((https://acsess.onlinelibrary.wiley.com/doi/abs/10.2134/agronj2016.07.0395))
+
+* **Single stage** analysis is golden standard to analyze the mutli-environment data. However, in experiments or trials with unbalanced data, different experimental designs across trials and to avoid computational challenges of analyzing huge trials together-**two-stage** analysis is more appropriate. In two stage approach adjusted means as BLUEs are estimated  per location/trial and weighted BLUEs (associated variance-covariance matrix)  are fitted in second step to get the BLUPs or predicted means for each genotype [Mohring and Piepho.2009](https://doi.org/10.2135/cropsci2009.02.0083).
+
+* Here both the **Single Stage** and **Stage-wise** approach for the MET analysis will be demonstrated. 
+</div>
+
+***
+### Single Stage Analysis
+***
+
+* In single stage analysis all the observed data is analyzed together. Here in this section a joint analysis of MET is done in a single stage by using a linear mixed model (LMM). The mixed model used is defined as:
+
+
+\[
+y_{ijklm}= \mu+g_{i} + e_{j}+ g_{i}*e_{j}+e_{j}:r_{k}+ e_{j}:r_{k}:b_{l} +\epsilon_{ijklm}\\
+\mu= \text {overall mean}\\
+g_{i}=\text{random effect of the $i$th genotype}\\
+e_{j}=\text{fixed effect of the $j$th environment}\\
+g_{i}*e_{j}=\text{is the interaction effect of $i$th genotypes with $j$th environment}\\
+r_{k}=\text{fixed effect of the $j$th replication nested within $j$th environment}\\
+b_{l}= \text {random effect of $k$th block nested with $j$ environment and $k$th replication}\\
+\varepsilon_{ijkl}=\text{residual error}\\
+\text{here we assume residuals are independent and identically distributed}\\
+\]
+
+
+- For more details on these models please see the manuscript. 
+
+***
+#### Read the filtered MET data
+***
+
+```{r, message=FALSE}
+  rm(list=ls())
+# Read the saved csv file, if working directly 
+  if(exists('demo.data.filtered') && is.data.frame(get('demo.data.filtered'))){
+  demo.data.filtered=demo.data.filtered
+  }else{
+  demo.data.filtered<-read.csv(file="~/Documents/Analysis-pipeline/Outputs/Tables/demo.data.filtered.csv",
+                               header = TRUE)
+# factor conversion if below are not in factors 
+  columns<-c("Environment", "Genotype", "Rep", "Block", "Row", "Column", "Line.type")
+  demo.data.filtered[, columns]<-lapply(columns, function(x) as.factor(demo.data.filtered[[x]]))
+  demo.data.filtered$Yield<-as.numeric(demo.data.filtered$Yield)
+  demo.data.filtered$HT<-as.numeric(demo.data.filtered$HT)
+  demo.data.filtered$DTF<-as.numeric(demo.data.filtered$DTF)
+  }
+# Subset the required columns
+  demo.data.filtered<-demo.data.filtered[, c("Environment", "Genotype", "Rep", "Block", 
+                                           "Row", "Column", "Line.type", "Yield", "HT", "DTF")]
+# First we will arrange the rows and columns for spatial analysis.
+# Now we will subset the environments and Yields for analysis
+  demo.data.filtered<-data.frame(demo.data.filtered%>% group_by(Environment)%>%arrange(Row, Column)) # arrange by row and column
+  demo.data.filtered<-data.frame(demo.data.filtered%>% arrange(Environment)) # Arrange by environment
+
+#demo.data.filtered<-demo.data.filtered[!demo.data.filtered$Environment %in% c("Env2", "Env5","Env8", "Env9"), ]
+```
+
+***
+#### Run the Models
+***
+
+* Here we will run the 10 linear mixed models which ranges from basic model to advanced factor analytical models. 
+
+* The description of these models is given in the manuscript.
+
+* We will use the best model (selected based on lower AIC and BIC values) to extract the results.
+
+
+```{r, warning=FALSE, message=FALSE, results='hide'}
+# Model 1: Basic model accounting for only environments and no interactions
+  met1 <-asreml(Yield~Rep+Environment, random =~Genotype+Environment+Rep:Block, 
+        na.method="incude",data = demo.data.filtered)
+
+# Model 2: Basic model accounting G x E interactions
+  met2 <-asreml(Yield~Rep+Environment, random =~Genotype+ Genotype*Environment+Rep:Block,
+        na.method="incude",data = demo.data.filtered)
+
+# Model 3: Different variances across Environments i.e., heterogeneous error variances across environments
+  met3<-asreml(fixed=Yield~Rep+Environment, 
+        random=~Genotype+Rep:Block+Genotype:Environment, 
+        na.method="incude",  residual = ~ dsum( ~ units|Environment),
+        data=demo.data.filtered)
+# Model 4: Modelling G x E with spatial trends (same for all environments)
+  met4<-asreml(fixed=Yield~Rep+Environment, 
+        random=~Genotype+Rep:Block, 
+        residual = ~dsum(~ar1(Row):ar1(Column) |Environment),
+        #residual =~ar1v(Row):ar1(Column),
+        na.method="incude", data=demo.data.filtered)
+# Model5: Modelling G x E with spatial trend specific to each environment
+  met5<-asreml(fixed=Yield~Rep+Environment, 
+        random=~Genotype+Rep:Block, 
+        residual =~dsum(~idv(Row):ar1(Column) +ar1v(Row):ar1(Column)+ar1(Row):idv(Column)|Environment,
+        levels = list(c(6,7), c(8,2), c(1,3,4,5,9,10))),
+        na.method="incude", data=demo.data.filtered)
+# Model 6:  Heterogeneous genetic variance-each environment has a unique genetic variance with no correlations between environments
+  met6 <- asreml(fixed=Yield~Rep+Environment,
+          random =~diag(Environment):Genotype+Rep:Block,
+          residual=~dsum(~id(units)|Environment),
+          data = demo.data.filtered)
+# Model 7:Heterogeneous genetic variance accounting common genetic correlations 
+   met7<- asreml(fixed=Yield~Rep+Environment,
+          random =~corgh(Environment):Genotype+Rep:Block,
+          residual=~dsum(~id(units)|Environment),
+          data = demo.data.filtered)
+# Model 8: Factor Analytically model (fa1) 
+  met8 <- asreml(fixed=Yield~Rep+Environment,
+          random =~diag(Environment):Rep:Block+fa(Environment,2):Genotype,
+          residual=~dsum(~id(units)|Environment),
+          data = demo.data.filtered)
+# Model 9: Factor Analytical model (fa3) 
+  met9 <- asreml(fixed=Yield~Rep+Environment,
+          random =~diag(Environment):Rep:Block+fa(Environment,3):Genotype,
+          residual=~dsum(~id(units)|Environment),
+          data = demo.data.filtered)
+# Model 10: Factor analytical model (fa3) with specific spatial trends
+  met10<-asreml(Yield~Rep+Environment,
+        random =~diag(Environment):Rep:Block+fa(Environment,3):Genotype,
+        residual =~dsum(~idv(Row):ar1(Column) +ar1v(Row):ar1(Column)+ar1(Row):idv(Column)|Environment,
+        levels = list(c(6,7), c(8,2), c(1,3,4,5,9,10))), 
+        data=demo.data.filtered)
+```
+
+***
+#### Find the Best Model
+***
+
+* In this section we will use ***infoCriteria.asreml*** function to extract the **AIC** and **BIC** values for each model.
+
+* Then we will apply it to all the models as list and identify the best model based on lower BIC value.
+
+```{r, warning=FALSE, message=FALSE}
+# Create the list of all models
+  library(asremlPlus)
+  all.models<-list(met1,met2, met3, met4, met5, met6, met7, met8, met9, met10)
+# Extract the AIC and BIC values
+  all.bic<-lapply(all.models,function(x){infoCriteria.asreml(x)})
+# Save it as data.frame
+  all.bic<-as.data.frame(do.call(rbind, all.bic) )  
+# Find which model has minimum BIC value  
+  all.bic[which.min(all.bic$BIC),]  
+```
+<span style="color: darkblue; font-size: 16pt">**Note: Model 8 (Met8) comes out the best model, thus will be used in downstream analysis to extract the results** </span>
+
+***
+#### Results from Best Model
+***
+
+* Here in this section we will show how to extract the results including variance components, heritability, BLUPs and plot the Bi-plots and check the stability of lines.
+
+***
+##### Extraction of Varaince Components
+***
+
+***
+###### Error Varaince at Each Environment
+***
+
+```{r, warning=FALSE}
+# Get all the variance components 
+  varcomp<-summary(met8)$varcomp
+# Extract the error variance
+  error.vars<-varcomp[grep("!R", rownames(varcomp)),"component", drop = F] 
+  error.vars$Environment<-substr(rownames(error.vars), start = 13, stop = 17)
+  error.vars$Environment<-gsub("!","",as.character(error.vars$Environment))
+  row.names(error.vars)<-error.vars$Environment
+```
+
+***
+###### Genetic variances at each environment
+***
+
+```{r}
+  genotyp.var<-varcomp[grep("var", rownames(varcomp)),"component", drop = F]
+#remove the leading characters
+  genotyp.var$Environment<-substr(rownames(genotyp.var), start = 29, stop = 33)
+  genotyp.var$Environment<-gsub("!","",as.character(genotyp.var$Environment))
+  row.names(genotyp.var)<-genotyp.var$Environment
+```
+
+***
+##### Heritability at Each Environment
+***
+
+```{r}
+# Combine genotype and phenotypic variances
+  varinace.all<-merge(genotyp.var,error.vars, by="Environment" )
+  colnames(varinace.all)<-c("Environment", "geno.var", "error.var")
+# Calculate the Heritability
+  varinace.all$heritability<-varinace.all$geno.var/(varinace.all$geno.var+varinace.all$error.var)
+```
+
+***
+##### Plot the Varainces and Heritability
+***
+
+```{r, fig.height=6, fig.width=12}
+# Put data in wide format
+  varinace.data<- gather(varinace.all, Variance, Value, geno.var:error.var, factor_key=TRUE)
+# Plot the variance graph
+  var.plot<-ggplot(varinace.data, 
+        aes(x = Environment, y = Value, fill=Variance)) + 
+        geom_bar(stat="identity",  colour="black") + 
+        ggtitle("Error variance at each Environment") +
+        ylab(label = "Error Variance") +
+     # theme(axis.text.x=element_text(angle = 90, hjust = 0))
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+      panel.background = element_blank(), axis.line = element_line(colour = "black"))
+# Get heritability plot
+  heritability.plot<-ggplot(varinace.all, 
+  aes(x = Environment, y = heritability)) + 
+  geom_bar(stat="identity",  colour="black", fill="lightblue") + 
+  ggtitle("Heritability at each Environment") +
+  ylab(label = "Error Variance") +
+  # theme(axis.text.x=element_text(angle = 90, hjust = 0))
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.background = element_blank(), axis.line = element_line(colour = "black"))
+  grid.arrange(var.plot, heritability.plot, nrow = 1)
+```
+
+***
+###### Extract BLUPs, Regression Plots and PCA Biplot
+***
+
+* In this section we will use library **ASExtras4** to extract the additional results including the regression plots and BLUPs.
+
+* We will use function ***fa.asreml*** to extract the results. It will return list of 7. For more details [click here](https://asreml.kb.vsni.co.uk/knowledge-base/asreml-r-supplementary-packages/)
+
+***
+###### Extract G x E BLUPs and PCA Biplot
+***
+
+```{r}
+# Get the summary of results from Factor Analytical model
+  summary.all<-fa.asreml(met8)
+# Get BLUPs across all Environments (G xE)
+  blups<-summary.all$blups$`fa(Environment, 2):Genotype`
+  blups.GE<-blups$blups[,-4]
+# Reshape the G x E BLUPs
+  biplot.blups<-reshape(blups.GE, idvar = "Genotype", timevar = "Environment", direction = "wide")
+  colnames(biplot.blups) <- gsub(x = colnames(biplot.blups),
+  pattern = "blup.", replacement = "")
+# Get PCA on the Biplot
+# Let us work with principle component analysis
+  data_pca<-biplot.blups[-1]
+  data_pca<- PCA(data_pca, graph = FALSE)
+  fviz_pca_biplot(data_pca, palette = "jco", geom = "point", 
+            #col.ind = blups.names$Type,
+            #pointshape = 21,
+            pointsize = 2,
+            #col.var = factor(c("UMMT", "GBB", "BPT", "RCB", "LNM", "MNM")),
+            addEllipses = TRUE, label = "var",
+            col.var = "blue", repel = TRUE,
+            legend.title = "Group") 
+```
+
+***
+###### Latent Regression Plots
+***
+
+```{r}
+# First let us get the BLUPs for G x E effects
+  blups.GE<-blups$blups[,-4]
+# factor conversion
+  blups.GE$Environment<-as.factor(blups.GE$Environment)
+  blups.GE$Genotype<-as.factor(blups.GE$Genotype)
+# First get top ten genotypes
+  top.blups<-blups.GE%>% 
+  arrange(desc(blup)) %>% slice(1:10)
+  top.blups<-droplevels.data.frame(top.blups)
+# Get names of top genotypes
+  top.genotypes<-c(top.blups$Genotype)
+# Now subset the data frame
+  blups.GE.top<-blups.GE[blups.GE$Genotype%in%top.blups$Genotype, ]
+# Now get the Factor loadings
+  loadings<-data.frame(summary.all$gammas$`fa(Environment, 2):Genotype`$`rotated loads`)
+  loadings$Environment<-row.names(loadings)
+# Now merge with top blups file
+  top.blups.final<-merge(blups.GE.top, loadings, by="Environment", all = TRUE)
+  colnames(top.blups.final)<-c("Environment", "BLUPs", "Genotype",    "Factor1",
+                             "Factor2")
+# Plot the laten regression plots 
+  ggplot(top.blups.final, aes(Factor1, BLUPs)) +
+    geom_point(color="darkred") +
+    geom_smooth(method="lm") +
+    facet_wrap(~ Genotype)+
+  #theme_few()+ #use white theme
+    labs(title="Latent Regression Plot",x="Factor Loading 1", y = "BLUP")+
+    theme_light ()+
+    theme (plot.title = element_text(color="black", size=16, face="bold", hjust=0.5),
+         axis.title.x = element_text(color="black", size=16),
+         axis.title.y = element_text(color="black", size=16)) +
+    theme(axis.text= element_text(color = "black", size = 10))+
+    theme(legend.position="none")+
+  #facet_grid(~ timepoint,ncol=4,scales = "free")+
+   theme(strip.text.x = element_text(size = 10,face="bold",colour = "black"))+ #adding theme and background to headings
+    theme(strip.background = element_rect(fill = "lightblue", color = "black", size=1.5))
+```
+
+<span style="color: darkblue; font-size: 16pt">**Figure shows the latent regression plot for top 10 genotypes. From the plot it is obvious that genotypes 127, 139, 146, 175, and 22 are high yielding and stable genotypes across the all the environments** </span>
+
+***
+###### Correlation Between Environments
+***
+
+```{r}
+# We will use again summary.all results to extract the Correlationship matrix
+  Corr.matrix<-summary.all$gammas$`fa(Environment, 2):Genotype`$Cmat
+# Get the genotype matrix
+  G.matrix<-summary.all$gammas$`fa(Environment, 2):Genotype`$Gmat
+  #corrplot(Corr.matrix, type = "upper", order = "hclust", 
+         #tl.col = "black", tl.srt = 45)
+  pheatmap(Corr.matrix, cluster_rows = FALSE, cluster_cols = FALSE, scale = "none", 
+         legend_labels = "-log10(p-value)", fontsize = 12, angle_col = 90)
+```
+
+***
+###### Get the BLUPS adjusted across all Environments
+***
+
+```{r, warning=FALSE, message=FALSE}
+# Get the Predicted Values for MET
+  blups.met<-predict(met8, "Genotype", sed=T)$pvals
+# Plot the Histogram of MET BLUPs
+  ggplot(data=blups.met, aes(predicted.value)) +
+    geom_histogram(color="darkblue", fill="lightblue")+ # adjust x values and breaks
+    geom_vline(aes(xintercept=mean(predicted.value)), # adding the line to represent mean
+             color="darkred", linetype="dashed", size=1)+
+    labs(title="",x="Value", y = "Count")+
+    theme_classic()+
+    theme (plot.title = element_text(color="black", size=14, face="bold", hjust=0),
+         axis.title.x = element_text(color="black", size=10, face="bold"),
+         axis.title.y = element_text(color="black", size=10, face="bold")) +
+    theme(axis.text= element_text(face = "bold", color = "black", size = 8))
+```
+
+***
+###### Top Ranking MET genotypes
+***
+
+```{r}
+# Arrange the BLUPs in decreasing order
+  blups.met<-blups.met%>%arrange(desc(predicted.value))
+# Select top 35 and merge with checks
+  blups.top50<-data.frame(blups.met[1:50, ])
+  blups.names<-merge(blups.top50[, c(1,2)],biplot.blups,by="Genotype", all=TRUE)
+  blups.names$Type<-ifelse(is.na(blups.names$predicted.value), "Un-selected", "Selected")          
+# Now let us plot the biplot
+  fviz_pca_biplot(data_pca, palette = "jco", geom = "point", 
+                col.ind = blups.names$Type,
+                #pointshape = 21,
+                pointsize = 2,
+                #col.var = factor(c("Env1", "Env2", "Env3", "Env5", "Env6", 
+                                  # "Env7","Env8", "Env9", "Env10", "Env11")),
+                addEllipses = TRUE, label = "var",
+                col.var = "blue", repel = TRUE,
+                legend.title = "Group") 
+```
+
+<span style="color: darkblue; font-size: 16pt">**Note: Most of the top genotypes selected are highly stable** </span>
+
+***
+### Step-wise or Stage Analysis
+***
+
+* Here in this section the joint analysis of MET data is performed in two stages or steps.
+* In the first stage adjusted means as BLUEs and residuals in each environment are obtained by considering the genotypes as fixed effect. At this step, the adjusted means of genotypes were corrected for the experimental design factors including blocks and replications and spatial trends in each environment.
+* The model used follows as:
+
+\[
+y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k}  + \epsilon_{ijk}\\
+y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
+\mu= \text {overall mean}\\
+g_{i}=\text{random effect of the $i$th genotype}\\
+r_{j}=\text{fixed effect of the $j$th replication}\\
+b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+\epsilon_{ijk}=\text  {residual error}\\
+\]
+
+here, we assume $\epsilon$ is a random effect that represents correlated residuals based on the distance between plots along both the rows and columns, where, $\epsilon\sim N(0,\mathbf{R})$ and *R* is the covariance matrix of $\epsilon$ with $R ={\sigma_\epsilon^2\ \Sigma}_c\left(\rho_c\right)\otimes\Sigma_r\left(\rho_r\right)$. $\sigma_\epsilon^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ and $\  \Sigma_r\left(\rho_r\right)$ represents the first-order autoregressive correlation matrices and $\rho_{c\ }$ and $\rho_{ro\ }$ are the autocorrelation parameters for the columns and rows; $\otimes$ represents the Kronecker product between separable auto-regressive processes of the first order in the row-column dimensions.
+
+***
+#### First Step Analysis
+***
+
+* Here in this step we will extract the BLUEs in each environment and residuals.
+* The BLUEs extracted are accounted for experimental design factors of replications and blocks and also accounted for spatial trends.
+* The best spatial trend model was identified from the separate analysis.
+
+```{r, warning=FALSE, message=FALSE, results='hide'}
+# Run the model for each environment
+  demo.data.filtered$Environment<- as.character(demo.data.filtered$Environment)
+  un.en<- unique(demo.data.filtered$Environment)
+# models<-c("model1", "model2", "model3", "model4", "model5")
+  for(i in 1:length(un.en)){
+  sub<- droplevels.data.frame(demo.data.filtered[which(demo.data.filtered$Environment==un.en[i]),]) 
+# Model 5 is best in Env1
+  if (sub$Environment=="Env1") {
+  model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,residual =~ar1(Row):idv(Column), 
+        na.method="include", data=sub)
+# Model 5 is best in Env6  
+   } else if(sub$Environment=="Env6"){
+    model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,residual =~ar1(Row):idv(Column), 
+           na.method="include", data=sub) 
+# Model 3 is best in Env7  
+    } else if (sub$Environment=="Env7") {
+    model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,residual =~ar1v(Row):ar1(Column), na.method="include", data=sub)
+# Model 3 is best in Env7 
+    }else if (sub$Environment=="Env10") {
+    model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block,residual =~ar1v(Row):ar1(Column), na.method="include", data=sub)
+  } else {
+    # In rest of environments model 1 was best
+  model<-asreml(fixed=Yield~Rep, random=~Genotype+Rep:Block, na.method="include", data=sub)
+  }
+#Extract BLUPS
+  predicted.gy<-predict(model, "Genotype", sed=T)$pvals
+  predicted.gy<-data.frame(predicted.gy, Environment=un.en[i])
+  if(i>1){
+    predicted.all<-rbind(predicted.all, predicted.gy) 
+  }
+  else{
+    predicted.all<- predicted.gy
+    }
+  }
+```
+
+***
+#### Second Step Analysis
+***
+
+* In the second stage, mixed model is fitted across each environment using the weighted adjusted means obtained from first stage as response variable. 
+
+* The weighted BLUEs were used to take care of the heterogeneous error variance and weights were calculated by the inverse of the squared standard error of BLUEs. 
+
+* The model used follows as: 
+
+\[
+  y_{ij}= \mu+g_{i} + e_{j}+ g_{i}*e_{j}+\epsilon_{ij}\\
+  y_{ij}= \text{ is the weighted BLUE for $i$th observation in $j$th environment}\\
+  \mu= \text {overall mean}\\
+  g_{i}=\text{the random effect of $i$th genotype} \\
+  e_{j}=\text{fixed effect of the $j$th environment}\\
+  g_{i}*e_{j}=\text{is interaction effect of genotype with the environment}\\
+  \varepsilon_{ijkl}=\text{residual error}\\
+\]
+Further, we can assume the different covariance structures among the residuals and random effects as show in the single stage analysis.
+
+```{r}
+# First let us get weighted BLUEs
+  wt<- predicted.all$std.error^2
+  wt<- 1/wt
+#names(wt)<-"weights"
+# Check for missing and convert it to 0
+  wt[is.na(wt)] = 0
+# Now fit the model with A matrix and extract Breeding values/BLUPs
+# Factor conversion
+# Now run the model, will use full matrix rather than inverse  
+  asreml.options(gammaPar = TRUE)
+  predicted.all$Environment<-as.factor(predicted.all$Environment)
+  model.com<-asreml(fixed= predicted.value ~Environment, random=~Genotype,
+                    workspace= 1000e06,weights=wt,
+                    na.action=na.method(x="include"), data=predicted.all)
+# Get the Breeding values (BLUPS)
+  blups.com<- predict(model.com, classify='Genotype', pworkspace='6gb')$pvals
+ # Plot the BLUPs
+# Plot the Histogram of MET BLUPs
+  ggplot(data=blups.com, aes(predicted.value)) +
+   geom_histogram(color="darkblue", fill="lightblue")+ # adjust x values and breaks
+    geom_vline(aes(xintercept=mean(predicted.value)), # adding the line to represent mean
+             color="darkred", linetype="dashed", size=1)+
+    labs(title="MET BLUPs across all Environments",x="Value", y = "Count")+
+    theme_classic()+
+    theme (plot.title = element_text(color="black", size=14, face="bold", hjust=0),
+         axis.title.x = element_text(color="black", size=10, face="bold"),
+         axis.title.y = element_text(color="black", size=10, face="bold")) +
+    theme(axis.text= element_text(face = "bold", color = "black", size = 8))
+```
+
+***
+#### Read the filtered MET data
+***
+
+```{r, message=FALSE}
+  rm(list=ls())
+# Read the saved csv file, if working directly 
+  if(exists('demo.data.filtered') && is.data.frame(get('demo.data.filtered'))){
+  demo.data.filtered=demo.data.filtered
+  }else{
+  demo.data.filtered<-read.csv(file="~/Documents/Analysis-pipeline/Outputs/Tables/demo.data.filtered.csv",
+                               header = TRUE)
+# factor conversion if below are not in factors 
+  columns<-c("Environment", "Genotype", "Rep", "Block", "Row", "Column", "Line.type")
+  demo.data.filtered[, columns]<-lapply(columns, function(x) as.factor(demo.data.filtered[[x]]))
+  demo.data.filtered$Yield<-as.numeric(demo.data.filtered$Yield)
+  demo.data.filtered$HT<-as.numeric(demo.data.filtered$HT)
+  demo.data.filtered$DTF<-as.numeric(demo.data.filtered$DTF)
+  }
+# Subset the required columns
+  demo.data.filtered<-demo.data.filtered[, c("Environment", "Genotype", "Rep", "Block", 
+                                           "Row", "Column", "Line.type", "Yield", "HT", "DTF")]
+# First we will arrange the rows and columns for spatial analysis.
+# Now we will subset the environments and Yields for analysis
+  demo.data.filtered<-data.frame(demo.data.filtered%>% group_by(Environment)%>%arrange(Row, Column)) # arrange by row and column
+  demo.data.filtered<-data.frame(demo.data.filtered%>% arrange(Environment)) # Arrange by environment
+
+#demo.data.filtered<-demo.data.filtered[!demo.data.filtered$Environment %in% c("Env2", "Env5","Env8", "Env9"), ]
+# Subset the Environment 1
+  #demo.data.filtered<-subset(demo.data.filtered, Environment=="Env1")
+  
+  table(demo.data.filtered$Environment)
+```
+
+***
+## Example using Marker Data
+***
+
+* Here in this section we will provide an example how to fit the model when we have marker data available. We will show how to extract the breeding values.
+
+* We will show it just for one model using *MET* Data set. And same can be extended to other models.
+
+* First we will read the Marker Data. Then we will subset and match it with phenotype data to make sure we have same number of genotypes in both data sets
+
+* Then We will construct Genomic Relationship matrix[[1](https://www.sciencedirect.com/science/article/pii/S0022030208709901)] that will be used in the model
+
+* Finally we will extract the results.
+
+***
+### Read Marker Data
+***
+
+* Here we will read the genotype data stored in the folder. The genotype data as ~1,000 [1k-RiCA](https://thericejournal.springeropen.com/articles/10.1186/s12284-019-0311-0)  marker data.
+
+```{r, error=FALSE, message=FALSE, warning=FALSE}
+# Read Marker Data
+  geno.data<-read.csv(file="~/Documents/Analysis-pipeline/Geno_Data/geno.data.csv", header=TRUE)
+# Subset it to match with phenotypic data
+  row.names(geno.data)<-geno.data$Genotype
+  geno.data<-as.matrix(geno.data[,-1])
+```
+
+***
+### Construct Relationship Matrix
+***
+
+* Here will will construct the **Genomic Relationship Matrix (GRM)** using marker data. The GRM will be based on **VanRanden (2008)**. 
+
+* The Steps used to create this GRM is:
+    - Create a center of marker data (X matrix)
+    - Creat a Cross Product $(XX)$
+    - Divide the $(XX)$ by number of markers
+    
+  \[
+  GRM= XX^t/m
+  \]
+  
+* More on relationship matrix can be found here [Source 1](https://www.sciencedirect.com/science/article/pii/S0022030209707933), [Source2](https://naldc.nal.usda.gov/download/27183/PDF)
+
+```{r}
+# Remove the columns that have all missing values
+  geno.data<-geno.data[ , !apply( geno.data , 2 , function(x) all(is.na(x)) ) ]
+# Impute missing values
+  for (j in 1:ncol(geno.data)) {
+    geno.data[, j] <- ifelse(is.na(geno.data[, j]), mean(geno.data[, j], na.rm = TRUE), geno.data[, 
+        j])
+  }
+#Xs <- scale(geno.data, center = TRUE)
+# Construct G matrix
+  GM <- geno.data %*% t(geno.data)/ncol(geno.data)
+```
+
+***
+### Fit the MET Model
+***
+* Here we will use one of the model to show how to fit the relationship matrix based on markers and phenotypic data together. 
+
+```{r, message=FALSE, warning=FALSE}
+ model.geno<-asreml(fixed=Yield~Rep+Environment, 
+        random=~vm(Genotype, GM)+Rep:Block, 
+        residual = ~dsum(~ar1(Row):ar1(Column) |Environment),
+        #residual =~ar1v(Row):ar1(Column),
+        na.method="incude", data=demo.data.filtered)
+
+```
+
+***
+### Results
+***
+
+#### Variance Components
+
+```{r}
+summary(model.geno)$varcom
+```
+
+#### Plot the Residuals
+
+```{r}
+plot(model.geno)
+```
+
+#### Get gBLUPs (Estimated Breeding Values)
+
+```{r}
+# Get the Breeding values (BLUPS)
+  gBLUPs<- predict(model.geno, classify='Genotype', pworkspace='6gb')$pvals
+```
+
+#### Check for Global Trends
+
+* Here we can use **ASExtras4** R package to check for global trends. It will return the variogram and residual information for rows and columns 
+```{r, eval=FALSE}
+# check for global spatial trends and extraneous variations
+met.asreml(model.geno)
+```
+
+<span style="color: blue;font-size: 14pt;font-family: fantansy"> Note: Other results can be extracted in similar way as as shown in the MET analysis of **Single Stage Analysis***</span>
+
+
+
+## Additional on MET and Stability Analysis 
+
+* Here in this section  we are giving some useful *R* resources that can be used for satbility and MET analysis.
+
+1. [metan-R: Multi-environment Trial Analysis](https://tiagoolivoto.github.io/metan/index.html)
+
+2. [gge-R: Functions for GGE and GGB ](https://kwstat.github.io/gge/)
+
+*** 
+# Additional Literature
+***
+
+- [Screening experimental designs ](https://www.frontiersin.org/articles/10.3389/fphys.2012.00156/full)
+
+- [Analysis and Handling of G × E in a Practical Breeding Program](https://acsess.onlinelibrary.wiley.com/doi/abs/10.2135/cropsci2015.06.0336)
+
+- [A stage‐wise approach for the analysis of multi‐environment trials](https://onlinelibrary.wiley.com/doi/abs/10.1002/bimj.201100219)
+
+- [Analysis of series of variety trials with perennial crops](https://onlinelibrary.wiley.com/doi/abs/10.1111/gfs.12054)
+
+- [A tutorial on the statistical analysis of factorial experiments with qualitative and quantitative treatment factor levels](https://onlinelibrary.wiley.com/doi/full/10.1111/jac.12267)
+
+- [Experimental design matters for statistical analysis: how to handle blocking](https://onlinelibrary.wiley.com/doi/abs/10.1002/ps.4773)
+
+- [Random effects structure for confirmatory hypothesis testing: Keep it maximal](https://www.sciencedirect.com/science/article/abs/pii/S0749596X12001180)
+
+- [Generalized linear mixed models: a practical guide for ecology and evolution](https://www.sciencedirect.com/science/article/abs/pii/S0169534709000196)
+
+- [Mixed Models Offer No Freedom from Degrees of Freedom](https://www.sciencedirect.com/science/article/abs/pii/S0169534719303465)
+
+- [Perils and pitfalls of mixed-effects regression models in biology](https://peerj.com/articles/9522/)
+
+- [A brief introduction to mixed effects modelling and multi-model inference in ecology](https://peerj.com/articles/4794/)
+
+- [Modeling Spatially Correlated and Heteroscedastic Errors in Ethiopian Maize Trials](https://acsess.onlinelibrary.wiley.com/doi/abs/10.2135/cropsci2017.11.0693)
+
+- [More, Larger, Simpler: How Comparable Are On‐Farm and On‐Station Trials for Cultivar Evaluation](https://acsess.onlinelibrary.wiley.com/doi/abs/10.2135/cropsci2017.09.0555)
+
+- [Rethinking the Analysis of Non‐Normal Data in Plant and Soil Science](https://acsess.onlinelibrary.wiley.com/doi/10.2134/agronj2013.0342)
+
+- [The Design and Analysis of Long‐Term Rotation Experiments](https://acsess.onlinelibrary.wiley.com/doi/10.2134/agronj2012.0411)
+
+- [Analysis of Combined Experiments Revisited](https://acsess.onlinelibrary.wiley.com/doi/10.2134/agronj13.0485)
+
+- [Fundamentals of Experimental Design: Guidelines for Designing Successful Experiments](https://acsess.onlinelibrary.wiley.com/doi/full/10.2134/agronj2013.0114)
+
+
+
+
+***
+*Note: For questions specific to data analysiss shown here contact waseem.hussain@irri.org*
+
+***
+
+<span style="color: blue;font-size: 14pt;font-family: fantansy">*If your experiment needs a statistician, you need a better experiment - Ernest Rutherford*</span>
+
