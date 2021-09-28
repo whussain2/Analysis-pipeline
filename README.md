@@ -3,7 +3,7 @@
 - This repository contains the end-to-end analysis workflow of phenotypic data. The workflow is divided into two parts: 1) Pre-processing and Quality Check
  and 2) Data Analysis analysis in ASReml R package and lme4 R package.
 
-# Description 
+# Overview of Workflow and Pipeline
 
 
 ```
