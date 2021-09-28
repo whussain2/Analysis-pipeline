@@ -23,8 +23,8 @@ tables or graphics in a unified way as one document.
 
 ## Pre-Processing and Quality Check
 
-- The source in ****.Rmd****  is available here [Sample:Pre-Processing](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/Pre-processing and Quality Check.Rmd)
-- The HTML file is available here [Sample:Pre-Processing HMTL](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Pre-processing-and-Quality-Check.html)
+- The source in ****.Rmd****  is available here [Sample Pre Processing](https://github.com/whussain2/Analysis-pipeline/blob/main/Codes/Pre-processing and Quality Check.Rmd)
+- The HTML file is available here [Sample:Pre-Processing HMTL](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Pre-processing-and-Quality-Check.html)
 
 ## Data Analysis
 
@@ -32,13 +32,13 @@ tables or graphics in a unified way as one document.
 
 ### Analysis in ASReml R
 
-- The source in ****.Rmd****  is available here [Analysis workflow:ASReml R](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/Analaysis workflow in ASReml R Package.Rmd)
-- The HTML file is available here [Analysis workflow ASReml R HMTL](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Analaysis workflow in ASReml R Package.html)
+- The source in ****.Rmd****  is available here [Analysis workflow ASReml R](https://github.com/whussain2/Analysis-pipeline/blob/main/Codes/Analaysis workflow in ASReml R Package.Rmd)
+- The HTML file is available here [Analysis workflow ASReml R HMTL](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Analaysis workflow in ASReml R Package.html)
 
 ### Analysis in lme4 R
 
-- The source in ****.Rmd****  is available here [Analysis workflow:lme4 R](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/Analysis-workflow-in-lme4-R-Package.Rmd)
-- The HTML file is available here [Analysis workflow lme4 HMTL](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Analysis-workflow-in-lme4-R-Package.html)
+- The source in ****.Rmd****  is available here [Analysis workflow lme4 R](https://github.com/whussain2/Analysis-pipeline/blob/main/Codes/Analysis-workflow-in-lme4-R-Package.Rmd)
+- The HTML file is available here [Analysis workflow lme4 HMTL](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Analysis-workflow-in-lme4-R-Package.html)
 
 
 # How to Use the Source Codes and Run the Pipeline
