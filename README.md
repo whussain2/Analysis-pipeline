@@ -4,7 +4,7 @@
  and 2) Data Analysis analysis in ASReml R package and lme4 R package.
 
 ***
-# Description
+# Description `#f03c15`
 ***
 
 ```
@@ -37,7 +37,7 @@ tables or graphics in a unified way as one document.
 - Data analysis is shown both in **ASReml R** package and in **lme4 R** package. The reason to show analysis in lme4 R package is because it is free and open source R package and can be used by all users.  For ASReml R users need license. 
 
 ***
-### Analysis in ASReml R
+### a) Analysis in ASReml R
 ***
 
 - The source in ****.Rmd****  is available here [Asreml R Workflow](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/ASReml.Rmd)
@@ -45,7 +45,7 @@ tables or graphics in a unified way as one document.
 - The HTML file is available here [ASReml R Workflow HMTL](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/ASReml.html)
 
 ***
-### Analysis in lme4 R
+### b) Analysis in lme4 R
 ***
 
 - The source in ****.Rmd****  is available here [lme4 R Workflow](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/lme4.Rmd)
