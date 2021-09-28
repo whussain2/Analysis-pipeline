@@ -25,7 +25,7 @@ tables or graphics in a unified way as one document.
 
 - The source in ****.Rmd****  is available here [Sample Pre Processing](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/Quality_check.Rmd)
 
-- The HTML file is available here [Sample:Pre-Processing HMTL](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Quality_check.html)
+- The HTML file is available here [Sample:Pre-Processing HMTL](https://htmlpreview.github.io/?https://github.com/Analysis-pipeline/blob/master/Codes/https://whussain2.github.io/Analysis-pipeline/Codes/Quality_check.html)
 
 ## Data Analysis
 
