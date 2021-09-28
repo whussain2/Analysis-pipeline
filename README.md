@@ -3,9 +3,8 @@
 - This repository contains the end-to-end analysis workflow of phenotypic data. The workflow is divided into two parts: 1) Pre-processing and Quality Check
  and 2) Data Analysis analysis in ASReml R package and lme4 R package.
 
-***
-# Description `#f03c15`
-***
+# Description 
+
 
 ```
 In this pipeline we provide an overview of how rainfed breeding program at IRRI has leveraged R 
@@ -20,11 +19,9 @@ tables or graphics in a unified way as one document.
 
 ![](www/workflow.png)
 
-***
-#  Source code and Document
-***
 
-***
+#  Source code and Document
+
 ## 1. Pre-Processing and Quality Check
 ***
 
@@ -36,25 +33,24 @@ tables or graphics in a unified way as one document.
 
 - Data analysis is shown both in **ASReml R** package and in **lme4 R** package. The reason to show analysis in lme4 R package is because it is free and open source R package and can be used by all users.  For ASReml R users need license. 
 
-***
+
 ### a) Analysis in ASReml R
-***
 
 - The source in ****.Rmd****  is available here [Asreml R Workflow](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/ASReml.Rmd)
 
 - The HTML file is available here [ASReml R Workflow HMTL](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/ASReml.html)
 
-***
+
 ### b) Analysis in lme4 R
-***
+
 
 - The source in ****.Rmd****  is available here [lme4 R Workflow](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/lme4.Rmd)
 -
 - The HTML file is available here [lme4 R Workflow HTML ](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/lme4.html)
 
-***
+
 # How to Use the Source Codes and Run the Pipeline
-***
+
 
 The steps to use the source codes and run it on local computer is given below:
 
@@ -77,18 +73,18 @@ library(easypackages)
 
 Note: The pipeline requires asreml R package to do the analysis.  If you dont have license for ASReml R then use lme4 R workflow to perform analysis. 
 
-***
+
 # Manuscript
-***
+
 
 More details can be found in the manuscript available as preprint [Link](https://www.researchsquare.com/article/rs-49247/v1)
 
-***
+
 # Contributors
 Rainfed Breeding Team IRRI
-***
 
-***
+
+
 # Contact
 You may contact the author of this code, Waseem Hussain at <waseem.hussain@irri.org>; <waseemhussain907@gmail.com>
 ***
