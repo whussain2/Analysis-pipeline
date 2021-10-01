@@ -22,27 +22,31 @@ tables or graphics in a unified way as one document.
 
 #  Source code and Document
 
+***
 ## 1. Pre-Processing and Quality Check
 ***
 
 - The source in ****.Rmd****  is available here [Sample Pre Processing](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/Quality_check.Rmd)
 
-- The HTML file is available here [Sample Pre Processing HMTL](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/Quality_check.html)
+- The HTML file is available here [Pre-processing and Quality Check HMTL](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/Quality_check.html)
 
+***
 ## 2. Data Analysis
+***
 
 - Data analysis is shown both in **ASReml R** package and in **lme4 R** package. The reason to show analysis in lme4 R package is because it is free and open source R package and can be used by all users.  For ASReml R users need license. 
 
-
+***
 ### a) Analysis in ASReml R
+***
 
 - The source in ****.Rmd****  is available here [Asreml R Workflow](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/ASReml.Rmd)
 
 - The HTML file is available here [ASReml R Workflow HMTL](https://htmlpreview.github.io/?https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/ASReml.html)
 
-
+***
 ### b) Analysis in lme4 R
-
+***
 
 - The source in ****.Rmd****  is available here [lme4 R Workflow](https://github.com/whussain2/Analysis-pipeline/blob/master/Codes/lme4.Rmd)
 -
