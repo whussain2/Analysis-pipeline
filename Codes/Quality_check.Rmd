@@ -39,7 +39,7 @@ h1.title
   font-family:  "Times New Roman", Times, serif;
   color: black;
    background-color:white;
-  text-transform: Capitalize;
+  text-transform: none;
 } 
 h1 { /* Header 1 */
   font-size: 30px;
@@ -112,13 +112,13 @@ libraries("dplyr", "reshape2", "readxl", "ggpubr","stringr", "ggplot2",
 
 **Experimental Design**: Alpha Lattice Design; 
 
-- 4 blocks 
+- 4 Blocks 
 
 - 2 Replications, 192 entries and 8 checks.
 
 **Season**: Wet-season (WS).
 
-**Location**: East-south Africa
+**Location**: East-South Africa
 
 **Year**: 2020.
 
@@ -225,7 +225,7 @@ rownames = FALSE, caption = htmltools::tags$caption("Table: Showing all the Raw 
   #dev.off() 
 ```
 
-<span style="color: darkblue;">**Note: Environment 4 has  more than 20% missing, thus will be dropped from the downstream analysis.**</span>
+<span style="color: darkblue;">**Note: Environment 4 has  more than 20% missing data, thus will be dropped from the downstream analysis.**</span>
 
 ***
 ### Filter the Missing Data
@@ -315,7 +315,7 @@ ggplot(Data.missing, aes(x=Environment, y=value))+
         St.err= sd(HT, na.rm=TRUE)/sqrt(length(HT))
         ))
   summary.HT<-cbind(data.frame(Trait=c(rep("Plant height", nrow(summary.HT)))),summary.HT )
-# Now combine the all data summeries and view as table
+# Now combine the all data summaries and view as table
   summary.data<-rbind(summary.Yield, summary.flowering, summary.HT)
   summary.data<-data.frame(lapply(summary.data, function(y) if(is.numeric(y)) round(y, 2) else y)) 
 # Add options to print and export
@@ -335,7 +335,7 @@ ggplot(Data.missing, aes(x=Environment, y=value))+
 
 * For demo purpose here we will generate the field design for one environment.
 
-* Heatmap of field designs for all the environments will be shown using heatmap using [**desplot**](https://github.com/kwstat/desplot) R package. 
+* Heat map of field designs for all the environments will be shown using heatmap using [**desplot**](https://github.com/kwstat/desplot) R package. 
 
 
 ### Heat map in ggplot package
@@ -391,7 +391,7 @@ par(mfrow = c(1, 1))
 
 #### Heat map in Desplot package
 
-* Here we will plot heat map of field experimental design for all the environments using *desplot* R package.
+* Here we will plot heat map of field experimental designs in all the environments using *desplot* R package.
 
 ```{r,fig.width = 10, fig.height=8, warning=FALSE}
 
@@ -466,6 +466,58 @@ grid.arrange(p1, p2,p3, nrow = 3)
 ```
 
 <span style="color: darkblue;">**Note: Seems outliers are present in Env9 for grain yield. The values for all the traits varied highly across the environments.**</span>
+
+### Interactive Box plots
+
+* Here in this section we will visualzie the box plots in an interactive way. 
+
+```{r, fig.height=6, fig.width=8, fig.cap="Interactive Box plot showing distribution for all the three traits."}
+# First let us visualize the data using boxplots
+  myboxplot<- function(dataframe,x,y){
+   aaa <- enquo(x)
+   bbb <- enquo(y)
+   dfname <- enquo(dataframe)
+   dataframe %>%
+	 filter(!is.na(!! aaa), !is.na(!! bbb))  %>%
+      #group_by(!! aaa,!! bbb) %>%
+      #count() %>%
+    ggplot(aes_(fill=aaa, x=aaa, y=bbb))+ 
+    theme_classic()+
+    geom_boxplot()+
+     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +# fill by timepoint to give different color
+      #scale_fill_manual(values = c("", ""))+
+      #scale_color_manual(values = c("", ""))
+      theme (plot.title = element_text(color="black", size=12,hjust=0.5, face = "bold"), # add and modify the title to plot
+    axis.title.x = element_text(color="black", size=12, face = "bold"), # add and modify title to x axis
+    axis.title.y = element_text(color="black", size=12, face="bold")) + # add and modify title to y axis
+  #scale_y_continuous(limits=c(0,15000), breaks=seq(0,15000,1000), expand = c(0, 0))+
+    theme(axis.text= element_text(color = "black", size = 10))+ # modify the axis text
+    theme(legend.title = element_text(colour="black", size=16), legend.position = "none",
+                  legend.text = element_text(colour="black", size=14))+ # add and modify the legends
+                  guides(fill=guide_legend(title="Environments"))
+  #stat_summary(fun.y=mean, geom="line", aes(group=1))  + 
+  #stat_summary(fun=mean, geom="point")
+  }
+
+# Now draw the box plot for yield
+  p1<-boxplot.yield<-myboxplot(demo.data,x=Environment,y=Yield)+
+  labs(title="",x="Environments", y = "Grain Yield (kg/ha)")
+  #stat_compare_means(method = "anova", label.x = 1.6, label.y = 10000)
+  p1<-ggplotly(boxplot.yield)
+
+# Now draw the box plot for flowering
+  p2<-boxplot.flowering<-myboxplot(demo.data,x=Environment,y=DTF)+
+  labs(title="",x="Environments", y = "Days to flowering")
+  #stat_compare_means(method = "anova", label.x = 1.6, label.y = 130)
+  p2<-ggplotly(boxplot.flowering)
+
+# Now draw the box plot height
+  p3<-boxplot.height<-myboxplot(demo.data,x=Environment,y=HT)+
+  labs(title="",x="Environments", y = "Plant Height (cm)")
+  #stat_compare_means(method = "anova", label.x = 1.6, label.y = 167)
+  p3<-ggplotly(boxplot.height)
+  subplot (p1, p2,p3)
+```
 
 
 **Histograms** and **QQ plots** are also available , click the buttons below
@@ -574,7 +626,7 @@ grid.arrange(p1, p2,p3, nrow = 3)
   qqline(level_envi$HT, col = "steelblue", lwd = 2)
   }
 ```
-<span style="color: darkblue;">**Some deviations are observed for the triats in certain environments.**</span>
+<span style="color: darkblue;">**Some deviations are observed for the traits in certain environments.**</span>
 </div>
 
 ***
@@ -592,7 +644,7 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 
 * First we will construct the a function called **outlier.R** which will be used to flag out the outliers. The outlier function is provided in the working folder. 
 
-* The R codes on this outlier function was orginally borrowed from the work available at [Click the link](https://static-content.springer.com/esm/art%3A10.1007%2Fs00122-016-2666-6/MediaObjects/122_2016_2666_MOESM2_ESM.pdf).
+* The R codes on this outlier function was originally borrowed from the work available at [Click the link](https://static-content.springer.com/esm/art%3A10.1007%2Fs00122-016-2666-6/MediaObjects/122_2016_2666_MOESM2_ESM.pdf).
 
 * The Steps involved in identifying the outliers are:
     - First run the model using data across all the environments for each trait.
@@ -716,7 +768,7 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 
 ### Estimate Reliability for Each Environment
 
-* * We will develope a function called ***my.blup*** which will be used to extract the reliability using the 
+* * We will develop a function called ***my.blup*** which will be used to extract the reliability using the 
 equation : $H_{C}=1-\frac{\overline{V}_{BLUP}}{2\sigma^{2}g}$
 
 ```{r, warning=FALSE, message=FALSE, results='hide'}

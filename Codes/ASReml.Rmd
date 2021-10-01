@@ -1,6 +1,6 @@
 ---
-title: "Analysis workflow in ASReml R Package"
-author: "Prepared by: Rainfed Breeding Team"
+title: "Analysis Workflow in ASReml R Package"
+author: "Prepared by: Rainfed Breeding Team IRRI"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
   html_document:
@@ -39,7 +39,7 @@ h1.title
   font-family:  "Times New Roman", Times, serif;
   color: black;
    background-color:white;
-  text-transform: Capitalize;
+  text-transform: none;
 } 
 h1 { /* Header 1 */
   font-size: 30px;
@@ -120,13 +120,13 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 <div class = "blue">
 * In this section, data analysis will be shown only for grain yield trait using a **Linear Mixed-Model Approach** in [ASReml-R package](https://asreml.kb.vsni.co.uk/wp-content/uploads/sites/3/2018/02/ASReml-R-Reference-Manual-4.pdf).
 
-* Demo data analysis for grain yield will also be shown using freely available [lme4 R Package](https://cran.r-project.org/web/packages/lme4/lme4.pdf) package, and will be useful to the users which do not have access to the commercial **ASReml-R package**. See the another HTML file for analysis in *lme4* R package.
+* Demo data analysis for grain yield will also be shown using freely available [lme4 R Package](https://cran.r-project.org/web/packages/lme4/lme4.pdf) package, and will be useful to the users who do not have access to the commercial **ASReml-R package**. See the another HTML file for analysis in *lme4* R package.
 
-* In general analysis is divided in two parts:
+* In general analysis pipeline is divided in two parts:
   1. **Separate analysis**: In this each environment/trial is analyzed separately. 
   
     - We will be testing **various mixed models** correcting for experimental design factors (Blocks and Replications) and spatial trends in the field. 
-    - Best model will be identified and selected (model having lowest *AIC* value ) and will be used  to extract the ***BLUPs or predicted means*** and ***Heritability***. 
+    - The best model will be identified and selected (model having lowest *AIC* value ) to extract the ***BLUPs or predicted means*** and ***Heritability***. 
     
     - Just a note, BLUPs are best for phenotypic selection, users can also extract the BLUEs for treating genotypes as *Fixed*
 
@@ -279,7 +279,7 @@ here, we assume $\epsilon$ is a random effect that represents correlated residua
 * Here we will read the filtered data set from the file.
 * Then we will use function to run all the *Five models* described above for grain yield in all the environments.
 * We will extract the AIC values for all, and the extract the model with minimum AIC value in all the environments.
-* Best model will be selected based on AIC , and the best model will be used to extract **BLUPs**, **Heritability** and **Variance Componnets**.
+* The best model will be selected based on lower AIC values, and  will be used to extract **BLUPs**, **Heritability** and **Variance components**.
 
 ***
 #### Read the Filtered Data set
@@ -393,7 +393,7 @@ here, we assume $\epsilon$ is a random effect that represents correlated residua
     datatable(AIC.min)
 ```
 
-<span style="color: darkblue;font-size: 10pt">**Second column shows which model is best in each environment.**</span>
+<span style="color: darkblue;font-size: 10pt">**The second column shows which model is best in each environment.**</span>
 
 ***
 ### Extract the BLUPs and Heritability
@@ -606,21 +606,21 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 </style>
 <div class = "blue">
-* In this section, we will show how to analyze multi-environment data. More on this can be found here: [Paper1](https://doi.org/10.2135/cropsci2015.06.0336), [Paper2](https://doi.org/10.3389/fphys.2012.00156).
+* In this section, we will show how to analyze multi-environment data. More information on this can be found here: [Paper1](https://doi.org/10.2135/cropsci2015.06.0336), [Paper2](https://doi.org/10.3389/fphys.2012.00156).
 
 
-* The MET data analysis can be divided into ways: 1) **One-step or Single stage Approach** and 2) **Two Step or Stage-wise Approach**.  More on this can be found here [Paper1](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-842X.2010.00570.x), [Paper2](https://onlinelibrary.wiley.com/doi/abs/10.1002/bimj.201100219), [Paper3](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.0006-341X.2001.01138.x), [Paper4](https://doi.org/10.2135/cropsci2009.02.0083), and [Paper5]((https://acsess.onlinelibrary.wiley.com/doi/abs/10.2134/agronj2016.07.0395))
+* The MET data analysis can be divided into ways: 1) **One-step or Single stage Approach** and 2) **Two-Step or Stage-wise Approach**.  More on this can be found here [Paper1](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-842X.2010.00570.x), [Paper2](https://onlinelibrary.wiley.com/doi/abs/10.1002/bimj.201100219), [Paper3](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.0006-341X.2001.01138.x), [Paper4](https://doi.org/10.2135/cropsci2009.02.0083), and [Paper5]((https://acsess.onlinelibrary.wiley.com/doi/abs/10.2134/agronj2016.07.0395))
 
-* **Single stage** analysis is golden standard to analyze the mutli-environment data. However, in experiments or trials with unbalanced data, different experimental designs across trials and to avoid computational challenges of analyzing huge trials together-**two-stage** analysis is more appropriate. In two stage approach adjusted means as BLUEs are estimated  per location/trial and weighted BLUEs (associated variance-covariance matrix)  are fitted in second step to get the BLUPs or predicted means for each genotype [Mohring and Piepho.2009](https://doi.org/10.2135/cropsci2009.02.0083).
+* **Single-stage** analysis is golden standard to analyze the mutli-environment data. However, in experiments or trials with unbalanced data, different experimental designs across trials and to avoid computational challenges of analyzing huge trials together-**two-stage** analysis is more appropriate. In two stage approach adjusted means as BLUEs are estimated  per location/trial and weighted BLUEs (associated variance-covariance matrix)  are fitted in second step to get the BLUPs or predicted means for each genotype [Mohring and Piepho.2009](https://doi.org/10.2135/cropsci2009.02.0083).
 
-* Here both the **Single Stage** and **Stage-wise** approach for the MET analysis will be demonstrated. 
+* Here both the **Single-Stage** and **Stage-wise** approach for the MET analysis will be demonstrated. 
 </div>
 
 ***
-### Single Stage Analysis
+### Single-Stage Analysis
 ***
 
-* In single stage analysis all the observed data is analyzed together. Here in this section a joint analysis of MET is done in a single stage by using a linear mixed model (LMM). The mixed model used is defined as:
+* In single-stage analysis all the observed data is analyzed together. Here in this section a joint analysis of MET is done in a single-stage using a linear mixed model (LMM). The mixed model used is defined as:
 
 
 \[
@@ -636,7 +636,6 @@ b_{l}= \text {random effect of $k$th block nested with $j$ environment and $k$th
 \]
 
 
-- For more details on these models please see the manuscript. 
 
 ***
 #### Read the filtered MET data
@@ -758,14 +757,14 @@ b_{l}= \text {random effect of $k$th block nested with $j$ environment and $k$th
 #### Results from Best Model
 ***
 
-* Here in this section we will show how to extract the results including variance components, heritability, BLUPs and plot the Bi-plots and check the stability of lines.
+* Here, in this section we will show how to extract the results including variance components, heritability, BLUPs, and plot the Bi-plots, and check the stability of lines.
 
 ***
-##### Extraction of Varaince Components
+##### Extraction of Variance Components
 ***
 
 ***
-###### Error Varaince at Each Environment
+###### Error Variance at Each Environment
 ***
 
 ```{r, warning=FALSE}
@@ -803,7 +802,7 @@ b_{l}= \text {random effect of $k$th block nested with $j$ environment and $k$th
 ```
 
 ***
-##### Plot the Varainces and Heritability
+##### Plot the Variances and Heritability
 ***
 
 ```{r, fig.height=6, fig.width=12}
@@ -909,7 +908,7 @@ b_{l}= \text {random effect of $k$th block nested with $j$ environment and $k$th
     theme(strip.background = element_rect(fill = "lightblue", color = "black", size=1.5))
 ```
 
-<span style="color: darkblue; font-size: 16pt">**Figure shows the latent regression plot for top 10 genotypes. From the plot it is obvious that genotypes 127, 139, 146, 175, and 22 are high yielding and stable genotypes across the all the environments** </span>
+<span style="color: darkblue; font-size: 16pt">**The figure shows the latent regression plots for top 10 genotypes. From the figure it is obvious that genotypes 127, 139, 146, 175, and 22 are high yielding and stable genotypes across the all the environments** </span>
 
 ***
 ###### Correlation Between Environments
@@ -1154,11 +1153,11 @@ Further, we can assume the different covariance structures among the residuals a
 ### Construct Relationship Matrix
 ***
 
-* Here will will construct the **Genomic Relationship Matrix (GRM)** using marker data. The GRM will be based on **VanRanden (2008)**. 
+* Here we will construct the **Genomic Relationship Matrix (GRM)** using marker data. The GRM will be based on **VanRanden (2008)**. 
 
-* The Steps used to create this GRM is:
+* The steps used to create this GRM is:
     - Create a center of marker data (X matrix)
-    - Creat a Cross Product $(XX)$
+    - Create a Cross Product $(XX)$
     - Divide the $(XX)$ by number of markers
     
   \[
@@ -1184,6 +1183,19 @@ Further, we can assume the different covariance structures among the residuals a
 ### Fit the MET Model
 ***
 * Here we will use one of the model to show how to fit the relationship matrix based on markers and phenotypic data together. 
+
+* Description of model in matrix notation is as follows:
+
+\[
+  Y= X\beta +Zu+\epsilon\\
+  Y= \text{ is a m x 1 vector of individual phenotypes}\\
+  X= \text{is a m x n design matrix relating phenotypes to fixed effects of replications and environments}\\
+  \beta = \text{ is a vector of fixed effects}\\
+  u= \text{is a random effect with variance u}\\
+  \epsilon= \text{is  n x n matrix of residual/error effects }\\
+\]
+here, we assume var(u)~$\sigma^2_{g}G$, where G is genomic relationship  kinship co-variance matrix of n x m dimensions (n is no. of markers and m is no. of individuals) representing genomic similarity of individuals, and  $Var(\epsilon)= \sigma^2_{\epsilon}I$, I is identity matrix.
+
 
 ```{r, message=FALSE, warning=FALSE}
  model.geno<-asreml(fixed=Yield~Rep+Environment, 
@@ -1231,7 +1243,7 @@ met.asreml(model.geno)
 
 ## Additional on MET and Stability Analysis 
 
-* Here in this section  we are giving some useful *R* resources that can be used for satbility and MET analysis.
+* Here in this section  we are giving some useful *R* resources that can be used for stability and MET analysis.
 
 1. [metan-R: Multi-environment Trial Analysis](https://tiagoolivoto.github.io/metan/index.html)
 
@@ -1274,8 +1286,6 @@ met.asreml(model.geno)
 - [Analysis of Combined Experiments Revisited](https://acsess.onlinelibrary.wiley.com/doi/10.2134/agronj13.0485)
 
 - [Fundamentals of Experimental Design: Guidelines for Designing Successful Experiments](https://acsess.onlinelibrary.wiley.com/doi/full/10.2134/agronj2013.0114)
-
-
 
 
 ***
