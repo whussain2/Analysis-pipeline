@@ -144,11 +144,7 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 * The five models shown here are for demo purpose, more models can be used to model the phenotypic data. For more information on these models and other advanced additional mixed models is available here: [Asreml-R-Tutorial: Go to section 4.1](https://asreml.kb.vsni.co.uk/wp-content/uploads/sites/3/2018/02/ASReml-R-Reference-Manual-4.pdf); [Book: Genetic Data Analysis for Plant and Animal Breeding; Chapter 7](https://link.springer.com/book/10.1007%2F978-3-319-55177-7). 
 
 
-* Click button below for more description on the models:
-
-
-<button class="btn btn-primary" data-toggle="collapse" data-target="#models"> Click Mixed-Models Description/Hide </button>  
-<div id="models" class="collapse">  
+**Description of Models**
 
 <span style="color: darkred;font-size: 20pt">**Model 1**</span>
 
@@ -158,12 +154,12 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 
 ***
 \[
-y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k} + \epsilon_{ijk}\\
+y_{ijk}= \mu+g_{i} + r_{j}+ b_{jk} + \epsilon_{ijk}\\
 y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
 \mu= \text {overall mean}\\
 g_{i}=\text{random effect of the $i$th genotype}\\
 r_{j}=\text{fixed effect of the $j$th replication}\\
-b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+b_{jk}= \text {random effect of $k$th block nested within $j$ replication}\\
 \varepsilon_{ijk}=\text{residual error}\\
 \text{here we assume errors are independent and identically distributed }\epsilon\sim \text{$iid$N}(0,\sigma_\epsilon^2)\\
 \]
@@ -181,21 +177,21 @@ b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
 
 ***
 \[
-y_{ijklm}= \mu+g_{i} + r_{j}+ r_{j}:b_{k} + c_{l}+ ro_{l}:c_{m}+\epsilon_{ijklm}\\
-y_{ijklm}= \text{ is the effect of $i$th genotype in $j$th replication, $k$th block (within the $j$th replication) in $l$th column and $m$th row (within the $l$th column)} \\
+y_{ijklm}= \mu+g_{i} + r_{j}+ b_{jk} + c_{l}+ ro_{m}+\epsilon_{ijklm}\\
+y_{ijklm}= \text{ is the effect of $i$th genotype in $j$th replication, $k$th block (within the $j$th replication) in $l$th column and $m$th row} \\
 \mu= \text {overall mean}\\
 g_{i}=\text{random effect of the $i$th genotype}\\
 r_{j}=\text{fixed effect of the $j$th replication}\\
-b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+b_{jk}= \text {random effect of $k$th block nested with $j$ replication}\\
 c_{l}=\text {random effect of $l$th column}\\
-ro_{l}=\text {random effect of $m$th row nested with $l$th column}\\
+ro_{m}=\text {random effect of $m$th row}\\
 \varepsilon_{ijklm}=\text{residual error}\\
 \text{here we assume residuals are independent and identically distributed }\epsilon\sim \text{$iid$N}(0,\sigma_\epsilon^2)\\
 \]
 
 **R script in Asreml**
 
-<span style="color: darkblue;font-size: 10pt">**model2<-asreml(fixed=trait~Rep, random=~Genotype+Rep:Block+Column+Column:Row, na.method="include", data=data)**</span>
+<span style="color: darkblue;font-size: 10pt">**model2<-asreml(fixed=trait~Rep, random=~Genotype+Rep:Block+Column+Row, na.method="include", data=data)**</span>
 
 * Replication is fixed effect and all other factors are random
 
@@ -206,12 +202,12 @@ ro_{l}=\text {random effect of $m$th row nested with $l$th column}\\
 * In this model we account experimental design *block* and *Replication*, and for *spatial trends/effects* i.e, correlated residuals both across rows and columns.
 
 \[
-y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k}  + \epsilon_{ijk}\\
+y_{ijk}= \mu+g_{i} + r_{j}+ b_{jk}  + \epsilon_{ijk}\\
 y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
 \mu= \text {overall mean}\\
 g_{i}=\text{random effect of the $i$th genotype}\\
 r_{j}=\text{fixed effect of the $j$th replication}\\
-b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+b_{jk}= \text {random effect of $k$th block nested within $j$ replication}\\
 \epsilon_{ijk}=\text  {residual error}\\
 \]
 
@@ -231,14 +227,15 @@ here, we assume $\epsilon$ is a random effect that represents correlated residua
 * In this model we account for experimental design factors *block* and *replication* and  *spatial trends* i.e, correlated residuals in row direction only.
 
 \[
-y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k}  + \epsilon_{ijk}\\
+y_{ijk}= \mu+g_{i} + r_{j}+ b_{jk}  + \epsilon_{ijk}\\
 y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
 \mu= \text {overall mean}\\
 g_{i}=\text{random effect of the $i$th genotype}\\
 r_{j}=\text{fixed effect of the $j$th replication}\\
-b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+b_{jk}= \text {random effect of $k$th block nested within $j$ replication}\\
 \epsilon_{ijk}=\text  {residual error}\\
 \]
+
 here, we assume $\epsilon$ is a random effect that represents correlated residual across rows only, where, $\epsilon\sim N(0,\mathbf{R})$ and **R** is the covariance matrix of $\epsilon$, and $\mathbf{R}={\sigma_\epsilon^2\ \Sigma}_c\left(\rho_c\right)\otimes I_r$. $\sigma_\epsilon^2$ is the variance of spatially dependent residual; ${\Sigma}_c\left(\rho_c\right)$ represents the first-order autoregressive correlation matrices and $\rho_{ro\ }$ the autocorrelation parameters for the rows only; $I_r$ represents independently and identically distributed variance structure for rows.
 
 **R script in Asreml**
@@ -254,12 +251,12 @@ here, we assume $\epsilon$ is a random effect that represents correlated residua
 * In this model we account for *spatial trends* i.e, correlated residuals across columns only.
 
 \[
-y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k}  + \epsilon_{ijk}\\
+y_{ijk}= \mu+g_{i} + r_{j}+ b_{jk}  + \epsilon_{ijk}\\
 y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
 \mu= \text {overall mean}\\
 g_{i}=\text{random effect of the $i$th genotype}\\
 r_{j}=\text{fixed effect of the $j$th replication}\\
-b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+b_{jk}= \text {random effect of $k$th block nested within $j$ replication}\\
 \epsilon_{ijk}=\text  {residual error}\\
 \]
 
@@ -270,8 +267,6 @@ here, we assume $\epsilon$ is a random effect that represents correlated residua
 <span style="color: darkblue;font-size: 10pt">**model5<-asreml(fixed=trait~Rep, random=~Genotype+Rep:Block,residual =~idv(Row):ar1(Column),  na.method="include", data=data))**</span>
 
 * Block as fixed and genotype as random effects.
-
-</div>
 
 
 ### Best Model for Grain Yield
@@ -333,7 +328,7 @@ here, we assume $\epsilon$ is a random effect that represents correlated residua
   na.method="include", data=sub)
   aic.model1<- -2 *model1$loglik +2 *length(model1$vparameters)
 # Model 2: Accounting blocks, replications and rows and columns.
-  model2<-asreml(fixed=Yield~Rep, random=~Genotype+Column+Block:Row, 
+  model2<-asreml(fixed=Yield~Rep, random=~Genotype+Column+Row, 
   na.method="include", data=sub)
   aic.model2<- -2 *model2$loglik +2 *length(model2$vparameters)
 # Model 3: Accounting block, Replication, and for spatial trends rows and columns.
@@ -411,9 +406,9 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 * We will also calculate the heritability's. Note we are dealing with complex models so we will not use basic formula as: $h{^2}=  \frac{\sigma^{2}g}{\sigma^{2}g+\sigma^{2}e}$ to calculate entry mean based heritability. Alternative methods have been proposed to genralize the heritability and is very well described in this paper [click here](https://academic.oup.com/genetics/article/212/4/991/5931331) 
 
 * Two alternative methods ( based on variance of a difference between genotypes) can be used to calculate heritability: 
-  - 1) [Piepho and M€ohring (2007)](https://link.springer.com/article/10.1007/s10681-007-9449-8) is more appropriate for complex residual structures and unbalanced experimental designs. The equation is: $H_{P}=1-\frac{\sigma^{2}g}{\sigma^{2}g+\frac{\overline{V}_{BLUE}}{2}}$. Where $\overline{V}_{BLUE}$ is mean variance difference of two genotypes based on BLUEs and $\sigma^{2}g$ is variance of genotypes.
+  - 1) [Piepho and M€ohring (2007)](https://academic.oup.com/genetics/article/177/3/1881/6064409) is more appropriate for complex residual structures and unbalanced experimental designs. The equation is: $H_{P}=1-\frac{\sigma^{2}g}{\sigma^{2}g+\frac{\overline{V}_{BLUE}}{2}}$. Where $\overline{V}_{BLUE}$ is mean variance difference of two genotypes based on BLUEs and $\sigma^{2}g$ is variance of genotypes.
 
-  - 2) [Cullis et al. 2006](https://link.springer.com/article/10.1198%2F108571106X154443) is also ....$1-\frac{\overline{V}_{BLUp}}{2\sigma^{2}g}$. Where $\overline{V}_{BLUP}$ is mean variance difference of two genotypes based on BLUPs and $\sigma^{2}g$ is variance of genotypes.
+  - 2) [Cullis et al. 2006](https://link.springer.com/article/10.1198%2F108571106X154443) is given by equation: $H_{C}=1-\frac{\overline{V}_{BLUp}}{2\sigma^{2}g}$. Where $\overline{V}_{BLUP}$ is mean variance difference of two genotypes based on BLUPs and $\sigma^{2}g$ is variance of genotypes.
 
 * The above two methods are more appropriate in breeding and selection of genotypes to calculate heritability through estimating genotype differences ratherthan the precision of the genotype effect estimates. Further this definition of heritability is related to reliability of breeding value predictions. For more details please check the [Book: Genetic Data Analysis for Plant and Animal Breeding; Chapter 7](https://link.springer.com/book/10.1007%2F978-3-319-55177-7); [Paper](https://academic.oup.com/genetics/article/212/4/991/5931331), and this beautiful resource [Summary of heritability equations](https://shantel-martinez.github.io/resources.html)
 
@@ -624,13 +619,13 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 
 
 \[
-y_{ijklm}= \mu+g_{i} + e_{j}+ g_{i}*e_{j}+e_{j}:r_{k}+ e_{j}:r_{k}:b_{l} +\epsilon_{ijklm}\\
+y_{ijkl}= \mu+g_{i} + e_{j}+ (ge)_{ij}+r_{jk}+ b_{jkl} +\epsilon_{ijklm}\\
 \mu= \text {overall mean}\\
 g_{i}=\text{random effect of the $i$th genotype}\\
-e_{j}=\text{fixed effect of the $j$th environment}\\
-g_{i}*e_{j}=\text{is the interaction effect of $i$th genotypes with $j$th environment}\\
-r_{k}=\text{fixed effect of the $j$th replication nested within $j$th environment}\\
-b_{l}= \text {random effect of $k$th block nested with $j$ environment and $k$th replication}\\
+e_{j}=\text{random effect of the $j$th environment}\\
+(ge)_{ij}=\text{is the interaction effect of $i$th genotypes with the $j$th environment}\\
+r_{jk}=\text{fixed effect of the $k$th replication nested within $j$th environment}\\
+b_{jkl}= \text {random effect of $l$th block nested with $j$ environment and $k$th replication}\\
 \varepsilon_{ijkl}=\text{residual error}\\
 \text{here we assume residuals are independent and identically distributed}\\
 \]
@@ -680,32 +675,32 @@ b_{l}= \text {random effect of $k$th block nested with $j$ environment and $k$th
 
 ```{r, warning=FALSE, message=FALSE, results='hide'}
 # Model 1: Basic model accounting for only environments and no interactions
-  met1 <-asreml(Yield~Rep+Environment, random =~Genotype+Environment+Rep:Block, 
+  met1 <-asreml(Yield~Rep, random =~Genotype+Environment+Rep:Block, 
         na.method="incude",data = demo.data.filtered)
 
 # Model 2: Basic model accounting G x E interactions
-  met2 <-asreml(Yield~Rep+Environment, random =~Genotype+ Genotype*Environment+Rep:Block,
+  met2 <-asreml(Yield~Rep, random =~Genotype+Environment+ Genotype*Environment+Rep:Block,
         na.method="incude",data = demo.data.filtered)
 
 # Model 3: Different variances across Environments i.e., heterogeneous error variances across environments
-  met3<-asreml(fixed=Yield~Rep+Environment, 
+  met3<-asreml(fixed=Yield~Rep, 
         random=~Genotype+Rep:Block+Genotype:Environment, 
         na.method="incude",  residual = ~ dsum( ~ units|Environment),
         data=demo.data.filtered)
 # Model 4: Modelling G x E with spatial trends (same for all environments)
-  met4<-asreml(fixed=Yield~Rep+Environment, 
-        random=~Genotype+Rep:Block, 
+  met4<-asreml(fixed=Yield~Rep, 
+        random=~Genotype+Environment+Rep:Block, 
         residual = ~dsum(~ar1(Row):ar1(Column) |Environment),
         #residual =~ar1v(Row):ar1(Column),
         na.method="incude", data=demo.data.filtered)
 # Model5: Modelling G x E with spatial trend specific to each environment
-  met5<-asreml(fixed=Yield~Rep+Environment, 
-        random=~Genotype+Rep:Block, 
+  met5<-asreml(fixed=Yield~Rep, 
+        random=~Genotype+Environment+Rep:Block, 
         residual =~dsum(~idv(Row):ar1(Column) +ar1v(Row):ar1(Column)+ar1(Row):idv(Column)|Environment,
         levels = list(c(6,7), c(8,2), c(1,3,4,5,9,10))),
         na.method="incude", data=demo.data.filtered)
 # Model 6:  Heterogeneous genetic variance-each environment has a unique genetic variance with no correlations between environments
-  met6 <- asreml(fixed=Yield~Rep+Environment,
+  met6 <- asreml(fixed=Yield~Rep,
           random =~diag(Environment):Genotype+Rep:Block,
           residual=~dsum(~id(units)|Environment),
           data = demo.data.filtered)
@@ -715,17 +710,17 @@ b_{l}= \text {random effect of $k$th block nested with $j$ environment and $k$th
           residual=~dsum(~id(units)|Environment),
           data = demo.data.filtered)
 # Model 8: Factor Analytically model (fa1) 
-  met8 <- asreml(fixed=Yield~Rep+Environment,
+  met8 <- asreml(fixed=Yield~Rep,
           random =~diag(Environment):Rep:Block+fa(Environment,2):Genotype,
           residual=~dsum(~id(units)|Environment),
           data = demo.data.filtered)
 # Model 9: Factor Analytical model (fa3) 
-  met9 <- asreml(fixed=Yield~Rep+Environment,
+  met9 <- asreml(fixed=Yield~Rep,
           random =~diag(Environment):Rep:Block+fa(Environment,3):Genotype,
           residual=~dsum(~id(units)|Environment),
           data = demo.data.filtered)
 # Model 10: Factor analytical model (fa3) with specific spatial trends
-  met10<-asreml(Yield~Rep+Environment,
+  met10<-asreml(Yield~Rep,
         random =~diag(Environment):Rep:Block+fa(Environment,3):Genotype,
         residual =~dsum(~idv(Row):ar1(Column) +ar1v(Row):ar1(Column)+ar1(Row):idv(Column)|Environment,
         levels = list(c(6,7), c(8,2), c(1,3,4,5,9,10))), 
@@ -979,7 +974,7 @@ b_{l}= \text {random effect of $k$th block nested with $j$ environment and $k$th
 * The model used follows as:
 
 \[
-y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k}  + \epsilon_{ijk}\\
+y_{ijk}= \mu+g_{i} + r_{j}+ b_{jk}  + \epsilon_{ijk}\\
 y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
 \mu= \text {overall mean}\\
 g_{i}=\text{random effect of the $i$th genotype}\\
@@ -1046,15 +1041,15 @@ here, we assume $\epsilon$ is a random effect that represents correlated residua
 * The model used follows as: 
 
 \[
-  y_{ij}= \mu+g_{i} + e_{j}+ g_{i}*e_{j}+\epsilon_{ij}\\
+  y_{ij}= \mu+g_{i} + e_{j}+ (ge)_{ij}+\epsilon_{ij}\\
   y_{ij}= \text{ is the weighted BLUE for $i$th observation in $j$th environment}\\
   \mu= \text {overall mean}\\
   g_{i}=\text{the random effect of $i$th genotype} \\
   e_{j}=\text{fixed effect of the $j$th environment}\\
-  g_{i}*e_{j}=\text{is interaction effect of genotype with the environment}\\
-  \varepsilon_{ijkl}=\text{residual error}\\
+  (ge)_{ij}=\text{is interaction effect of $i$th genotype genotype with the $j$th genotype environment}\\
+  \epsilon_{ij}=\text{residual error}\\
 \]
-Further, we can assume the different covariance structures among the residuals and random effects as show in the single stage analysis.
+Here, we assume $g_{i} ∼N (0, \sigma_g^2)$ where $\sigma_g^2$ is the genetic variance, and the error is know from the first stage which is give as $\epsilon~N(0,\xi)$, where $\xi$ is the diagonal matrix, in which its elements are given by the inverse of the residual variance  adjusted means of genotypes in each environment. Further, we can assume the different covariance structures among the residuals and random effects as show in the single stage analysis.
 
 ```{r}
 # First let us get weighted BLUEs

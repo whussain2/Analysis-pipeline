@@ -182,12 +182,12 @@ sub.data<-droplevels.data.frame(sub.data)
 ***
 
 \[
-y_{ijk}= \mu+g_{i} + r_{j}+ r_{j}:b_{k} + \epsilon_{ijk}\\
+y_{ijk}= \mu+g_{i} + r_{j}+ b_{jk} + \epsilon_{ijk}\\
 y_{ijk}= \text{ is the effect of $i$th genotype in $j$th replication and $k$th block within the $j$th replication} \\
 \mu= \text {overall mean}\\
 g_{i}=\text{random effect of the $i$th genotype}\\
 r_{j}=\text{fixed effect of the $j$th replication}\\
-b_{k}= \text {random effect of $k$th block nested with $j$ replication}\\
+b_{jk}= \text {random effect of $k$th block nested within $j$ replication}\\
 \varepsilon_{ijk}=\text{residual error}\\
 \text{here we assume errors are independent and identically distributed }\epsilon\sim \text{$iid$N}(0,\sigma_\epsilon^2)\\
 \]
@@ -316,7 +316,7 @@ data=demo.data.filtered)
 
 ```{r}
 # 
-model2<- lmer(Yield~Environment+(1|Genotype)+
+model2<- lmer(Yield~Rep+(1|Genotype)+(1|Environment)+
           (1|Environment:Rep)+(1|Environment:Rep:Block),
           data=demo.data.filtered)
 
@@ -332,16 +332,15 @@ ylab='Pearson residual value')
 
 ***
 \[
-Y_{ijk}= \mu + G_{i} + E_{j} + G_{i}*E_{j}+ R_{k}(E_{j})+ B_{l}(R_{K}(E_{j}))+ \varepsilon_{ijk}\\
-Y_{ij}= \text{ is the effect of $i$th genotype in $j$th environment and $k$th block} \\
+y_{ijkl}= \mu+g_{i} + e_{j}+ (ge)_{ij}+r_{jk}+ b_{jkl} +\epsilon_{ijklm}\\
 \mu= \text {overall mean}\\
-G_{i}=\text{random effect of the $i$th genotype}\\
-E_{j}= \text {fixed effect of $j$th environment}\\
-G_{i}*G_{j}=  \text {interaction effect of $i$th genotype in $j$th environment}\\
-R_{k}(E_{j})= \text {is effect of $k$th replication nested in $j$th environment}\\
-B_{l}(R_{K}(E_{j}))=  \text {effect of $k$th block nested within $k$th and$j$th environment}\\
-e_{ijk}=\text{error}\\
-\text{here we assume residuals are independent and identically distributed }\varepsilon\sim \text{$iid$N}(0,\sigma_e^2)\\
+g_{i}=\text{random effect of the $i$th genotype}\\
+e_{j}=\text{random effect of the $j$th environment}\\
+(ge)_{ij}=\text{is the interaction effect of $i$th genotypes with the $j$th environment}\\
+r_{jk}=\text{fixed effect of the $k$th replication nested within $j$th environment}\\
+b_{jkl}= \text {random effect of $l$th block nested with $j$ environment and $k$th replication}\\
+\varepsilon_{ijkl}=\text{residual error}\\
+\text{here we assume residuals are independent and identically distributed}\\
 \]
 
 ***
@@ -352,7 +351,7 @@ e_{ijk}=\text{error}\\
 
 ```{r}
 demo.data.filtered$Environment<-as.factor(demo.data.filtered$Environment)
-Model3.lme4<-lmer(Yield~Environment+(1|Genotype)+(1|Environment:Genotype)+
+Model3.lme4<-lmer(Yield~Rep+(1|Genotype)+(1|Environment:Genotype)+
           (1|Environment:Rep)+(1|Environment:Rep:Block), data=demo.data.filtered)
 
 ```
