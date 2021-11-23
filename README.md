@@ -7,15 +7,16 @@
 
 
 ```
-In this pipeline we provide an overview of how rainfed breeding program at IRRI has leveraged R 
-computational power with open-source resource tools like R Markdown, plotly, LaTeX and HTML
-to develop a data analysis workflow and redesigned it to a reproducible document for
-better interpretation, visualization and seamlessly sharing with partners. The generated report 
-is the state-of-the-art implementation of analysis workflow and outputs either in text, 
-tables or graphics in a unified way as one document. 
+- In this pipeline we demosntrated the state-of-the-art implementation of the phenotypic data analysis pipeline and workflow embedded into a well-descriptive document. 
+- The developed analytical pipeline is open-source, demonstrating how to analyze the phenotypic data in crop breeding programs with step-by-step instructions.
+
+- The analysis pipeline shows how to pre-process and check the quality of phenotypic data, perform robust data analysis using modern statistical tools and approaches, and convert it into a reproducible document. 
+
+- Explanatory text with R codes, outputs either in text, tables, or graphics, and interpretation of results are integrated into the unified document. The analysis is highly reproducible and can be regenerated at any time.
+
 ```
 
-- The schematic representation of analysis workflow adopted is given in figure: 
+- The schematic representation of analysis workflow is given in figure: 
 
 ![](www/workflow.png)
 
