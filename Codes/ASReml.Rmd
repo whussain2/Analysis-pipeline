@@ -619,14 +619,14 @@ div.blue { background-color:#F0FFF0; border-radius: 5px; padding: 20px;}
 
 
 \[
-y_{ijkl}= \mu+g_{i} + e_{j}+ (ge)_{ij}+r_{jk}+ b_{jkl} +\epsilon_{ijklm}\\
+y_{ijkl}= \mu+g_{i} + e_{j}+ (ge)_{ij}+r_{jk}+ b_{jkl} +\epsilon_{ijkl}\\
 \mu= \text {overall mean}\\
 g_{i}=\text{random effect of the $i$th genotype}\\
 e_{j}=\text{random effect of the $j$th environment}\\
 (ge)_{ij}=\text{is the interaction effect of $i$th genotypes with the $j$th environment}\\
 r_{jk}=\text{fixed effect of the $k$th replication nested within $j$th environment}\\
 b_{jkl}= \text {random effect of $l$th block nested with $j$ environment and $k$th replication}\\
-\varepsilon_{ijkl}=\text{residual error}\\
+\epsilon_{ijkl}=\text{residual error}\\
 \text{here we assume residuals are independent and identically distributed}\\
 \]
 
@@ -836,7 +836,7 @@ b_{jkl}= \text {random effect of $l$th block nested with $j$ environment and $k$
 ###### Extract G x E BLUPs and PCA Biplot
 ***
 
-```{r}
+```{r, warning=FALSE}
 # Get the summary of results from Factor Analytical model
   summary.all<-fa.asreml(met8)
 # Get BLUPs across all Environments (G xE)
@@ -849,7 +849,8 @@ b_{jkl}= \text {random effect of $l$th block nested with $j$ environment and $k$
 # Get PCA on the Biplot
 # Let us work with principle component analysis
   data_pca<-biplot.blups[-1]
-  data_pca<- PCA(data_pca, graph = FALSE)
+  data_pca<- PCA(data_pca, graph = FALSE, scale.unit = TRUE)
+  #data_pca <- prcomp(data_pca,  scale = TRUE)
   fviz_pca_biplot(data_pca, palette = "jco", geom = "point", 
             #col.ind = blups.names$Type,
             #pointshape = 21,
@@ -857,7 +858,8 @@ b_{jkl}= \text {random effect of $l$th block nested with $j$ environment and $k$
             #col.var = factor(c("UMMT", "GBB", "BPT", "RCB", "LNM", "MNM")),
             addEllipses = TRUE, label = "var",
             col.var = "blue", repel = TRUE,
-            legend.title = "Group") 
+            legend.title = "Group")+
+   xlim(-5, 5) + ylim (-5, 5)
 ```
 
 ***
@@ -960,7 +962,8 @@ b_{jkl}= \text {random effect of $l$th block nested with $j$ environment and $k$
                                   # "Env7","Env8", "Env9", "Env10", "Env11")),
                 addEllipses = TRUE, label = "var",
                 col.var = "blue", repel = TRUE,
-                legend.title = "Group") 
+                legend.title = "Group")+
+    xlim(-6, 6) + ylim (-6, 6)
 ```
 
 <span style="color: darkblue; font-size: 16pt">**Note: Most of the top genotypes selected are highly stable** </span>
@@ -1042,14 +1045,14 @@ here, we assume $\epsilon$ is a random effect that represents correlated residua
 
 \[
   y_{ij}= \mu+g_{i} + e_{j}+ (ge)_{ij}+\epsilon_{ij}\\
-  y_{ij}= \text{ is the weighted BLUE for $i$th observation in $j$th environment}\\
+  y_{ij}= \text{ is the BLUE value for $i$th observation in $j$th environment}\\
   \mu= \text {overall mean}\\
   g_{i}=\text{the random effect of $i$th genotype} \\
   e_{j}=\text{fixed effect of the $j$th environment}\\
   (ge)_{ij}=\text{is interaction effect of $i$th genotype genotype with the $j$th genotype environment}\\
   \epsilon_{ij}=\text{residual error}\\
 \]
-Here, we assume $g_{i} ∼N (0, \sigma_g^2)$ where $\sigma_g^2$ is the genetic variance, and the error is know from the first stage which is give as $\epsilon~N(0,\xi)$, where $\xi$ is the diagonal matrix, in which its elements are given by the inverse of the residual variance  adjusted means of genotypes in each environment. Further, we can assume the different covariance structures among the residuals and random effects as show in the single stage analysis.
+Here, we assume $g_{i} ∼N (0, \sigma_g^2)$ where $\sigma_g^2$ is the genetic variance, and the error is know from the first stage which is give as $\epsilon~N(0,R)$, where $R$ is the diagonal matrix, in which its elements are given by the inverse of the residual variance  adjusted means of genotypes in each environment. Further, we can assume the different covariance structures among the residuals and random effects as show in the single stage analysis.
 
 ```{r}
 # First let us get weighted BLUEs
@@ -1063,7 +1066,7 @@ Here, we assume $g_{i} ∼N (0, \sigma_g^2)$ where $\sigma_g^2$ is the genetic v
 # Now run the model, will use full matrix rather than inverse  
   asreml.options(gammaPar = TRUE)
   predicted.all$Environment<-as.factor(predicted.all$Environment)
-  model.com<-asreml(fixed= predicted.value ~Environment, random=~Genotype,
+  model.com<-asreml(fixed= predicted.value ~1, random=~Genotype+Environment+Genotype*Environment,
                     workspace= 1000e06,weights=wt,
                     na.action=na.method(x="include"), data=predicted.all)
 # Get the Breeding values (BLUPS)
@@ -1130,6 +1133,8 @@ Here, we assume $g_{i} ∼N (0, \sigma_g^2)$ where $\sigma_g^2$ is the genetic v
 
 * Finally we will extract the results.
 
+* Further, we will show example of **single-step Genomic selection**, in which non-genetic effects and genetic effects are modeled together. More details on on single-step and two-step GS can be found here: [Resource 1](https://doi.org/10.1002/csc2.20253), [Resource 2](https://doi.org/10.1371/journal.pone.0201181), [Resource 3](https://doi.org/10.1534/g3.118.200038), [Resource 4](https://www.nature.com/articles/s41437-020-0321-0).
+
 ***
 ### Read Marker Data
 ***
@@ -1179,18 +1184,25 @@ Here, we assume $g_{i} ∼N (0, \sigma_g^2)$ where $\sigma_g^2$ is the genetic v
 ***
 * Here we will use one of the model to show how to fit the relationship matrix based on markers and phenotypic data together. 
 
-* Description of model in matrix notation is as follows:
+* Description of general model in the matrix notation is as follows:
 
 \[
-  Y= X\beta +Zu+\epsilon\\
+  Y= X\beta +Zu++Z_{g}u_{g}+Z_{b}u_{rb}+Z_{E}u_{E}+\epsilon\\
   Y= \text{ is a m x 1 vector of individual phenotypes}\\
-  X= \text{is a m x n design matrix relating phenotypes to fixed effects of replications and environments}\\
-  \beta = \text{ is a vector of fixed effects}\\
-  u= \text{is a random effect with variance u}\\
-  \epsilon= \text{is  n x n matrix of residual/error effects }\\
+  X= \text{is a design matrix relating phenotypes to fixed effects of replications}\\
+  \beta = \text{ is a vector of fixed effects of replications }\\
+  Z_{g}= \text{is a design matrix of marker effects}\\
+  u_{g}= \text{is a vector of random marker effects}\\
+  Z_{rb}=\text{is a design matrix of non-genetic block effects nested within replications}\\
+  u_{rb}=\text{is a vector of random block effects}\\
+  Z_{e}=\text{ is a design matrix of non-genetic random effect of environments and interactions }\\
+  u_{e}=\text{ is a vector of main environment and interaction random effects}\\
+  \epsilon= \text{is matrix of residual/error effects }\\
 \]
-here, we assume var(u)~$\sigma^2_{g}G$, where G is genomic relationship  kinship co-variance matrix of n x m dimensions (n is no. of markers and m is no. of individuals) representing genomic similarity of individuals, and  $Var(\epsilon)= \sigma^2_{\epsilon}I$, I is identity matrix.
 
+Further, we assume random effects are normally distributed with zero mean vectors and variance–covariance matrices as B, G, R as described in single-stage approach analysis of MET analysis above. Here, variance of  $var(u_{g})=\sigma^2_{g}G$, where G is genomic or kinship covariance matrix of n x m dimensions (n is no. of markers and m is no. of individuals) representing the genomic similarity of individuals. 
+
+* The one of model run above has $\epsilon$ has spatial trend structure with correlated residuals across rows and columns. 
 
 ```{r, message=FALSE, warning=FALSE}
  model.geno<-asreml(fixed=Yield~Rep+Environment, 
@@ -1232,7 +1244,7 @@ plot(model.geno)
 met.asreml(model.geno)
 ```
 
-<span style="color: blue;font-size: 14pt;font-family: fantansy"> Note: Other results can be extracted in similar way as as shown in the MET analysis of **Single Stage Analysis***</span>
+<span style="color: blue;font-size: 14pt;font-family: fantansy"> Note: Other results can be extracted in similar way as as shown in the MET analysis of **Single Stage Analysis**</span>
 
 
 
