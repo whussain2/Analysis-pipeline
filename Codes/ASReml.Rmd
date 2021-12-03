@@ -710,7 +710,7 @@ b_{jkl}= \text {random effect of $l$th block nested with $j$ environment and $k$
           residual=~dsum(~id(units)|Environment),
           data = demo.data.filtered)
 # Model 8: Factor Analytically model (fa1) 
-  met8 <- asreml(fixed=Yield~Rep,
+  met8 <- asreml(fixed=Yield~Rep+Environment,
           random =~diag(Environment):Rep:Block+fa(Environment,2):Genotype,
           residual=~dsum(~id(units)|Environment),
           data = demo.data.filtered)
@@ -954,6 +954,8 @@ b_{jkl}= \text {random effect of $l$th block nested with $j$ environment and $k$
   blups.names<-merge(blups.top50[, c(1,2)],biplot.blups,by="Genotype", all=TRUE)
   blups.names$Type<-ifelse(is.na(blups.names$predicted.value), "Un-selected", "Selected")          
 # Now let us plot the biplot
+  #png(file = "PCA_biplot.png", width =7, 
+#height =6, units = "in", res = 600)
   fviz_pca_biplot(data_pca, palette = "jco", geom = "point", 
                 col.ind = blups.names$Type,
                 #pointshape = 21,
@@ -964,6 +966,7 @@ b_{jkl}= \text {random effect of $l$th block nested with $j$ environment and $k$
                 col.var = "blue", repel = TRUE,
                 legend.title = "Group")+
     xlim(-6, 6) + ylim (-6, 6)
+  #dev.off()
 ```
 
 <span style="color: darkblue; font-size: 16pt">**Note: Most of the top genotypes selected are highly stable** </span>
