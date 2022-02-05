@@ -82,7 +82,7 @@ Note: The pipeline requires asreml R package to do the analysis.  If you dont ha
 # Manuscript
 
 
-More details can be found in the manuscript available as preprint [Link](https://www.researchsquare.com/article/rs-49247/v1)
+More details can be found in the manuscript available at [Link](https://plantmethods.biomedcentral.com/articles/10.1186/s13007-022-00845-7)
 
 
 # Contributors
